@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	<bean id="ldapContextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="ldap://ldapserver:389" />
+		<property name="referral" value="follow" />
+		<property name="base" value="DC=org,DC=spring" />
+		<property name="userDn" value="user@spring.org" />
+		<property name="password" value="password" />
+	</bean>
+	
+	<util:properties id="ldapProperties">
+		<prop key="userSearchBase">ou=Usuarios</prop>
+		<prop key="groupSearchBase">OU=_Grupos da Regional,OU=EMPRESA</prop>
+		<prop key="groupRoleAttribute">CN</prop>
+		<prop key="groupSearchFilter">(member={0})</prop>
+		<prop key="userSearchFilter">(sAMAccountName={0})</prop>
+		<prop key="atributoDepartamento">department</prop>
+		<prop key="atributoNomePessoa">distinguishedName</prop>
+	</util:properties>
+</beans>

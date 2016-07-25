@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="severino" path="/severino" reloadable="true" source="org.eclipse.jst.jee.server:severino">
+	<Resource 
+		name="jdbc/ces" 
+		type="javax.sql.DataSource" 
+		url="jdbc:mysql://producao/ces?useSSL=false" 
+		driverClassName="org.gjt.mm.mysql.Driver" 
+		auth="Container" 
+		username="ces" 
+		password="12345678" 
+		maxTotal="8" 
+		maxIdle="4" />
+</Context>

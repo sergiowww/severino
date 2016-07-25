@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+.bodycontainer {
+	height: 351px;
+	width: 100%;
+	margin: 0;
+	overflow-y: auto;
+}
+
+.table-scrollable {
+	margin: 0;
+	padding: 0;
+}
+
+#tableRecordSet_wrapper {
+	margin-bottom: 86px;
+}
