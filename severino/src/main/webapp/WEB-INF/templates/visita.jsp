@@ -5,7 +5,7 @@
 <html>
 <head>
 <jsp:include page="includes/head.jsp"></jsp:include>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/helpers/visita.js"></script>
+<script type="text/javascript" src="js/helpers/visita.js"></script>
 <title>Registro de visitantes</title>
 </head>
 <body>

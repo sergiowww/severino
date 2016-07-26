@@ -73,6 +73,7 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 
 	@PostMapping("")
 	@PreAuthorize(Roles.PADRAO)
+	@Override
 	public ModelAndView salvar(@Validated(CadastrarVisita.class) Visita entity, BindingResult result, RedirectAttributes redirectAttributes) {
 		return super.salvar(entity, result, redirectAttributes);
 	}

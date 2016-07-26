@@ -26,6 +26,12 @@ public class HomeController {
 	@Autowired
 	private UsuarioMediator usuarioMediator;
 
+	/**
+	 * Url de início.
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@GetMapping("/")
 	public String inicio(HttpServletRequest request) {
 
@@ -34,6 +40,11 @@ public class HomeController {
 		return "home";
 	}
 
+	/**
+	 * Url para acesso negado.
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/403", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView acessoNegado() {
 		ModelAndView mav = new ModelAndView("erro/403");

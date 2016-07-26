@@ -16,7 +16,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${pageContext.request.contextPath}/">SEVERINO</a>
+			<a class="navbar-brand" href=".">SEVERINO</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -24,7 +24,7 @@
 			<ul class="nav navbar-nav">
 				<c:forTokens items="${menuItens}" delims="," var="menuItem">
 					<c:set var="urlPart" value="${fn:substringAfter(menuItem, ';')}" />
-					<c:set var="urlMenu" value="${pageContext.request.contextPath}/${urlPart}" />
+					<c:set var="urlMenu" value="${urlPart}" />
 					<c:set var="labelMenu" value="${fn:substringBefore(menuItem, ';')}" />
 					<c:if test="${selectedItem eq  urlPart}">
 						<li class="active"><a href="${urlMenu}">${labelMenu}</a></li>
@@ -41,7 +41,7 @@
 					<span class="text-success">${sessionScope['scopedTarget.usuarioHolder'].usuario.nome}</span>
 				</li>
 				<li>
-					<a href="${pageContext.request.contextPath}/logout" class="btn" role="button">
+					<a href="logout" class="btn" role="button">
 						Sair
 						<span class="glyphicon glyphicon-log-out"></span>
 					</a>

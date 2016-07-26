@@ -25,8 +25,7 @@ public class LoginController {
 	/**
 	 * Apresentar as mensagens de retorno após a validação do login.
 	 * 
-	 * @param error
-	 * @param logout
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

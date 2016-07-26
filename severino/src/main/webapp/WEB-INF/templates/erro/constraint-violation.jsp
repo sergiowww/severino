@@ -20,7 +20,6 @@
 				</div>
 			</div>
 			<hr>
-
 		</div>
 	</div>
 	<jsp:include page="../includes/footer.jsp"></jsp:include>

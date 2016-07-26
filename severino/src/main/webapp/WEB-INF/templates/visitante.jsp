@@ -11,7 +11,7 @@
 	<tags:menu selectedItem="visitante/registros" />
 	<div class="container">
 		<jsp:include page="includes/message-panel.jsp"></jsp:include>
-		<form:form servletRelativeAction="/visitante" cssClass="form-horizontal" commandName="visitante">
+		<form:form servletRelativeAction="/visitante" cssClass="form-horizontal" modelAttribute="visitante">
 			<form:hidden path="id" />
 			<div class="form-group">
 				<tags:inputField label="Nome" name="nome" type="text" />

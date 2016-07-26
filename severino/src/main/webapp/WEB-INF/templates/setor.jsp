@@ -11,7 +11,7 @@
 	<tags:menu selectedItem="setor/registros" />
 	<div class="container">
 		<jsp:include page="includes/message-panel.jsp"></jsp:include>
-		<form:form servletRelativeAction="/setor" cssClass="form-horizontal" commandName="setor">
+		<form:form servletRelativeAction="/setor" cssClass="form-horizontal" modelAttribute="setor">
 			<form:hidden path="id" />
 			<div class="form-group">
 				<tags:inputField label="Nome" name="nome" type="text" />

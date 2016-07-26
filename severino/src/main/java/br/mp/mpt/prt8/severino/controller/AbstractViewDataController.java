@@ -1,31 +1,27 @@
 package br.mp.mpt.prt8.severino.controller;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.ResolvableType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.entity.IEntity;
-import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.utils.DataTableUtils;
 
@@ -44,27 +40,11 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 	/**
 	 * Construtor.
 	 */
-	public AbstractViewDataController() {
-		entityClass = retrieveEntityClass();
-	}
-
-	/**
-	 * Recuperar a classe informada no parâmetro genérico T
-	 * 
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
-	private Class<T> retrieveEntityClass() {
-		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-		Type[] genericTypes = genericSuperclass.getActualTypeArguments();
-		for (Type type : genericTypes) {
-			Class<?> clazzType = (Class<?>) type;
-			String packageNameEntidades = ClassUtils.getPackageName(Usuario.class);
-			if (Objects.equals(packageNameEntidades, ClassUtils.getPackageName(clazzType))) {
-				return (Class<T>) clazzType;
-			}
-		}
-		return null;
+	public AbstractViewDataController() {
+		ResolvableType resolvableType = ResolvableType.forClass(getClass()).as(getClass().getSuperclass());
+		Optional<ResolvableType> first = Arrays.stream(resolvableType.getGenerics()).filter(r -> IEntity.class.isAssignableFrom(r.getRawClass())).findFirst();
+		entityClass = (Class<T>) first.get().getRawClass();
 	}
 
 	/**
@@ -127,7 +107,7 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 	 * @return
 	 */
 	@GetMapping({ "/{id:.+}", "/" })
-	public ModelAndView inicio(@PathVariable Optional<ID> id, RedirectAttributes redirectAttributes) {
+	public ModelAndView inicio(@PathVariable Optional<ID> id) {
 		ModelAndView modelAndView = new ModelAndView(getModelName());
 		T entity = null;
 		if ((entity = getMediatorBean().findOne(id)) != null) {

@@ -11,7 +11,7 @@
 	<tags:menu selectedItem="empresa/registros" />
 	<div class="container">
 		<jsp:include page="includes/message-panel.jsp"></jsp:include>
-		<form:form servletRelativeAction="/empresa" cssClass="form-horizontal" commandName="empresa">
+		<form:form servletRelativeAction="/empresa" cssClass="form-horizontal" modelAttribute="empresa">
 			<form:hidden path="id" />
 			<tags:inputField label="Nome" name="nome" type="text" extraCssClass="form-group" />
 			<tags:defaultButtons backUrl="empresa/registros" />

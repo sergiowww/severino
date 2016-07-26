@@ -17,7 +17,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
  *
  */
 public class CesMappingExceptionResolver extends SimpleMappingExceptionResolver {
-	private static final String ERRO_403 = "redirect:/403";
+	private static final String ERRO_403 = "forward:/403";
 	private static final String ERRO_500 = "erro/500";
 	private static final Logger LOG = LoggerFactory.getLogger(CesMappingExceptionResolver.class);
 	private static final String CONTRAINT_VIOLATION_ERROR_VIEW = "erro/constraint-violation";

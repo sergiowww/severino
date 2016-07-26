@@ -19,7 +19,7 @@
 			</h3>
 		</div>
 		<div class="panel-body">
-			<form:form cssClass="form-horizontal" commandName="visita" autocomplete="off" servletRelativeAction="/visita">
+			<form:form cssClass="form-horizontal" modelAttribute="visita" autocomplete="off" servletRelativeAction="/visita">
 				<form:errors path="validacao*" cssClass="alert alert-danger fade in" element="div"></form:errors>
 				<form:hidden path="id" id="id" />
 				<form:hidden path="dataHoraCadastro" id="dataHoraCadastro" />
