@@ -22,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.viewhelpers.CesMappingExceptionResolver;
 
 /**
@@ -55,8 +56,8 @@ public class CesViewConfiguration extends WebMvcConfigurerAdapter {
 
 	@PostConstruct
 	public void initLocaleSettings() {
-		Locale.setDefault(new Locale("pt", "BR"));
-		TimeZone.setDefault(TimeZone.getTimeZone("America/Fortaleza"));
+		Locale.setDefault(Constantes.DEFAULT_LOCALE);
+		TimeZone.setDefault(Constantes.DEFAULT_TIMEZONE);
 	}
 
 

@@ -100,6 +100,7 @@ public class Visita implements IEntity<Integer> {
 	@JoinColumn(name = "id_visitante", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
 	@Valid
+	@NotNull(groups = CadastrarVisita.class)
 	private Visitante visitante;
 
 	@Transient

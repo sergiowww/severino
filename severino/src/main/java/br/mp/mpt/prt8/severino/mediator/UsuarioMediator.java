@@ -72,7 +72,11 @@ public class UsuarioMediator extends AbstractMediator<Usuario, String> {
 		if (StringUtils.isEmpty(dn)) {
 			return login;
 		}
-		return LdapStringUtil.extrairNomeUsuario(dn);
+		String nomeUsuario = LdapStringUtil.extrairNomeUsuario(dn);
+		if (StringUtils.isEmpty(nomeUsuario)) {
+			return login;
+		}
+		return nomeUsuario;
 	}
 
 }

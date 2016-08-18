@@ -80,7 +80,7 @@ public class VisitaMediator extends AbstractMediator<Visita, Integer> {
 	}
 
 	private void checkVisitante(Visita visita) {
-		Visitante visitanteTransient = visita.getVisitante();
+		Visitante visitanteTransient = Objects.requireNonNull(visita.getVisitante(), "Visitante não informado");
 		String documento = visitanteTransient.getDocumento();
 		Visitante visitante = visitanteMediator.findByDocumento(documento);
 		if (visitante != null) {

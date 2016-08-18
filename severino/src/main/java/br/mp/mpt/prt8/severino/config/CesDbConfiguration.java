@@ -26,7 +26,7 @@ public class CesDbConfiguration {
 
 	private static final String JPA_PU_NAME = "ces";
 
-	private DataSource dataSource() {
+	protected DataSource dataSource() {
 		JndiDataSourceLookup jndiDataSourceLookup = new JndiDataSourceLookup();
 		jndiDataSourceLookup.setResourceRef(true);
 		return jndiDataSourceLookup.getDataSource("java:comp/env/jdbc/ces");

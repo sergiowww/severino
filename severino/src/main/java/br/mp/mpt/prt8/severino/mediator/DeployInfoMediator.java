@@ -47,7 +47,7 @@ public class DeployInfoMediator {
 					LOG.info(String.format("Manifest Entry: %s => %s", entry.getKey(), entry.getValue()));
 				}
 				String timestampString = Objects.toString(mainAttributes.getValue("Implementation-Build"),
-						"2016-07-11T10:08:00Z");
+						"2016-07-12T10:08:00Z");
 
 				Calendar calendar = DatatypeConverter.parseDateTime(timestampString);
 				calendar.setTimeZone(TimeZone.getDefault());
