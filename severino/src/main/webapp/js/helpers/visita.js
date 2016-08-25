@@ -6,6 +6,7 @@ function VisitaClass() {
 	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor", "profissao" ];
 	this.FIELD_PREFIX = "#visitante\\.";
 	this.HIDDEN_SUFFIX = "_hidden";
+	this.eventoUsuario = false;
 	this.configurarAutoCompleteNomeProcurado = function() {
 		var contextPath = Utils.getContextPath();
 		$("#nomeProcurado").autocomplete({
@@ -42,25 +43,40 @@ function VisitaClass() {
 			return $("<li></li>").data("item.autocomplete", item).append("<a>(" + item.id + ") " + item.nome + "</a>").appendTo(ul);
 		};
 	};
+	
 	/**
 	 * Buscar os dados do visitante pelo documento.
 	 */
 	this.configurarConsultaPeloDocumento = function() {
-		var contextPath = Utils.getContextPath();
 		var fieldDocumento = $("#visitante\\.documento");
 		var fieldHiddenId = $("#id");
 
-		var callBackDocumento = this.pesquisarVisitantePeloDocumento.bind(this);
-		fieldDocumento.on("change keyup paste", function() {
-			var documentoValor = fieldDocumento.val();
-			$.getJSON(contextPath + "visitante/getByDocumento?term=" + documentoValor, callBackDocumento);
-		});
+		if (fieldDocumento.val()) {
+			this.onChangePesquisarDocumento();
+		}
+		this.eventoUsuario = true;
+		fieldDocumento.on("change keyup paste", this.onChangePesquisarDocumento.bind(this));
 		if (fieldDocumento.val() && !fieldHiddenId.val()) {
 			this.toggleElementsState(false);
 		} else {
 			this.toggleElementsState(true);
 		}
 	};
+
+	/**
+	 * Handler do evento ao digitar o documento.
+	 */
+	this.onChangePesquisarDocumento = function() {
+		var contextPath = Utils.getContextPath();
+		var callBackDocumento = this.pesquisarVisitantePeloDocumento.bind(this);
+		var fieldDocumento = $("#visitante\\.documento");
+		var documentoValor = fieldDocumento.val();
+		$.getJSON(contextPath + "visitante/getByDocumento?term=" + documentoValor, callBackDocumento);
+	};
+
+	/**
+	 * Mudar estado dos elementos controlados.
+	 */
 	this.toggleElementsState = function(disabled) {
 		for (var i = 0; i < this.FIELDS_VISITANTE.length; i++) {
 			var fieldName = this.FIELD_PREFIX + this.FIELDS_VISITANTE[i];
@@ -81,7 +97,7 @@ function VisitaClass() {
 			if (visitantePresente) {
 				fieldHidden.val(visitante[fieldName]);
 				field.val(visitante[fieldName]);
-			} else {
+			} else if (this.eventoUsuario) {
 				field.val("");
 			}
 		}
