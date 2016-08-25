@@ -6,7 +6,6 @@ function VisitaClass() {
 	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor", "profissao" ];
 	this.FIELD_PREFIX = "#visitante\\.";
 	this.HIDDEN_SUFFIX = "_hidden";
-	this.eventoUsuario = false;
 	this.configurarAutoCompleteNomeProcurado = function() {
 		var contextPath = Utils.getContextPath();
 		$("#nomeProcurado").autocomplete({
@@ -43,7 +42,7 @@ function VisitaClass() {
 			return $("<li></li>").data("item.autocomplete", item).append("<a>(" + item.id + ") " + item.nome + "</a>").appendTo(ul);
 		};
 	};
-	
+
 	/**
 	 * Buscar os dados do visitante pelo documento.
 	 */
@@ -52,10 +51,9 @@ function VisitaClass() {
 		var fieldHiddenId = $("#id");
 
 		if (fieldDocumento.val()) {
-			this.onChangePesquisarDocumento();
+			this.onChangePesquisarDocumento(false);
 		}
-		this.eventoUsuario = true;
-		fieldDocumento.on("change keyup paste", this.onChangePesquisarDocumento.bind(this));
+		fieldDocumento.on("change keyup paste", this.onChangePesquisarDocumento.bind(this, true));
 		if (fieldDocumento.val() && !fieldHiddenId.val()) {
 			this.toggleElementsState(false);
 		} else {
@@ -66,12 +64,15 @@ function VisitaClass() {
 	/**
 	 * Handler do evento ao digitar o documento.
 	 */
-	this.onChangePesquisarDocumento = function() {
+	this.onChangePesquisarDocumento = function(eventoUsuario) {
 		var contextPath = Utils.getContextPath();
 		var callBackDocumento = this.pesquisarVisitantePeloDocumento.bind(this);
+		var callback = function(visitante) {
+			callBackDocumento(visitante, eventoUsuario);
+		}
 		var fieldDocumento = $("#visitante\\.documento");
 		var documentoValor = fieldDocumento.val();
-		$.getJSON(contextPath + "visitante/getByDocumento?term=" + documentoValor, callBackDocumento);
+		$.getJSON(contextPath + "visitante/getByDocumento?term=" + documentoValor, callback);
 	};
 
 	/**
@@ -87,7 +88,7 @@ function VisitaClass() {
 		}
 	};
 
-	this.pesquisarVisitantePeloDocumento = function(visitante) {
+	this.pesquisarVisitantePeloDocumento = function(visitante, eventoUsuario) {
 		var visitantePresente = visitante != null;
 		this.toggleElementsState(visitantePresente);
 		for (var i = 0; i < this.FIELDS_VISITANTE.length; i++) {
@@ -97,7 +98,7 @@ function VisitaClass() {
 			if (visitantePresente) {
 				fieldHidden.val(visitante[fieldName]);
 				field.val(visitante[fieldName]);
-			} else if (this.eventoUsuario) {
+			} else if (eventoUsuario) {
 				field.val("");
 			}
 		}
