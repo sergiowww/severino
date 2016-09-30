@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
-import br.mp.mpt.prt8.severino.dao.examplequery.ExampleSpecificationDisjunction;
+import br.mp.mpt.prt8.severino.dao.ExampleSpecificationDisjunction;
 import br.mp.mpt.prt8.severino.utils.DataTableUtils;
 
 /**

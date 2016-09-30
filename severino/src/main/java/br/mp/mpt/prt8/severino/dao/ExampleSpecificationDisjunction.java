@@ -1,11 +1,15 @@
-package br.mp.mpt.prt8.severino.dao.examplequery;
+package br.mp.mpt.prt8.severino.dao;
+
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.Assert;
 
@@ -41,6 +45,11 @@ public class ExampleSpecificationDisjunction<T> implements Specification<T> {
 	 */
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-		return QueryByExampleOr.getPredicate(root, cb, example);
+		Predicate restrictions = QueryByExamplePredicateBuilder.getPredicate(root, cb, example);
+		List<Expression<Boolean>> expressions = restrictions.getExpressions();
+		if (expressions.isEmpty()) {
+			return restrictions;
+		}
+		return cb.or(expressions.toArray(new Predicate[expressions.size()]));
 	}
 }
