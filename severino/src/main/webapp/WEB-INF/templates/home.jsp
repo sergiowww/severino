@@ -20,7 +20,7 @@
 			</a>
 			<a href="viagem/" class="btn btn-default btn-lg">
 				<span class="glyphicon glyphicon-road"></span>
-				Fluxo Técnicos
+				Fluxo Motoristas
 			</a>
 			<a href="acessoGaragem/" class="btn btn-default btn-lg">
 				<span class="glyphicon glyphicon-list-alt"></span>

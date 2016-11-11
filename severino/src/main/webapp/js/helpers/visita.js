@@ -103,23 +103,8 @@ function VisitaClass() {
 			}
 		}
 	};
+	$(document).ready(this.configurarAutoCompleteEmpresa.bind(this));
+	$(document).ready(this.configurarConsultaPeloDocumento.bind(this));
+	$(document).ready(this.configurarAutoCompleteNomeProcurado.bind(this));
 };
 var Visita = new VisitaClass();
-
-/**
- * Configuração dos elementos de formulário.
- */
-$(document).ready(function() {
-	Visita.configurarAutoCompleteEmpresa();
-	Visita.configurarConsultaPeloDocumento();
-	Visita.configurarAutoCompleteNomeProcurado();
-
-	$(document).on({
-		ajaxStart: function() {
-			$("#wait").css("visibility", "visible");
-		},
-		ajaxStop: function() {
-			$("#wait").css("visibility", "hidden");
-		}
-	});
-});

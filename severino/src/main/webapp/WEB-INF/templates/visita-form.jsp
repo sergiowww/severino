@@ -7,7 +7,7 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<img alt="Carregando..." src="img/ajax-loader.gif" style="visibility: hidden;" id="wait" /> Visita
+			Visita
 			<c:if test="${not empty visita.id}">
 					- ${visita.visitante.nome}
 				</c:if>

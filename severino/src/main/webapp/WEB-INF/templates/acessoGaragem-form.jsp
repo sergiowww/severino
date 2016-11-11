@@ -6,7 +6,7 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<img alt="Carregando..." src="img/ajax-loader.gif" style="visibility: hidden;" id="wait" /> Acesso
+			Acesso
 			<c:if test="${not empty acessoGaragem.id}">
 				- <c:out value="${acessoGaragem.visita.visitante.nome}" default="${acessoGaragem.motorista.nome}" />
 			</c:if>

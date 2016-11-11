@@ -22,3 +22,17 @@ Utils.hideTooltips = function() {
 var docTitle = document.title;
 $("body > .container").prepend($("<div></div>").addClass("page-header").append($("<h3>" + docTitle + "</h3>")));
 $(document).ready(Utils.showTooltips);
+
+/**
+ * Ajax loading.
+ */
+$(document).ready(function() {
+	$(document).on({
+		ajaxStart: function() {
+			$("#wait").css("visibility", "visible");
+		},
+		ajaxStop: function() {
+			$("#wait").css("visibility", "hidden");
+		}
+	});
+});

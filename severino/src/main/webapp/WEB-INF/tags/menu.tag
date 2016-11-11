@@ -34,6 +34,7 @@
 				</button>
 				<a class="navbar-brand" href=".">
 					<img alt="logo severino" src="img/favicon.ico" style="display: inline;"> SEVERINO
+					<img alt="Carregando..." src="img/ajax-loader.gif" style="visibility: hidden;" id="wait" />
 				</a>
 			</div>
 

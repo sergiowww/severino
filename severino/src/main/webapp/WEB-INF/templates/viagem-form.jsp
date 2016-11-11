@@ -9,7 +9,7 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			<img alt="Carregando..." src="img/ajax-loader.gif" style="visibility: hidden;" id="wait" />Viagem (quando o motorista sai em serviço com a viatura)
+			Viagem (quando o motorista sai em serviço com a viatura)
 		</h3>
 		<div class="label label-default" style="float: right;">
 			<c:if test="${empty viagem.id}">

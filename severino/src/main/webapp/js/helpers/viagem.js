@@ -89,14 +89,3 @@ function ViagemClass() {
 }
 
 var viagem = new ViagemClass();
-
-$(document).ready(function() {
-	$(document).on({
-		ajaxStart: function() {
-			$("#wait").css("visibility", "visible");
-		},
-		ajaxStop: function() {
-			$("#wait").css("visibility", "hidden");
-		}
-	});
-});
