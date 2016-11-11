@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonView;
  */
 @Entity
 @Table(name = "empresa")
-public class Empresa implements IEntity<Integer> {
+public class Empresa extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 1L;
 
 	@Id

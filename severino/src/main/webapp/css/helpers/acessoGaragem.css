@@ -1,0 +1,7 @@
+@CHARSET "ISO-8859-1";
+
+.nomeVisitante {
+	overflow: hidden;
+	width: 103px;
+	white-space: nowrap;
+}

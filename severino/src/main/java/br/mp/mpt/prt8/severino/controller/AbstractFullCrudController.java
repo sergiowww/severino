@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.mp.mpt.prt8.severino.entity.IEntity;
+import br.mp.mpt.prt8.severino.entity.AbstractEntity;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.utils.Roles;
 
@@ -25,9 +25,9 @@ import br.mp.mpt.prt8.severino.utils.Roles;
  * @param <T>
  * @param <ID>
  */
-public abstract class AbstractFullCrudController<T extends IEntity<ID>, ID extends Serializable> extends AbstractViewDataController<T, ID> {
-	private static final String KEY_ERROR = "error";
-	private static final String KEY_MSG = "msg";
+public abstract class AbstractFullCrudController<T extends AbstractEntity<ID>, ID extends Serializable> extends AbstractViewDataController<T, ID> {
+	protected static final String KEY_ERROR = "error";
+	protected static final String KEY_MSG = "msg";
 
 	/**
 	 * Apagar um registro.
@@ -67,11 +67,11 @@ public abstract class AbstractFullCrudController<T extends IEntity<ID>, ID exten
 				mav.setViewName(redirectAposGravar(entity));
 				return mav;
 			} catch (NegocioException e) {
-				addCollections(mav);
+				addCollections(mav, entity);
 				return mav.addObject(KEY_ERROR, e.getMessage());
 			}
 		}
-		addCollections(mav);
+		addCollections(mav, entity);
 		return mav;
 
 	}

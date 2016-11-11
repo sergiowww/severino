@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.EmpresaRepository;
 import br.mp.mpt.prt8.severino.entity.Empresa;
+import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -46,8 +47,7 @@ public class EmpresaMediator extends AbstractMediator<Empresa, Integer> {
 	 */
 	public List<Empresa> findByParteNome(String nomeEmpresa) {
 		Empresa empresa = getExampleForSearching(nomeEmpresa);
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
 		return empresaRepository.findAll(Example.of(empresa, exampleMatcher));
 	}
 
@@ -55,10 +55,8 @@ public class EmpresaMediator extends AbstractMediator<Empresa, Integer> {
 	@Override
 	public Empresa save(Empresa empresa) {
 		String nome = empresa.getNome();
-		Integer id = empresa.getId();
-		if (id == null) {
-			id = -1;
-		}
+		Integer id = EntidadeUtil.getIdNaoNulo(empresa);
+
 		if (empresaRepository.countByNomeIgnoreCaseAndIdNot(nome, id) > 0) {
 			throw new NegocioException("A empresa com o nome \"" + nome + "\" já existe!");
 		}

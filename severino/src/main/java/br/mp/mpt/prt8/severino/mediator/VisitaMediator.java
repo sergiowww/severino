@@ -1,9 +1,9 @@
 package br.mp.mpt.prt8.severino.mediator;
 
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
-import br.mp.mpt.prt8.severino.dao.LdapRepository;
 import br.mp.mpt.prt8.severino.dao.VisitaRepository;
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
+import br.mp.mpt.prt8.severino.mediator.intervalodatas.CheckConflitoIntervalo;
+import br.mp.mpt.prt8.severino.mediator.intervalodatas.FluxoCamposIntervalo;
+import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.valueobject.PessoaLdap;
 
 /**
  * Mediador de operações.
@@ -38,10 +39,15 @@ public class VisitaMediator extends AbstractMediator<Visita, Integer> {
 	private EmpresaMediator empresaMediator;
 
 	@Autowired
-	private UsuarioHolder usuarioHolder;
+	private FluxoCamposIntervalo fluxoCamposIntervalo;
 
-	@Autowired
-	private LdapRepository ldapRepository;
+	private CheckConflitoIntervalo<String, Visita> checkConflitoIntervalo;
+
+	@PostConstruct
+	public void setUp() {
+		this.checkConflitoIntervalo = new CheckConflitoIntervalo<String, Visita>(visitaRepository,
+				"O visitante com documento %s possui intervalo de entrada e saída conflitante com a(s) visita(s) %s");
+	}
 
 	@Override
 	protected BaseRepositorySpecification<Visita, Integer> repositoryBean() {
@@ -61,21 +67,10 @@ public class VisitaMediator extends AbstractMediator<Visita, Integer> {
 	@Transactional
 	@Override
 	public Visita save(Visita visita) {
-		Boolean registrarSaida = visita.isRegistrarSaida();
-		if (registrarSaida) {
-			visita.setSaida(new Date());
-		}
-		boolean cadastro = visita.getId() == null;
-		if (cadastro) {
-			visita.setDataHoraCadastro(new Date());
-		}
-		if (visita.getEntrada() == null && cadastro) {
-			visita.setEntrada(new Date());
-		}
+		fluxoCamposIntervalo.setCamposIniciais(visita);
 		checkEmpresa(visita);
 
 		checkVisitante(visita);
-		visita.setUsuario(Objects.requireNonNull(usuarioHolder.getUsuario()));
 		return super.save(visita);
 	}
 
@@ -92,29 +87,21 @@ public class VisitaMediator extends AbstractMediator<Visita, Integer> {
 	}
 
 	private void checkVisita(Visita visita, String documento) {
-		Integer id = visita.getId();
-		if (id == null) {
-			id = -1;
-		}
+		Integer id = EntidadeUtil.getIdNaoNulo(visita);
 		if (visitaRepository.countByUsuarioAndSaida(documento, id) > 0) {
 			throw new NegocioException("O visitante com documento " + documento + " já entrou no prédio e não saiu!");
 		}
-		Date saida = visita.getSaida();
-		Date entrada = visita.getEntrada();
-		List<Integer> idsConflitantes = null;
-		if (entrada != null && saida != null && !(idsConflitantes = visitaRepository.findIdsByDocumentoAndIntervalo(entrada, saida, documento, id)).isEmpty()) {
-			String idsString = StringUtils.collectionToCommaDelimitedString(idsConflitantes);
-			throw new NegocioException("O visitante com documento " + documento + " possui intervalo de entrada e saída conflitante com a(s) visita(s) " + idsString);
-		}
+
+		checkConflitoIntervalo.validar(visita, documento);
+
 	}
 
 	private void checkEmpresa(Visita visita) {
 		Empresa empresa = visita.getEmpresa();
-		if (empresa != null) {
-			if (StringUtils.isEmpty(empresa.getNome()) && empresa.getId() == null) {
+		if (empresa != null && empresa.getId() == null) {
+			if (StringUtils.isEmpty(empresa.getNome())) {
 				visita.setEmpresa(null);
-			}
-			if (empresa.getId() == null && !StringUtils.isEmpty(empresa.getNome())) {
+			} else {
 				visita.setEmpresa(empresaMediator.save(empresa));
 			}
 		}
@@ -130,26 +117,14 @@ public class VisitaMediator extends AbstractMediator<Visita, Integer> {
 	}
 
 	/**
-	 * Listar pessoas por parte do nome.
+	 * Recupera todas as visitas com data de entrada na data corrente.
 	 * 
-	 * @param nome
+	 * @param visita
 	 * @return
 	 */
-	public List<PessoaLdap> findResponsaveisByNome(String nome) {
-		if (StringUtils.isEmpty(nome)) {
-			return Collections.emptyList();
-		}
-		return ldapRepository.findByNomeLike(nome);
+	public List<Visita> findAllRegistradasHoje(Visita visita) {
+		Integer idVisita = EntidadeUtil.getIdNaoNulo(visita);
+		return visitaRepository.findAllRegistradasHoje(idVisita);
 	}
 
-	@Transactional
-	@Override
-	public void apagar(Integer id) {
-		Visita visita = visitaRepository.findByIdAndUsuario(id, usuarioHolder.getUsuario());
-		if (visita != null) {
-			visitaRepository.delete(visita);
-		} else {
-			throw new NegocioException("A visita só pode ser removida no mesmo dia e pelo mesmo usuário criador.");
-		}
-	}
 }

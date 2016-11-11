@@ -36,7 +36,7 @@ public class CesSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		//@formatter:off
 		http.authorizeRequests()
-			.antMatchers("/css/**", "/js/**", "/img/**")
+			.antMatchers("/css/**", "/js/**", "/img/**", "/resources/**")
 			.permitAll()
 			.anyRequest()
 			.authenticated()

@@ -1,4 +1,4 @@
-package br.mp.mpt.prt8.severino.validatorgroups;
+package br.mp.mpt.prt8.severino.validators;
 
 /**
  * Grupo de validação para cadastrar uma visita.

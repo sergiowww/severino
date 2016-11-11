@@ -3,6 +3,7 @@ package br.mp.mpt.prt8.severino.mediator;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -13,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
+import br.mp.mpt.prt8.severino.dao.DeleteSomentePeloCriador;
 import br.mp.mpt.prt8.severino.dao.ExampleSpecificationDisjunction;
 import br.mp.mpt.prt8.severino.utils.DataTableUtils;
+import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
  * Classe base para um mediator.
@@ -23,6 +26,9 @@ import br.mp.mpt.prt8.severino.utils.DataTableUtils;
  *
  */
 public abstract class AbstractMediator<T, ID extends Serializable> {
+
+	@Autowired
+	protected UsuarioHolder usuarioHolder;
 
 	/**
 	 * Retornar o bean do repositório.
@@ -39,11 +45,17 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 * @return
 	 */
 	private Page<T> find(String searchValue, Pageable pageable) {
-		ExampleMatcher exampleMather = ExampleMatcher.matching().withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING);
-		return repositoryBean().findAll(
-				new ExampleSpecificationDisjunction<>(Example.of(getExampleForSearching(searchValue), exampleMather)),
-				pageable);
+		ExampleMatcher exampleMather = getExampleMatcher();
+		return repositoryBean().findAll(new ExampleSpecificationDisjunction<>(Example.of(getExampleForSearching(searchValue), exampleMather)), pageable);
+	}
+
+	/**
+	 * Example matcher.
+	 * 
+	 * @return
+	 */
+	protected ExampleMatcher getExampleMatcher() {
+		return ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
 	}
 
 	/**
@@ -100,6 +112,22 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 */
 	@Transactional
 	public void apagar(ID id) {
-		repositoryBean().delete(id);
+		BaseRepositorySpecification<T, ID> repository = repositoryBean();
+		if (repository instanceof DeleteSomentePeloCriador) {
+			deleteSomenteCriador(id, repository);
+		} else {
+			repository.delete(id);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void deleteSomenteCriador(ID id, BaseRepositorySpecification<T, ID> repository) {
+		DeleteSomentePeloCriador<T, ID> deleteSomentePeloCriador = (DeleteSomentePeloCriador<T, ID>) repository;
+		T entidade = deleteSomentePeloCriador.findByIdAndUsuario(id, usuarioHolder.getUsuario());
+		if (entidade != null) {
+			repository.delete(entidade);
+		} else {
+			throw new NegocioException("Este registro só pode ser removido no mesmo dia pelo usuário criador!");
+		}
 	}
 }

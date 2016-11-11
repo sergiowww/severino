@@ -4,7 +4,8 @@
 	height: 351px;
 	width: 100%;
 	margin: 0;
-	overflow-y: auto;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
 }
 
 .table-scrollable {
@@ -14,4 +15,27 @@
 
 #tableRecordSet_wrapper {
 	margin-bottom: 86px;
+}
+
+ul.divider li:LAST-CHILD {
+	border-right: 14px double gray;
+}
+
+.has-error .tooltip-inner {
+	background-color: #a94442 !important;
+}
+
+.has-error .tooltip-arrow {
+	border-left-color: #a94442 !important;
+}
+
+.radioButtonSmall input[type="radio"] {
+	vertical-align: text-bottom;
+}
+
+.radioButtonSmall label {
+	font-size: 12px;
+	color: #777;
+	font-weight: normal !important;
+	font-style: italic;
 }

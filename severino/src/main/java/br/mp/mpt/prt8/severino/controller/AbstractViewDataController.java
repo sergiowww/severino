@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.entity.IEntity;
+import br.mp.mpt.prt8.severino.entity.AbstractEntity;
 import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.utils.DataTableUtils;
 
@@ -33,7 +34,7 @@ import br.mp.mpt.prt8.severino.utils.DataTableUtils;
  * @param <T>
  * @param <ID>
  */
-public abstract class AbstractViewDataController<T extends IEntity<ID>, ID extends Serializable> {
+public abstract class AbstractViewDataController<T extends AbstractEntity<ID>, ID extends Serializable> {
 
 	private final Class<T> entityClass;
 
@@ -43,7 +44,7 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 	@SuppressWarnings("unchecked")
 	public AbstractViewDataController() {
 		ResolvableType resolvableType = ResolvableType.forClass(getClass()).as(getClass().getSuperclass());
-		Optional<ResolvableType> first = Arrays.stream(resolvableType.getGenerics()).filter(r -> IEntity.class.isAssignableFrom(r.getRawClass())).findFirst();
+		Optional<ResolvableType> first = Arrays.stream(resolvableType.getGenerics()).filter(r -> AbstractEntity.class.isAssignableFrom(r.getRawClass())).findFirst();
 		entityClass = (Class<T>) first.get().getRawClass();
 	}
 
@@ -53,7 +54,7 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 	 * @return
 	 */
 	protected final String getModelName() {
-		return entityClass.getSimpleName().toLowerCase();
+		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 
 	/**
@@ -76,8 +77,9 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 	 * Adicionar coleções na view quando necessário.
 	 * 
 	 * @param mav
+	 * @param entity
 	 */
-	protected void addCollections(ModelAndView mav) {
+	protected void addCollections(ModelAndView mav, T entity) {
 		// implementar se necessário.
 	}
 
@@ -117,7 +119,7 @@ public abstract class AbstractViewDataController<T extends IEntity<ID>, ID exten
 			modelAndView.addObject(getModelName(), entity);
 		}
 
-		addCollections(modelAndView);
+		addCollections(modelAndView, entity);
 		return modelAndView;
 	}
 

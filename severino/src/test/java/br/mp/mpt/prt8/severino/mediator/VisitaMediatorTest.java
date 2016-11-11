@@ -12,12 +12,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
@@ -25,12 +25,13 @@ import br.mp.mpt.prt8.severino.dao.VisitaRepository;
 import br.mp.mpt.prt8.severino.dao.VisitanteRepository;
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.entity.Estado;
-import br.mp.mpt.prt8.severino.entity.Setor;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
+import br.mp.mpt.prt8.severino.mediator.carga.CargaSetor;
+import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
  * Casos de teste para a visita.
@@ -38,26 +39,16 @@ import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
  * @author sergio.eoliveira
  *
  */
+@ContextConfiguration(classes = { CargaUsuario.class, CargaSetor.class })
 public class VisitaMediatorTest extends AbstractSeverinoTests {
 	private static final Estado VISITANTE_ESTADO = Estado.DF;
 	private static final String VISITANTE_ORGAO = "SSP-DF";
 	private static final String VISITANTE_DOCUMENTO = "123456";
 	private static final String VISITANTE_NOME = "José do Egito";
-	private static final String NOME_SETOR_2 = "Setor 2";
-	private static final String NOME_SETOR_1 = "Setor 1";
 	private static final String NOME_EMPRESA = "EMPRESA 1";
 
 	@Autowired
 	private VisitaMediator visitaMediator;
-
-	@Autowired
-	private SetorMediator setorMediator;
-
-	@Autowired
-	private UsuarioHolder usuarioHolder;
-
-	@Autowired
-	private UsuarioMediator usuarioMediator;
 
 	@Autowired
 	private SmartValidator smartValidator;
@@ -74,39 +65,11 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 	@Autowired
 	private VisitanteRepository visitanteRepository;
 
-	private Setor setor2;
+	@Autowired
+	private CargaSetor cargaSetor;
 
-	private Setor setor1;
-
-	@Before
-	public void cargaUsuario() {
-		Usuario usuario = new Usuario();
-		usuario.setId("sergio.eoliveira");
-		usuario.setNome("Sergio Eduardo");
-		usuarioHolder.setUsuario(usuario);
-		usuarioMediator.save(usuario);
-	}
-
-	@Before
-	public void cargaSetores() {
-		List<Setor> registros = setorMediator.findAll();
-		if (registros.isEmpty()) {
-			this.setor1 = new Setor();
-			setor1.setAndar((short) 1);
-			setor1.setNome(NOME_SETOR_1);
-			setor1.setSala("001");
-			setorMediator.save(setor1);
-
-			this.setor2 = new Setor();
-			setor2.setAndar((short) 1);
-			setor2.setNome(NOME_SETOR_2);
-			setor2.setSala("001");
-			setorMediator.save(setor2);
-		} else {
-			this.setor1 = registros.stream().filter(s -> s.getNome().equals(NOME_SETOR_1)).findFirst().get();
-			this.setor2 = registros.stream().filter(s -> s.getNome().equals(NOME_SETOR_2)).findFirst().get();
-		}
-	}
+	@Autowired
+	private UsuarioHolder usuarioHolder;
 
 	/**
 	 * Nova empresa; Novo visitante; sem informar data de entrada; apagar em
@@ -118,7 +81,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		Empresa empresa = new Empresa();
 		empresa.setNome(NOME_EMPRESA);
 		visita.setEmpresa(empresa);
-		visita.setSetor(setor1);
+		visita.setSetor(cargaSetor.getSetor1());
 		Visitante visitante = new Visitante();
 		visita.setVisitante(visitante);
 		visitante.setDocumento(VISITANTE_DOCUMENTO);
@@ -154,7 +117,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		Empresa empresa = new Empresa();
 		empresa.setNome(indice + NOME_EMPRESA);
 		visita.setEmpresa(empresa);
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -165,7 +128,11 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		visita.setEntrada(entrada);
 		validarVisita(visita);
 
-		visitaMediator.save(visita);
+		try {
+			visitaMediator.save(visita);
+		} catch (NegocioException e) {
+			fail("Exceção não esperada neste ponto" + e.getMessage());
+		}
 
 		Integer id = visita.getId();
 		Usuario usuario = new Usuario();
@@ -176,7 +143,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 			visitaMediator.apagar(id);
 			fail("Não deveria ter chegado aqui");
 		} catch (NegocioException e) {
-			assertEquals("A visita só pode ser removida no mesmo dia e pelo mesmo usuário criador.", e.getMessage());
+			assertEquals("Este registro só pode ser removido no mesmo dia pelo usuário criador!", e.getMessage());
 			throw e;
 		}
 
@@ -197,7 +164,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 		visita.setEmpresa(empresaMediator.save(empresa));
 		assertNotNull(visita.getEmpresa().getId());
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -234,7 +201,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		empresaAssociada.setId(empresaPersisted.getId());
 		visita.setEmpresa(empresaAssociada);
 		assertNotNull(visita.getEmpresa().getId());
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -263,7 +230,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 	public void testCenario6() throws Exception {
 		Integer indice = 5;
 		Visita visita = new Visita();
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -274,7 +241,11 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		visita.setEntrada(entrada);
 		validarVisita(visita);
 
-		visitaMediator.save(visita);
+		try {
+			visitaMediator.save(visita);
+		} catch (NegocioException e) {
+			fail("Exceção não esperada neste ponto: " + e.getMessage());
+		}
 
 		Visita visitaCheckar = getFirst();
 		assertVisita(indice, visitaCheckar);
@@ -302,7 +273,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 	public void testCenario7() throws Exception {
 		Integer indice = 6;
 		Visita visita = new Visita();
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -327,7 +298,11 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 		validarVisita(visita);
 
-		visitaMediator.save(visita);
+		try {
+			visitaMediator.save(visita);
+		} catch (NegocioException e) {
+			fail("Exceção não esperada neste ponto: " + e.getMessage());
+		}
 
 		Visita visitaCheckar = getFirst();
 		assertVisita(indice, visitaCheckar);
@@ -361,7 +336,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 	public void testCenario5() throws Exception {
 		Integer indice = 4;
 		Visita visita = new Visita();
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -409,7 +384,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 		visita.setEmpresa(empresa);
 		assertNull(visita.getEmpresa().getId());
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -459,13 +434,13 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 	@Test
 	public void testFind() throws Exception {
-		
+
 		Integer indice = 1;
 		Visita visita = new Visita();
 		Empresa empresa = new Empresa();
 		empresa.setNome(indice + NOME_EMPRESA);
 		visita.setEmpresa(empresa);
-		visita.setSetor(setor2);
+		visita.setSetor(cargaSetor.getSetor2());
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(indice + VISITANTE_DOCUMENTO);
 		visitante.setNome(indice + VISITANTE_NOME);
@@ -477,7 +452,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		validarVisita(visita);
 
 		visitaMediator.save(visita);
-		
+
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);

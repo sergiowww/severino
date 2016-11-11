@@ -11,6 +11,8 @@ import javax.naming.directory.Attributes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
@@ -18,7 +20,6 @@ import org.springframework.ldap.query.ContainerCriteria;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Repository;
 
-import br.mp.mpt.prt8.severino.utils.LdapStringUtil;
 import br.mp.mpt.prt8.severino.valueobject.PessoaLdap;
 
 /**
@@ -29,10 +30,9 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaLdap;
  */
 @Repository
 public class LdapRepository {
-	private static final String KEY_ATRIBUTO_DEPARTAMENTO = "atributoDepartamento";
-	private static final String KEY_ATRIBUTO_NOME_PESSOA = "atributoNomePessoa";
 	private static final String KEY_USER_SEARCH_BASE = "userSearchBase";
 	private static final Logger LOG = LoggerFactory.getLogger(LdapRepository.class);
+	private static final String KEY_ATRIBUTOS_TRAZER = "attributesToShow";
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
@@ -43,12 +43,13 @@ public class LdapRepository {
 	public List<PessoaLdap> findByNomeLike(String parteNome) {
 		LOG.info(String.format("Consultando LDAP por \"%s\" ...", parteNome));
 		String base = ldapProperties.getProperty(KEY_USER_SEARCH_BASE);
-		String atributoNome = ldapProperties.getProperty(KEY_ATRIBUTO_NOME_PESSOA);
-		String atributoDepartamento = ldapProperties.getProperty(KEY_ATRIBUTO_DEPARTAMENTO);
+		String atributos = ldapProperties.getProperty(KEY_ATRIBUTOS_TRAZER);
+
+		String[] attr = atributos.split(",");
+
 		String cn = ldapProperties.getProperty("groupRoleAttribute");
-		ContainerCriteria criteria = LdapQueryBuilder.query().base(base).attributes(atributoNome, atributoDepartamento)
-				.where("objectClass").is("person").and(cn).whitespaceWildcardsLike(parteNome);
-		return ldapTemplate.search(criteria, new PessoaLdapAttributeMapper(atributoNome, atributoDepartamento));
+		ContainerCriteria criteria = LdapQueryBuilder.query().base(base).attributes(attr).where("objectClass").is("person").and(cn).whitespaceWildcardsLike(parteNome);
+		return ldapTemplate.search(criteria, new PessoaLdapAttributeMapper(attr));
 	}
 
 	/**
@@ -59,23 +60,28 @@ public class LdapRepository {
 	 */
 	private final class PessoaLdapAttributeMapper implements AttributesMapper<PessoaLdap> {
 
-		private final String atributoNome, atributoDepartamento;
+		private final String[] atributos;
 
-		public PessoaLdapAttributeMapper(String atributoNome, String atributoDepartamento) {
+		public PessoaLdapAttributeMapper(String[] atributos) {
 			super();
-			this.atributoNome = atributoNome;
-			this.atributoDepartamento = atributoDepartamento;
+			this.atributos = atributos;
+
 		}
 
 		@Override
 		public PessoaLdap mapFromAttributes(Attributes attributes) throws NamingException {
-			Attribute attributeDepartamento = attributes.get(atributoDepartamento);
-			String departamento = "";
-			if (attributeDepartamento != null) {
-				departamento = Objects.toString(attributeDepartamento.get());
+			PessoaLdap pessoaLdap = new PessoaLdap();
+			BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(pessoaLdap);
+			for (String atributo : atributos) {
+				Attribute attribute = attributes.get(atributo);
+				String value = "";
+				if (attribute != null) {
+					value = Objects.toString(attribute.get());
+				}
+				wrapper.setPropertyValue(atributo, value);
+
 			}
-			String nome = LdapStringUtil.extrairNomeUsuario(Objects.toString(attributes.get(atributoNome).get()));
-			return new PessoaLdap(nome, departamento);
+			return pessoaLdap;
 		}
 	}
 }

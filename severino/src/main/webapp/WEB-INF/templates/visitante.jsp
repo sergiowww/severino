@@ -14,11 +14,11 @@
 		<form:form servletRelativeAction="/visitante" cssClass="form-horizontal" modelAttribute="visitante">
 			<form:hidden path="id" />
 			<div class="form-group">
-				<tags:inputField label="Nome" name="nome" type="text" requiredField="true"/>
-				<tags:inputField label="Documento de identificação" name="documento" type="text" requiredField="true"/>
-				<tags:inputField label="Órgão Emissor" name="orgaoEmissor" type="text" />
-				<tags:inputField label="Profissão" name="profissao" type="text" requiredField="false"/>
-				<tags:selectField label="UF de Emissão" name="uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="true" requiredField="true"></tags:selectField>
+				<tags:inputField label="Nome" name="nome" type="text" requiredField="true" />
+				<tags:inputField label="Documento de identificação" name="documento" type="text" requiredField="true" />
+				<tags:inputField label="Órgão Emissor" name="orgaoEmissor" type="text" requiredField="true" />
+				<tags:inputField label="Profissão" name="profissao" type="text" requiredField="false" />
+				<tags:selectField label="UF de Emissão" name="uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="false" requiredField="true" />
 			</div>
 			<tags:defaultButtons backUrl="visitante/registros" />
 		</form:form>

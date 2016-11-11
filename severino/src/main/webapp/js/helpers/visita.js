@@ -9,7 +9,7 @@ function VisitaClass() {
 	this.configurarAutoCompleteNomeProcurado = function() {
 		var contextPath = Utils.getContextPath();
 		$("#nomeProcurado").autocomplete({
-			source: contextPath + "visita/listarPessoasPorParteNome",
+			source: contextPath + "ldap/listarPessoasPorParteNome",
 			minLength: 2,
 			delay: 600,
 			autoFocus: true,

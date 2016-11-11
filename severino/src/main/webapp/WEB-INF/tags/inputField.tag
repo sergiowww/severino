@@ -7,6 +7,7 @@
 <%@ attribute name="tip" description="Dica do campo" required="false" type="java.lang.String"%>
 <%@ attribute name="requiredField" description="Indica se o campo é obrigatório o preenchimento" required="false" type="java.lang.Boolean"%>
 <%@ attribute name="readonlyField" description="Indica se o campo é somente leitura" required="false" type="java.lang.Boolean"%>
+<%@ attribute name="onkeyup" description="Javascript onkeyup event" required="false" type="java.lang.String"%>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -37,20 +38,18 @@
 </c:if>
 <spring:bind path="${name}">
 	<c:if test="${status.error}">
-		<c:set var="extraCssClass" value="${extraCssClass += ' has-error'}"></c:set>
+		<c:set var="extraCssClass" value="${extraCssClass += ' has-error has-feedback'}"></c:set>
 	</c:if>
 	<div class="${extraCssClass}">
-		<form:label path="${name}" cssClass="control-lable" for="${name}">
+		<label class="control-lable">
 			${label}
 			<c:if test="${requiredField}">
 				<span style="color: red;">*</span>
 			</c:if>
-		</form:label>
-		<form:input type="${type}" path="${name}" cssClass="form-control" id="${name}" title="${tip}" readonly="${readonlyField}" />
+		</label>
+		<form:input type="${type}" path="${name}" cssClass="form-control" id="${name}" title="${tip}" readonly="${readonlyField}" onkeyup="${onkeyup}" />
 		<c:if test="${status.error}">
-			<div class="help-block">
-				<form:errors path="${name}" cssClass="help-inline" />
-			</div>
+			<i class="form-control-feedback glyphicon glyphicon-remove" data-fv-icon-for="${name}" data-toggle="tooltip" data-placement="left" data-delay="3000" data-animation="true" title="${fn:join(status.errorMessages, ', ') }"></i>
 		</c:if>
 	</div>
 </spring:bind>

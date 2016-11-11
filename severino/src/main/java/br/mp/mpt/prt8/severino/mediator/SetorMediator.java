@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.SetorRepository;
 import br.mp.mpt.prt8.severino.entity.Setor;
+import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -48,10 +49,8 @@ public class SetorMediator extends AbstractMediator<Setor, Integer> {
 	@Override
 	public Setor save(Setor setor) {
 		String nome = setor.getNome();
-		Integer id = setor.getId();
-		if (id == null) {
-			id = -1;
-		}
+		Integer id = EntidadeUtil.getIdNaoNulo(setor);
+
 		Short andar = setor.getAndar();
 		String sala = setor.getSala();
 		Long total = countSetoresComMesmosValores(nome, id, andar, sala);

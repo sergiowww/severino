@@ -1,7 +1,12 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_DATA_ENTRADA;
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_INTERVALO_ENTRADA_SAIDA;
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isDataEntradaValida;
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isIntervaloEntradaSaidaValido;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,7 +33,10 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
+import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
+import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.SelecionarVisita;
 
 /**
  * The persistent class for the visita database table.
@@ -38,18 +46,19 @@ import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
  */
 @Entity
 @Table(name = "visita")
-public class Visita implements IEntity<Integer> {
+public class Visita extends AbstractEntityIntervaloData<Integer> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_visita", unique = true, nullable = false)
 	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = SelecionarVisita.class)
 	private Integer id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
 	@Past(message = "Não pode ser uma data futura", groups = CadastrarVisita.class)
 	private Date entrada;
@@ -70,7 +79,7 @@ public class Visita implements IEntity<Integer> {
 	private Date dataHoraCadastro;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
 	@Past(message = "Não pode ser uma data futura", groups = CadastrarVisita.class)
 	private Date saida;
@@ -103,13 +112,26 @@ public class Visita implements IEntity<Integer> {
 	@NotNull(groups = CadastrarVisita.class)
 	private Visitante visitante;
 
+	@AssertFalse(message = VALIDACAO_DATA_ENTRADA, groups = CadastrarVisita.class)
+	public boolean isValidacaoDataEntrada() {
+		return isDataEntradaValida(this);
+	}
+
+	@AssertFalse(message = VALIDACAO_INTERVALO_ENTRADA_SAIDA, groups = CadastrarVisita.class)
+	public boolean isValidacaoIntervaloEntradaSaida() {
+		return isIntervaloEntradaSaidaValido(this);
+	}
+
 	@Transient
-	private boolean registrarSaida;
+	public LocalDate getEntradaAsLocalDate() {
+		return DateUtils.toLocalDate(getEntrada());
+	}
 
 	public Date getDataHoraCadastro() {
 		return dataHoraCadastro;
 	}
 
+	@Override
 	public void setDataHoraCadastro(Date dataHoraCadastro) {
 		this.dataHoraCadastro = dataHoraCadastro;
 	}
@@ -131,6 +153,7 @@ public class Visita implements IEntity<Integer> {
 		this.id = id;
 	}
 
+	@Override
 	public Date getEntrada() {
 		return this.entrada;
 	}
@@ -147,6 +170,7 @@ public class Visita implements IEntity<Integer> {
 		this.nomeProcurado = nomeProcurado;
 	}
 
+	@Override
 	public Date getSaida() {
 		return this.saida;
 	}
@@ -175,6 +199,7 @@ public class Visita implements IEntity<Integer> {
 		return this.usuario;
 	}
 
+	@Override
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
@@ -185,32 +210,6 @@ public class Visita implements IEntity<Integer> {
 
 	public void setVisitante(Visitante visitante) {
 		this.visitante = visitante;
-	}
-
-	@AssertFalse(message = "A data de entrada não pode ser vazia!", groups = CadastrarVisita.class)
-	public boolean isValidacaoDataEntrada() {
-
-		return getId() != null && getEntrada() == null;
-	}
-
-	@AssertFalse(message = "A data/hora de saída não pode estar antes da entrada!", groups = CadastrarVisita.class)
-	public boolean isValidacaoIntervaloEntradaSaida() {
-		return getSaida() != null && getEntrada() != null && getSaida().before(getEntrada());
-	}
-
-	/**
-	 * @return the registrarSaida
-	 */
-	public boolean isRegistrarSaida() {
-		return registrarSaida;
-	}
-
-	/**
-	 * @param registrarSaida
-	 *            the registrarSaida to set
-	 */
-	public void setRegistrarSaida(boolean registrarSaida) {
-		this.registrarSaida = registrarSaida;
 	}
 
 }

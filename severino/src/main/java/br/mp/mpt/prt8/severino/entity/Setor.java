@@ -18,7 +18,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 
 /**
@@ -29,7 +29,7 @@ import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
  */
 @Entity
 @Table(name = "setor")
-public class Setor implements IEntity<Integer> {
+public class Setor extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 1L;
 
 	private static final String DESCRICAO_TEMPLATE = "%dº - %s %s";

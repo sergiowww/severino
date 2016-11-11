@@ -7,7 +7,7 @@
 		driverClassName="org.gjt.mm.mysql.Driver" 
 		auth="Container" 
 		username="ces" 
-		password="12345678" 
+		password="123321" 
 		maxTotal="8" 
 		maxIdle="4" />
 </Context>

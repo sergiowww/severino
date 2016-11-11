@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+	<named-query name="ControleMotorista.findMotoristasDisponiveis">
+		<query>
+			select 
+				cm.motorista 
+			from 
+				ControleMotorista as cm 
+			where 
+				cm.fluxo = :fluxo and 
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+		</query>
+	</named-query>
+	<named-query name="ControleMotorista.findUltimoAgrupadoPorMotorista">
+		<query>
+			select 
+				cm 
+			from 
+				ControleMotorista as cm 
+			where 
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+			order by
+				cm.id desc
+		</query>
+	</named-query>
+	<named-query name="ControleMotorista.findUltimoControle">
+		<query>
+			select 
+				cm 
+			from 
+				ControleMotorista as cm 
+			where 
+				cm.motorista.id = :idMotorista and 
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+		</query>
+	</named-query>
+	<named-query name="Motorista.findMotoristasSemRegistroPonto">
+		<query>
+			select 
+				m 
+			from 
+				Motorista as m 
+			where 
+				m.cargo = :cargoMotorista and 
+				m.id not in (
+					select distinct cm.motorista.id 
+					from ControleMotorista as cm
+				)
+			</query>
+	</named-query>
+	<named-query name="Visita.findIdsConflitos">
+		<query>
+			select 
+				v.id 
+			from 
+				Visita as v 
+				inner join v.visitante as vi 
+			where 
+				upper(vi.documento) = upper(:documento) and 
+				v.id &lt;&gt; :id and 
+				:saida &gt;= v.entrada and 
+				v.saida &gt;= :entrada
+		</query>
+	</named-query>
+	<named-query name="Visita.countByUsuarioAndSaida">
+		<query>
+			select 
+				count(v) 
+			from 
+				Visita as v 
+				inner join v.visitante as vi 
+			where 
+				upper(vi.documento) = upper(:documento) and 
+				v.saida is null and 
+				v.id &lt;&gt; :id
+		</query>
+	</named-query>
+</entity-mappings>

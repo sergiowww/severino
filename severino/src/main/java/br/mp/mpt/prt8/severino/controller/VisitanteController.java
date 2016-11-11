@@ -24,7 +24,7 @@ import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitanteMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
-import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
  * Controlador de operações da entidade.
@@ -40,7 +40,7 @@ public class VisitanteController extends AbstractFullCrudController<Visitante, I
 	private VisitanteMediator visitanteMediator;
 
 	@Override
-	protected void addCollections(ModelAndView mavError) {
+	protected void addCollections(ModelAndView mavError, Visitante entity) {
 		mavError.addObject("ufs", Arrays.asList(Estado.values()));
 	}
 

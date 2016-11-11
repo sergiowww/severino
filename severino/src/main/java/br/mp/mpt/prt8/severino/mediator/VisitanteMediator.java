@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.VisitanteRepository;
 import br.mp.mpt.prt8.severino.entity.Visitante;
+import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -28,16 +29,14 @@ public class VisitanteMediator extends AbstractMediator<Visitante, Integer> {
 
 	@Transactional
 	@Override
-	public Visitante save(Visitante entity) {
-		Integer id = entity.getId();
-		if (id == null) {
-			id = -1;
-		}
-		Long totalPorDocumento = visitanteRepository.countByDocumentoIgnoreCaseAndIdNot(entity.getDocumento(), id);
+	public Visitante save(Visitante visitante) {
+		Integer id = EntidadeUtil.getIdNaoNulo(visitante);
+
+		Long totalPorDocumento = visitanteRepository.countByDocumentoIgnoreCaseAndIdNot(visitante.getDocumento(), id);
 		if (totalPorDocumento > 0) {
 			throw new NegocioException("Já existe um visitante com o mesmo número de documento informado");
 		}
-		return super.save(entity);
+		return super.save(visitante);
 	}
 
 	@Override

@@ -13,10 +13,21 @@
 			Severino
 			<small class="text-muted">Controle de acesso da Procuradoria Regional do Trabalho da 8ª Região - PRT8</small>
 		</h3>
-		<a href="visita/" class="btn btn-default btn-lg">
-			<span class="glyphicon glyphicon-triangle-right"></span>
-			Cadastrar visita
-		</a>
+		<div class="btn-group">
+			<a href="visita/" class="btn btn-default btn-lg">
+				<span class="glyphicon glyphicon-briefcase"></span>
+				Nova visita
+			</a>
+			<a href="viagem/" class="btn btn-default btn-lg">
+				<span class="glyphicon glyphicon-road"></span>
+				Fluxo Técnicos
+			</a>
+			<a href="acessoGaragem/" class="btn btn-default btn-lg">
+				<span class="glyphicon glyphicon-list-alt"></span>
+				Acesso Garagem
+			</a>
+		</div>
+		<img alt="Logo MPT" src="img/logo-mpt-texto.svg" style="margin-top: 100px;">
 	</div>
 	<jsp:include page="includes/footer.jsp"></jsp:include>
 </body>

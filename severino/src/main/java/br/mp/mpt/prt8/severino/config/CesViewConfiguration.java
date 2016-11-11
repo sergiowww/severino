@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.validation.SmartValidator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -47,11 +50,18 @@ public class CesViewConfiguration extends WebMvcConfigurerAdapter {
 		return viewResolve;
 	}
 
+	@Bean
+	@Primary
+	public SmartValidator validator() {
+		return new LocalValidatorFactoryBean();
+	}
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/");
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/");
 		registry.addResourceHandler("/img/**").addResourceLocations("/img/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	@PostConstruct
@@ -59,7 +69,6 @@ public class CesViewConfiguration extends WebMvcConfigurerAdapter {
 		Locale.setDefault(Constantes.DEFAULT_LOCALE);
 		TimeZone.setDefault(Constantes.DEFAULT_TIMEZONE);
 	}
-
 
 	@Bean
 	public ResourceBundleMessageSource messageSource() {

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
  * The persistent class for the visitante database table.
@@ -27,8 +28,10 @@ import br.mp.mpt.prt8.severino.validatorgroups.CadastrarVisita;
  */
 @Entity
 @Table(name = "visitante")
-public class Visitante implements IEntity<Integer> {
+public class Visitante extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 1L;
+
+	private static final String FORMATO_DADOS_RESUMO = "%s (%s %s-%s)";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,4 +125,13 @@ public class Visitante implements IEntity<Integer> {
 		this.profissao = profissao;
 	}
 
+	/**
+	 * Retorna uma descrição com os dados mais importantes.
+	 * 
+	 * @return
+	 */
+	@Transient
+	public String getDadosResumo() {
+		return String.format(FORMATO_DADOS_RESUMO, getNome(), getDocumento(), getOrgaoEmissor(), getUf().name());
+	}
 }

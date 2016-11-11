@@ -40,7 +40,14 @@ CesDataTableUtils.createDataTable = function(contextPath, urlJsonList, urlEdit, 
 						return $.datepicker.formatDate("dd/mm/yy", date) + " " + date.getHours() + ":" + date.getMinutes();
 					}
 					return null;
-				}
+				};
+				break;
+
+			case "sim_nao":
+				columnData.render = function(data, type, row) {
+					return data ? "Sim" : "Não";
+				};
+				break;
 			}
 		}
 		columnData.data = propValue;

@@ -1,0 +1,38 @@
+@CHARSET "ISO-8859-1";
+
+#anotacao {
+	height: 64px;
+}
+
+.equal, .equal>div[class*='col-'] {
+	display: -webkit-flex;
+	display: flex;
+	flex: 1 1 auto;
+}
+
+.row-motoristas input {
+	height: 22px;
+	width: 69px;
+	float: left;
+}
+
+.row-motoristas div.toggle {
+	width: 64px;
+	height: 22px;
+	float: right;
+}
+
+.row-motoristas .nomeMotorista {
+	white-space: nowrap;
+	width: 40px;
+	overflow: hidden;
+}
+
+.row-viagems-em-andamento .nomeMotorista {
+	width: 114px;
+	overflow: hidden;
+}
+
+.row-viagems-em-andamento td {
+	white-space: nowrap;
+}

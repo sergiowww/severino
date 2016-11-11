@@ -3,15 +3,23 @@
 	<persistence-unit name="ces">
 		<description>Entidades CES</description>
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<mapping-file>META-INF/named-queries.xml</mapping-file>
 		<class>br.mp.mpt.prt8.severino.entity.Empresa</class>
 		<class>br.mp.mpt.prt8.severino.entity.Setor</class>
 		<class>br.mp.mpt.prt8.severino.entity.Usuario</class>
 		<class>br.mp.mpt.prt8.severino.entity.Visita</class>
 		<class>br.mp.mpt.prt8.severino.entity.Visitante</class>
+		<class>br.mp.mpt.prt8.severino.entity.AcessoGaragem</class>
+		<class>br.mp.mpt.prt8.severino.entity.ControleMotorista</class>
+		<class>br.mp.mpt.prt8.severino.entity.Motorista</class>
+		<class>br.mp.mpt.prt8.severino.entity.Passageiro</class>
+		<class>br.mp.mpt.prt8.severino.entity.PassageiroPK</class>
+		<class>br.mp.mpt.prt8.severino.entity.Veiculo</class>
+		<class>br.mp.mpt.prt8.severino.entity.Viagem</class>
 		<validation-mode>AUTO</validation-mode>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57InnoDBDialect" />
-			<property name="hibernate.show_sql" value="false"/>
+			<property name="hibernate.show_sql" value="false" />
 		</properties>
 	</persistence-unit>
 </persistence>

@@ -13,7 +13,7 @@
 		<jsp:include page="includes/message-panel.jsp"></jsp:include>
 		<form:form servletRelativeAction="/empresa" cssClass="form-horizontal" modelAttribute="empresa">
 			<form:hidden path="id" />
-			<tags:inputField label="Nome" name="nome" type="text" extraCssClass="form-group" />
+			<tags:inputField label="Nome" name="nome" type="text" extraCssClass="form-group" requiredField="true"/>
 			<tags:defaultButtons backUrl="empresa/registros" />
 		</form:form>
 	</div>

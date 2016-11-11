@@ -15,7 +15,6 @@
 		<prop key="groupRoleAttribute">CN</prop>
 		<prop key="groupSearchFilter">(member={0})</prop>
 		<prop key="userSearchFilter">(sAMAccountName={0})</prop>
-		<prop key="atributoDepartamento">department</prop>
-		<prop key="atributoNomePessoa">distinguishedName</prop>
+		<prop key="attributesToShow">department,displayName,employeeID,employeeType</prop>
 	</util:properties>
 </beans>
