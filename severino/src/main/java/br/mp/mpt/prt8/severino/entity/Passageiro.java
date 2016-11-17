@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
@@ -24,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  */
 @Entity
-@Table(name = "passageiro")
+@Table(name = "passageiro", uniqueConstraints = @UniqueConstraint(columnNames = { "nome", "id_viagem" }))
 public class Passageiro extends AbstractEntity<PassageiroPK> {
 	private static final long serialVersionUID = 1L;
 

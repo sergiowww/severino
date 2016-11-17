@@ -4,10 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,10 +29,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
+import br.mp.mpt.prt8.severino.TestUtil;
 import br.mp.mpt.prt8.severino.dao.AcessoGaragemRepository;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.entity.Estado;
+import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Visita;
@@ -42,6 +46,7 @@ import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarVeiculo;
 import br.mp.mpt.prt8.severino.validators.SelecionarVisita;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * Teste para o acesso garagem.
@@ -393,7 +398,8 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		String marca = "Nissan";
 		veiculo.setMarca(marca);
 		veiculo.setModelo("Livina");
-		veiculo.setMotorista(cargaMotorista.getMotorista());
+		Motorista motorista = cargaMotorista.getMotorista();
+		veiculo.setMotorista(motorista);
 		entityManager.persist(veiculo);
 		entityManager.flush();
 		entityManager.clear();
@@ -401,7 +407,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		AcessoGaragem acessoGaragem = new AcessoGaragem();
 		Date entrada = getDataEntradaHoje();
 		acessoGaragem.setEntrada(entrada);
-		acessoGaragem.setMotorista(cargaMotorista.getMotorista());
+		acessoGaragem.setMotorista(motorista);
 		String anotacao = "Teste";
 		acessoGaragem.setAnotacao(anotacao);
 		veiculo.setMarca("Este Valor Não Será Persistido");
@@ -415,8 +421,8 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		assertEquals(DATE_FORMAT.format(new Date()), DATE_FORMAT.format(acessoGaragemPersistido.getDataHoraCadastro()));
 		assertEquals(DATE_TIME_FORMAT.format(entrada), DATE_TIME_FORMAT.format(acessoGaragemPersistido.getEntrada()));
 		assertNotNull(acessoGaragemPersistido.getUsuario());
-		assertEquals(cargaMotorista.getMotorista(), acessoGaragemPersistido.getMotorista());
-		assertEquals(cargaMotorista.getMotorista().getNome(), acessoGaragemPersistido.getMotorista().getNome());
+		assertEquals(motorista, acessoGaragemPersistido.getMotorista());
+		assertEquals(motorista.getNome(), acessoGaragemPersistido.getMotorista().getNome());
 		assertNotNull(acessoGaragemPersistido.getVeiculo());
 		assertEquals(placa, acessoGaragemPersistido.getVeiculo().getId());
 		assertEquals(marca, acessoGaragemPersistido.getVeiculo().getMarca());
@@ -435,7 +441,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(veiculo.getMarca(), false));
+		dataTablesInput.setSearch(new SearchParameter(motorista.getNome(), false));
 		Page<AcessoGaragem> page = acessoGaragemMediator.find(dataTablesInput);
 		assertEquals(1, page.getTotalElements());
 	}
@@ -459,6 +465,33 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		assertNotNull(acessoGaragemMediator.save(acessoGaragem));
 		entityManager.flush();
 		entityManager.clear();
+	}
+
+	@Test
+	public void testFindUltimaDisponibilidade() throws Exception {
+		TestUtil.executarScript(entityManager, "testFindUltimaDisponibilidade.sql");
+		List<PessoaDisponibilidade> ultimas = acessoGaragemMediator.findUltimaDisponibilidade();
+		assertEquals(3, ultimas.size());
+
+		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, ultimas);
+		checkPassageiro("2016-11-16 08:07", null, "Carla Afonso de Novoa Melo", true, ultimas);
+		checkPassageiro("2016-11-16 08:54", null, "Faustino Bartolomeu Alves Pimenta", true, ultimas);
+
+	}
+
+	private void checkPassageiro(String entrada, String saida, String nomePassageiro, boolean entrou, List<PessoaDisponibilidade> ultimas) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Optional<PessoaDisponibilidade> optional = ultimas.stream().filter(p -> p.getNome().equals(nomePassageiro)).findFirst();
+		assertTrue(optional.isPresent());
+		PessoaDisponibilidade pessoaDisponibilidade = optional.get();
+		assertEquals(FonteDisponibilidade.ACESSO_GARAGEM, pessoaDisponibilidade.getFonte());
+		assertEquals(entrou, pessoaDisponibilidade.isEntrou());
+		assertEquals(entrada, df.format(pessoaDisponibilidade.getEntrada()));
+		if (saida == null) {
+			assertNull(pessoaDisponibilidade.getSaida());
+		} else {
+			assertEquals(saida, df.format(pessoaDisponibilidade.getSaida()));
+		}
 	}
 
 }

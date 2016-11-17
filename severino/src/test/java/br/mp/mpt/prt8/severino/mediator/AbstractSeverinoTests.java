@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import br.mp.mpt.prt8.severino.config.CesDbTestConfiguration;
 import br.mp.mpt.prt8.severino.mediator.carga.ICarga;
 
 /**
@@ -18,7 +19,7 @@ import br.mp.mpt.prt8.severino.mediator.carga.ICarga;
  * @author sergio.eoliveira
  *
  */
-@ContextConfiguration(classes = { CesDbTestConfiguration.class })
+@ContextConfiguration(classes = CesDbTestConfiguration.class)
 @WebAppConfiguration
 public abstract class AbstractSeverinoTests extends AbstractTransactionalJUnit4SpringContextTests {
 

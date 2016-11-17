@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -29,8 +30,10 @@ import org.springframework.validation.SmartValidator;
 
 import br.mp.mpt.prt8.severino.dao.ControleMotoristaRepository;
 import br.mp.mpt.prt8.severino.dao.ViagemRepository;
+import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.Fluxo;
+import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Passageiro;
 import br.mp.mpt.prt8.severino.entity.Usuario;
@@ -38,8 +41,11 @@ import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
+import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 @ContextConfiguration(classes = { CargaUsuario.class, CargaMotorista.class })
 public class ViagemMediatorTest extends AbstractSeverinoTests {
@@ -51,6 +57,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 	private static final String PASSAGEIRO1_NOME = "Sergio Eduardo";
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyy");
+	private static final DateFormat DTF = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
 
 	@Autowired
 	private ViagemMediator viagemMediator;
@@ -504,5 +511,92 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new SearchParameter(viagem.getMotorista().getNome(), false));
 		Page<Viagem> page = viagemMediator.find(dataTablesInput);
 		assertEquals(1, page.getTotalElements());
+	}
+
+	@Test
+	public void testFindUltimaDisponibilidade() throws Exception {
+		// gravar viagem 1 com dois passageiros
+		Date saidaViagem1 = DateUtils.toDate(LocalDateTime.now().minusHours(10));
+		Date retornoViagem1 = DateUtils.toDate(LocalDateTime.now().minusMinutes(1));
+		Viagem viagem1 = new Viagem();
+		viagem1.setMotorista(cargaMotorista.getMotorista());
+		viagem1.setGravarVeiculo(false);
+		viagem1.setSaida(saidaViagem1);
+		viagem1.setRetorno(retornoViagem1);
+
+		Passageiro passageiro1 = new Passageiro();
+		String nomePassageiro1 = "Passageiro 1";
+		passageiro1.setNome(nomePassageiro1);
+		passageiro1.setMatricula("12");
+		viagem1.addPassageiro(passageiro1);
+
+		Passageiro passageiro2 = new Passageiro();
+		String nomePassageiro2 = "Passageiro 2";
+		passageiro2.setNome(nomePassageiro2);
+		passageiro2.setMatricula("13");
+
+		viagem1.addPassageiro(passageiro2);
+
+		viagem1 = salvarRegistro(viagem1);
+		assertEquals(2, viagem1.getPassageiros().size());
+
+		// gravar viagem 3 com 1 passageiro
+		Motorista motorista2 = new Motorista();
+		motorista2.setNome("Outro Motora");
+		motorista2.setMatricula("1");
+		motorista2.setCargo(Cargo.MOTORISTA);
+		entityManager.persist(motorista2);
+
+		Date saidaViagem3 = DateUtils.toDate(LocalDateTime.now().minusHours(8));
+		Date retornoViagem3 = DateUtils.toDate(LocalDateTime.now().minusHours(6));
+		Viagem viagem3 = new Viagem();
+		viagem3.setMotorista(motorista2);
+		viagem3.setGravarVeiculo(false);
+		viagem3.setSaida(saidaViagem3);
+		viagem3.setRetorno(retornoViagem3);
+
+		Passageiro passageiro3 = new Passageiro();
+		String nomePassageiro3 = "Passageiro 3";
+		passageiro3.setNome(nomePassageiro3);
+		passageiro3.setMatricula("3");
+		viagem3.addPassageiro(passageiro3);
+
+		viagem3 = salvarRegistro(viagem3);
+		assertEquals(1, viagem3.getPassageiros().size());
+
+		// gravar viagem 2 com o mesmo passageiro da viagem 3
+		Viagem viagem2 = new Viagem();
+		Date saidaViagem2 = DateUtils.toDate(LocalDateTime.now().minusHours(5));
+		viagem2.setMotorista(motorista2);
+		viagem2.setGravarVeiculo(false);
+		viagem2.setSaida(saidaViagem2);
+
+		passageiro3 = new Passageiro();
+		passageiro3.setNome(nomePassageiro3);
+		passageiro3.setMatricula("3");
+		viagem2.addPassageiro(passageiro3);
+		viagem2 = salvarRegistro(viagem2);
+		assertEquals(1, viagem2.getPassageiros().size());
+
+		List<PessoaDisponibilidade> ultimas = viagemMediator.findUltimaDisponibilidade();
+		assertEquals(3, ultimas.size());
+		checkPassageiro(saidaViagem1, retornoViagem1, nomePassageiro1, true, ultimas);
+		checkPassageiro(saidaViagem1, retornoViagem1, nomePassageiro2, true, ultimas);
+		checkPassageiro(saidaViagem2, null, nomePassageiro3, false, ultimas);
+
+	}
+
+	private void checkPassageiro(Date saida, Date entrada, String nomePassageiro, boolean entrou, List<PessoaDisponibilidade> ultimas) {
+		Optional<PessoaDisponibilidade> optional = ultimas.stream().filter(p -> p.getNome().equals(nomePassageiro)).findFirst();
+		assertTrue(optional.isPresent());
+		PessoaDisponibilidade pessoaDisponibilidade = optional.get();
+		assertEquals(FonteDisponibilidade.VIAGEM, pessoaDisponibilidade.getFonte());
+		assertEquals(entrou, pessoaDisponibilidade.isEntrou());
+		assertEquals(DTF.format(saida), DTF.format(pessoaDisponibilidade.getSaida()));
+		if (entrada == null) {
+			assertNull(pessoaDisponibilidade.getEntrada());
+		} else {
+			assertEquals(DTF.format(entrada), DTF.format(pessoaDisponibilidade.getEntrada()));
+		}
 	}
 }

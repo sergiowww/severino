@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.mp.mpt.prt8.severino.dao.AcessoGaragemRepository;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
+import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Visita;
@@ -20,6 +21,7 @@ import br.mp.mpt.prt8.severino.mediator.intervalodatas.CheckConflitoIntervalo;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.FluxoCamposIntervalo;
 import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * Mediator para acesso garagem.
@@ -62,11 +64,6 @@ public class AcessoGaragemMediator extends AbstractMediator<AcessoGaragem, Integ
 		Motorista motorista = new Motorista();
 		motorista.setNome(searchValue);
 		acessoGaragem.setMotorista(motorista);
-		Veiculo veiculo = new Veiculo();
-		veiculo.setMarca(searchValue);
-		veiculo.setModelo(searchValue);
-		veiculo.setId(searchValue);
-		acessoGaragem.setVeiculo(veiculo);
 		return acessoGaragem;
 	}
 
@@ -140,6 +137,17 @@ public class AcessoGaragemMediator extends AbstractMediator<AcessoGaragem, Integ
 	 */
 	public List<AcessoGaragem> findAllSemBaixa() {
 		return acessoGaragemRepository.findBySaidaIsNull();
+	}
+
+	/**
+	 * Buscar o ultimo horario de entrada e saída de cada motorista.
+	 * 
+	 * @return
+	 */
+	public List<PessoaDisponibilidade> findUltimaDisponibilidade() {
+		List<PessoaDisponibilidade> acessos = acessoGaragemRepository.findUltimaDisponibilidade();
+		acessos.forEach(p -> p.setFonte(FonteDisponibilidade.ACESSO_GARAGEM));
+		return acessos;
 	}
 
 }

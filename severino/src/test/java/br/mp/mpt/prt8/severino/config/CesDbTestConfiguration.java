@@ -1,4 +1,4 @@
-package br.mp.mpt.prt8.severino.mediator;
+package br.mp.mpt.prt8.severino.config;
 
 import java.util.Map;
 
@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-
-import br.mp.mpt.prt8.severino.config.CesDbConfiguration;
 
 public class CesDbTestConfiguration extends CesDbConfiguration {
 

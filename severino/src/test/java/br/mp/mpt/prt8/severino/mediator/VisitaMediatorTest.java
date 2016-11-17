@@ -459,5 +459,8 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new SearchParameter(VISITANTE_NOME, false));
 		Page<Visita> resultado = visitaMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
+
+		assertEquals(1, visitaMediator.findAllRegistradasHoje(null).size());
+		assertEquals(1, visitaMediator.findAllRegistradasHoje(resultado.getContent().get(0)).size());
 	}
 }

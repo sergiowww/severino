@@ -14,10 +14,10 @@ public class PassageiroPK implements Serializable {
 	// default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(unique = true, nullable = false, length = 200)
+	@Column(nullable = false, length = 200)
 	private String nome;
 
-	@Column(name = "id_viagem", insertable = false, updatable = false, unique = true, nullable = false)
+	@Column(name = "id_viagem", insertable = false, updatable = false, nullable = false)
 	private int idViagem;
 
 	public String getNome() {

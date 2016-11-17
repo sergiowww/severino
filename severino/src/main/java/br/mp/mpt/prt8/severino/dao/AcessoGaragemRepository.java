@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.IntervaloValidator;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * DAO para acesso o acesso a garagem.
@@ -69,4 +70,12 @@ public interface AcessoGaragemRepository extends BaseRepositorySpecification<Ace
 	@Query("select ag.id from AcessoGaragem as ag where upper(ag.veiculo.id) = upper(:placa) and ag.id <> :id and :saida >= ag.entrada and ag.saida >= :entrada")
 	@Override
 	List<Integer> findIdsConflitos(@Param("entrada") Date entrada, @Param("saida") Date saida, @Param("placa") String placa, @Param("id") Integer id);
+
+	/**
+	 * Buscar o ultimo horario de entrada e saída de cada motorista.
+	 * 
+	 * @return
+	 */
+	@Query
+	List<PessoaDisponibilidade> findUltimaDisponibilidade();
 }

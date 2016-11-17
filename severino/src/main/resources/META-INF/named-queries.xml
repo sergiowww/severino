@@ -75,4 +75,54 @@
 				v.id &lt;&gt; :id
 		</query>
 	</named-query>
+	<named-query name="Viagem.findPassageirosUltimaViagem">
+		<query>
+			select 
+				new br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade(
+					v.id,
+					p.id.nome,
+					cr.dataHora,
+					cs.dataHora
+				)
+			from
+				Viagem as v 
+				inner join v.passageiros as p
+				inner join v.controleSaida as cs
+				left join v.controleRetorno as cr
+			where
+				cs.dataHora = (
+					select 
+						max(cs2.dataHora)
+					from
+						Viagem as v2
+						inner join v2.controleSaida as cs2
+						inner join v2.passageiros as p2
+					where
+						p2.id.nome = p.id.nome
+				)
+		</query>
+	</named-query>
+	<named-query name="AcessoGaragem.findUltimaDisponibilidade">
+		<query>
+			select
+				new br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade(
+					ag.id,
+					m.nome,
+					ag.entrada,
+					ag.saida
+				)
+			from
+				AcessoGaragem as ag 
+				inner join ag.motorista as m
+			where
+				ag.entrada = (
+					select 
+						max(ag2.entrada) 
+					from 
+						AcessoGaragem as ag2
+					where
+						ag2.motorista.id = ag.motorista.id
+				)
+		</query>
+	</named-query>
 </entity-mappings>

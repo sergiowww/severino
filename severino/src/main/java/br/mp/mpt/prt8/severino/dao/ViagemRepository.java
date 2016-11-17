@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Viagem;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * DAO para viagem.
@@ -61,4 +62,12 @@ public interface ViagemRepository extends BaseRepositorySpecification<Viagem, In
 	 */
 	@Query("select v.controleRetorno.id from Viagem as v where v.id = :idViagem")
 	Integer findIdControleRetornoByViagem(@Param("idViagem") Integer idViagem);
+
+	/**
+	 * Buscar a ultima viagem com cada passageiro.
+	 * 
+	 * @return
+	 */
+	@Query
+	List<PessoaDisponibilidade> findPassageirosUltimaViagem();
 }

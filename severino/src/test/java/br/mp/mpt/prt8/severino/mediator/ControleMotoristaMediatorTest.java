@@ -129,7 +129,7 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 		controle.setDataHora(SDF.parse(dataHora));
 		controle.setMotorista(motorista);
 		controle.setFluxo(fluxo);
-		entityManager.persist(controle);
+		controleMotoristaMediator.save(controle);
 		return controle;
 	}
 

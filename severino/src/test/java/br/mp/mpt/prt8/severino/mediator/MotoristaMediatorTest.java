@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.parameter.SearchParameter;
 
-import br.mp.mpt.prt8.severino.dao.MotoristaRepository;
 import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
@@ -22,9 +24,6 @@ public class MotoristaMediatorTest extends AbstractSeverinoTests {
 
 	@Autowired
 	private MotoristaMediator motoristaMediator;
-
-	@Autowired
-	private MotoristaRepository motoristaRepository;
 
 	@Test(expected = NegocioException.class)
 	public void testCheckMotorista() {
@@ -54,7 +53,7 @@ public class MotoristaMediatorTest extends AbstractSeverinoTests {
 
 		entityManager.flush();
 		entityManager.clear();
-		List<Motorista> todos = motoristaRepository.findAll();
+		List<Motorista> todos = motoristaMediator.findAll();
 		assertEquals(1, todos.size());
 		Motorista motoristaGravado = todos.get(0);
 
@@ -67,10 +66,19 @@ public class MotoristaMediatorTest extends AbstractSeverinoTests {
 
 		entityManager.flush();
 		entityManager.clear();
-		todos = motoristaRepository.findAll();
+		todos = motoristaMediator.findAll();
 		assertEquals(1, todos.size());
 		motoristaGravado = todos.get(0);
 		assertEquals(nomeAlterado, motoristaGravado.getNome());
+
+		DataTablesInput dataTablesInput = new DataTablesInput();
+		dataTablesInput.setStart(0);
+		dataTablesInput.setLength(4);
+		dataTablesInput.setSearch(new SearchParameter("João", false));
+		Page<Motorista> page = motoristaMediator.find(dataTablesInput);
+		assertEquals(1, page.getTotalElements());
+
+		assertEquals(0, motoristaMediator.findAllMotoristasTecnicos().size());
 
 	}
 

@@ -21,7 +21,7 @@ import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
- * Controlador de operações da entidade. <br>
+ * Controlador de operações da entidade.
  * 
  * @author sergio.eoliveira
  *
@@ -52,7 +52,6 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 	protected String redirectAposGravar(Visita entity) {
 		return "redirect:/visita/" + entity.getId();
 	}
-
 
 	@PostMapping("")
 	@PreAuthorize(Roles.PADRAO)

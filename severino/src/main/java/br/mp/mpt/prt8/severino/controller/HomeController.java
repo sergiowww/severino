@@ -1,5 +1,7 @@
 package br.mp.mpt.prt8.severino.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -8,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.mp.mpt.prt8.severino.entity.ControleMotorista;
+import br.mp.mpt.prt8.severino.mediator.ControleMotoristaMediator;
+import br.mp.mpt.prt8.severino.mediator.PessoaDisponibilidadeMediator;
 import br.mp.mpt.prt8.severino.mediator.UsuarioMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * Controlador da tela inicial.
@@ -23,6 +29,12 @@ public class HomeController {
 	@Autowired
 	private UsuarioMediator usuarioMediator;
 
+	@Autowired
+	private PessoaDisponibilidadeMediator pessoaDisponibilidadeMediator;
+
+	@Autowired
+	private ControleMotoristaMediator controleMotoristaMediator;
+
 	/**
 	 * Url de início.
 	 * 
@@ -30,9 +42,17 @@ public class HomeController {
 	 * @return
 	 */
 	@GetMapping("/")
-	public String inicio(Authentication auth) {
+	public ModelAndView inicio(Authentication auth) {
 		usuarioMediator.save(auth);
-		return "home";
+		ModelAndView mav = new ModelAndView("home");
+		List<PessoaDisponibilidade> pessoas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade();
+		mav.addObject("totalPessoasNaCasa", pessoas.stream().filter(p -> p.isEntrou()).count());
+		mav.addObject("pessoasDisponiveis", pessoas);
+		
+		List<ControleMotorista> motoristas = controleMotoristaMediator.findDisponiveis();
+		mav.addObject("totalMotoristasNaCasa", motoristas.stream().filter(m -> m.isFluxoEntrada()).count());
+		mav.addObject("controleMotoristas", motoristas);
+		return mav;
 	}
 
 	/**

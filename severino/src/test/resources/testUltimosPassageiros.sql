@@ -1,0 +1,16 @@
+INSERT INTO motorista (id_motorista,nome,tipo,matricula) VALUES (9,'Gerson Felix Mendonca Dias',2,'6007641-0');
+INSERT INTO motorista (id_motorista,nome,tipo,matricula) VALUES (38,'Cesar Augusto Cabral da Rocha',2,'6000927-6');
+INSERT INTO motorista (id_motorista,nome,tipo,matricula) VALUES (5,'Jose Ricardo Barros da Silva',2,'6005289-9');
+INSERT INTO motorista (id_motorista,nome,tipo,matricula) VALUES (13,'Loris Rocha Pereira Junior',0,'262-3');
+INSERT INTO veiculo (placa,marca,modelo,cor,viatura_mp,id_motorista) VALUES ('QDG3584','fiat','uno','vermelho',0,13);
+INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo) VALUES (131,5,'2016-11-17 12:11:00',1);
+INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo) VALUES (104,9,'2016-11-16 08:35:06',1);
+INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo) VALUES (106,9,'2016-11-16 09:35:25',0);
+INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo) VALUES (105,38,'2016-11-16 09:31:12',1);
+INSERT INTO viagem (id_viagem,anotacao,data_hora_cadastro,id_motorista,placa,id_usuario,id_controle_saida,id_controle_retorno) VALUES (24,NULL,'2016-11-16 08:35:06',9,NULL,'c.marcos.porfirio',104,106);
+INSERT INTO viagem (id_viagem,anotacao,data_hora_cadastro,id_motorista,placa,id_usuario,id_controle_saida,id_controle_retorno) VALUES (25,NULL,'2016-11-16 09:31:12',38,NULL,'c.marcos.porfirio',105,null);
+INSERT INTO viagem (id_viagem,anotacao,data_hora_cadastro,id_motorista,placa,id_usuario,id_controle_saida,id_controle_retorno) VALUES (33,NULL,'2016-11-17 12:11:39',5,NULL,'c.marcos.porfirio',131,NULL);
+INSERT INTO passageiro (nome,matricula,id_viagem) VALUES ('Carla Afonso de Novoa Melo','863-X',24);
+INSERT INTO passageiro (nome,matricula,id_viagem) VALUES ('Hideraldo Luiz de Sousa Machado','549-5',25);
+INSERT INTO passageiro (nome,matricula,id_viagem) VALUES ('Loris Rocha Pereira Junior','262-3',33);
+INSERT INTO acesso_garagem (id_acesso_garagem,entrada,saida,data_hora_cadastro,anotacao,id_motorista,id_visita,placa,id_usuario) VALUES (84,'2016-11-16 14:33:23',NULL,'2016-11-16 14:33:23',NULL,13,NULL,'QDG3584','c.marcos.porfirio');

@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="resources/jquery-ui/jquery-ui.theme.min.css" />
 <link rel="stylesheet" type="text/css" href="resources/jquery-ui/jquery-ui.structure.min.css" />
 <link rel="stylesheet" type="text/css" href="resources/select2/select2.min.css" />
+<link rel="stylesheet" type="text/css" href="resources/bootstrap-toggle.min.css" />
 
 <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
 <link rel="icon" type="image/x-icon" href="img/favicon.ico" />

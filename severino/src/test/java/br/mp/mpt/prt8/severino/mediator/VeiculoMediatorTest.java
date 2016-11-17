@@ -2,6 +2,8 @@ package br.mp.mpt.prt8.severino.mediator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.parameter.SearchParameter;
 import org.springframework.test.context.ContextConfiguration;
 
+import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
@@ -65,7 +68,7 @@ public class VeiculoMediatorTest extends AbstractSeverinoTests {
 		veiculo3.setMotorista(new Motorista());
 		this.veiculo3 = veiculoMediator.save(veiculo3);
 	}
-	
+
 	@Test
 	public void testFind() throws Exception {
 		DataTablesInput dataTablesInput = new DataTablesInput();
@@ -74,6 +77,23 @@ public class VeiculoMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new SearchParameter("Nissan", false));
 		Page<Veiculo> page = veiculoMediator.find(dataTablesInput);
 		assertEquals(2, page.getTotalElements());
+	}
+
+	@Test
+	public void testListarServidoresMembros() throws Exception {
+		Motorista motorista = cargaMotorista.getMotorista();
+		motorista.setCargo(Cargo.PROCURADOR);
+		entityManager.persist(motorista);
+		veiculo1.setMotorista(motorista);
+		entityManager.persist(veiculo1);
+		entityManager.flush();
+		entityManager.clear();
+
+		List<Veiculo> resultado = veiculoMediator.findAllServidoresMembros();
+		assertNotNull(resultado);
+		assertEquals(1, resultado.size());
+		assertNotNull(resultado.get(0).getMotorista());
+		assertEquals(Cargo.PROCURADOR, resultado.get(0).getMotorista().getCargo());
 	}
 
 	@Test
@@ -99,4 +119,11 @@ public class VeiculoMediatorTest extends AbstractSeverinoTests {
 		assertTrue(veiculoMediator.isViatura(veiculoTransient));
 	}
 
+	@Test
+	public void testFindByPlaca() throws Exception {
+		assertNotNull(veiculoMediator.findByPlaca("AQT1234"));
+		assertNull(veiculoMediator.findByPlaca("nao existe"));
+		assertNull(veiculoMediator.findByPlaca(""));
+		assertNull(veiculoMediator.findByPlaca(null));
+	}
 }

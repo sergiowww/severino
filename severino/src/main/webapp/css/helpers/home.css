@@ -1,0 +1,11 @@
+@CHARSET "ISO-8859-1";
+
+div.toggle {
+	width: 64px;
+	height: 22px;
+	float: right;
+}
+
+div.bodycontainer {
+	height: 420px;
+}

@@ -38,9 +38,7 @@
 										<c:set var="dataHoraFormatada">00:00</c:set>
 									</c:if>
 									<c:if test="${not empty controle.dataHora}">
-										<c:set var="dataHoraFormatada">
-											<fmt:formatDate value="${controle.dataHora}" type="time" timeStyle="SHORT" />
-										</c:set>
+										<fmt:formatDate value="${controle.dataHora}" type="time" timeStyle="SHORT" var="dataHoraFormatada" />
 									</c:if>
 									<c:if test="${controle.fluxoEntrada}">
 										<c:set var="dicaUltimoEvento">

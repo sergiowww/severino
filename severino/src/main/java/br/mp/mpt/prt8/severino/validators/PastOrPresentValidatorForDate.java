@@ -8,6 +8,12 @@ import javax.validation.ConstraintValidatorContext;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.hibernate.validator.spi.time.TimeProvider;
 
+/**
+ * Validação de datas para valores igual a agora ou passado.
+ * 
+ * @author sergio.eoliveira
+ *
+ */
 public class PastOrPresentValidatorForDate implements ConstraintValidator<PastOrPresent, Date> {
 	@Override
 	public boolean isValid(Date date, ConstraintValidatorContext constraintValidatorContext) {

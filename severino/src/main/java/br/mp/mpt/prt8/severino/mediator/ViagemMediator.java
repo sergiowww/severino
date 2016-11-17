@@ -21,12 +21,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.ViagemRepository;
 import br.mp.mpt.prt8.severino.entity.ControleMotorista;
+import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Passageiro;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
  * Mediator para viagens.
@@ -176,4 +178,14 @@ public class ViagemMediator extends AbstractMediator<Viagem, Integer> {
 		return null;
 	}
 
+	/**
+	 * Buscar passageiros com a última entrada e saída.
+	 * 
+	 * @return
+	 */
+	public List<PessoaDisponibilidade> findUltimaDisponibilidade() {
+		List<PessoaDisponibilidade> passageiros = viagemRepository.findPassageirosUltimaViagem();
+		passageiros.forEach(p -> p.setFonte(FonteDisponibilidade.VIAGEM));
+		return passageiros;
+	}
 }

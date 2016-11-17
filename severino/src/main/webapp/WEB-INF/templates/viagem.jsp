@@ -12,7 +12,6 @@
 	<jsp:include page="viagem-template-passageiro.jsp" />
 </script>
 
-<link rel="stylesheet" type="text/css" href="resources/bootstrap-toggle.min.css" />
 <link rel="stylesheet" type="text/css" href="css/helpers/viagem.css" />
 <title>Fluxo de Técnicos de Transporte</title>
 </head>
