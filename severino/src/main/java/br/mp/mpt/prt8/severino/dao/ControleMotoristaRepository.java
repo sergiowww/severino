@@ -53,4 +53,36 @@ public interface ControleMotoristaRepository extends BaseRepositorySpecification
 	@Query("select max(c.dataHora) from ControleMotorista as c where c.motorista.id = :idMotorista")
 	Date findMaxDataHoraByMotorista(@Param("idMotorista") Integer idMotorista);
 
+	/**
+	 * Buscar o controle de ponto anterior em relação a data informada para o
+	 * motorista em questão.
+	 * 
+	 * @param dataHora
+	 * @param idMotorista
+	 * @return
+	 */
+	@Query
+	ControleMotorista findControleAnterior(@Param("dataHora") Date dataHora, @Param("idMotorista") Integer idMotorista);
+
+	/**
+	 * Buscar o próximo controle de ponto em relação a data informada para o
+	 * motorista.
+	 * 
+	 * @param dataHora
+	 * @param idMotorista
+	 * @return
+	 */
+	@Query
+	ControleMotorista findControleProximo(@Param("dataHora") Date dataHora, @Param("idMotorista") Integer idMotorista);
+
+	/**
+	 * Contar quantos existem com a mesma data para o mesmo motorista.
+	 * 
+	 * @param dataHoraCorrente
+	 * @param motorista
+	 * @param id
+	 * @return
+	 */
+	Long countByDataHoraAndMotoristaAndIdNot(Date dataHoraCorrente, Motorista motorista, Integer id);
+
 }

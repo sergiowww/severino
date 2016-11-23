@@ -125,4 +125,48 @@
 				)
 		</query>
 	</named-query>
+	<named-query name="ControleMotorista.findControleAnterior">
+		<query>
+			select
+				new br.mp.mpt.prt8.severino.entity.ControleMotorista(
+					cm.dataHora,
+					cm.fluxo
+				)
+			from
+				ControleMotorista as cm
+			where
+				cm.motorista.id = :idMotorista and
+				cm.dataHora = (
+					select 
+						max(cm2.dataHora)
+					from
+						ControleMotorista cm2
+					where
+						cm2.dataHora &lt; :dataHora and
+						cm2.motorista.id = cm.motorista.id
+				)
+		</query>
+	</named-query>
+	<named-query name="ControleMotorista.findControleProximo">
+		<query>
+			select
+				new br.mp.mpt.prt8.severino.entity.ControleMotorista(
+					cm.dataHora,
+					cm.fluxo
+				)
+			from
+				ControleMotorista as cm
+			where
+				cm.motorista.id = :idMotorista and
+				cm.dataHora = (
+					select 
+						min(cm2.dataHora)
+					from
+						ControleMotorista cm2
+					where
+						cm2.dataHora &gt; :dataHora and
+						cm2.motorista.id = cm.motorista.id
+				)
+		</query>
+	</named-query>
 </entity-mappings>

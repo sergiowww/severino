@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="includes/head.jsp"></jsp:include>
-<title>Usuários</title>
+<title>Usuários do Sistema</title>
 </head>
 <body>
 	<tags:menu selectedItem="usuario/registros" />

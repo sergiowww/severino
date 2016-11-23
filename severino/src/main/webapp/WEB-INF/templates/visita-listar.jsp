@@ -4,7 +4,7 @@
 <html>
 <head>
 <jsp:include page="includes/head.jsp"></jsp:include>
-<title>Registro de Visitantes</title>
+<title>Visitas</title>
 </head>
 <body>
 	<tags:menu selectedItem="visita/registros" />

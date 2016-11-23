@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
-import br.mp.mpt.prt8.severino.TestUtil;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
@@ -24,6 +25,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  * @author sergio.eoliveira
  *
  */
+@Sql({ "/testFindUltimaDisponibilidade.sql", "/testUltimosPassageiros.sql" })
 public class PessoaDisponibilidadeMediatorTest extends AbstractSeverinoTests {
 	private static final DateFormat DTF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	@Autowired
@@ -31,8 +33,6 @@ public class PessoaDisponibilidadeMediatorTest extends AbstractSeverinoTests {
 
 	@Test
 	public void testFindUltimaDisponibilidade() {
-		TestUtil.executarScript(entityManager, "testFindUltimaDisponibilidade.sql");
-		TestUtil.executarScript(entityManager, "testUltimosPassageiros.sql");
 		List<PessoaDisponibilidade> ultimas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade();
 		assertEquals(5, ultimas.size());
 
@@ -41,7 +41,11 @@ public class PessoaDisponibilidadeMediatorTest extends AbstractSeverinoTests {
 		checkPassageiro("2016-11-16 08:54", null, "Faustino Bartolomeu Alves Pimenta", true, FonteDisponibilidade.ACESSO_GARAGEM, ultimas);
 		checkPassageiro(null, "2016-11-16 09:31", "Hideraldo Luiz de Sousa Machado", false, FonteDisponibilidade.VIAGEM, ultimas);
 		checkPassageiro(null, "2016-11-17 12:11", "Loris Rocha Pereira Junior", false, FonteDisponibilidade.VIAGEM, ultimas);
+	}
 
+	@After
+	public void cleanUp() {
+		deleteFromTables("passageiro", "viagem", "controle_motorista", "acesso_garagem", "veiculo", "usuario", "motorista");
 	}
 
 	private void checkPassageiro(String entrada, String saida, String nomePassageiro, boolean entrou, FonteDisponibilidade fonte, List<PessoaDisponibilidade> ultimas) {

@@ -22,9 +22,7 @@
 					</c:if>
 					<c:forEach items="${viagensSemBaixa}" var="viagemSemBaixa">
 						<tr class="row-viagems-em-andamento ${viagemSemBaixa.id eq viagem.id ? 'active' : ''}">
-							<c:set var="dataSaidaCompleta">
-								<fmt:formatDate value="${viagemSemBaixa.saida}" type="both" timeStyle="SHORT" dateStyle="MEDIUM" />
-							</c:set>
+							<fmt:formatDate value="${viagemSemBaixa.saida}" type="both" timeStyle="SHORT" dateStyle="MEDIUM" var="dataSaidaCompleta" />
 							<td title="${dataSaidaCompleta}">
 								<fmt:formatDate value="${viagemSemBaixa.saida}" type="time" timeStyle="SHORT" />
 							</td>

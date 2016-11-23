@@ -23,9 +23,7 @@
 					</c:if>
 					<c:forEach items="${acessosSemBaixa}" var="acessoGaragemSemBaixa">
 						<tr class="${acessoGaragemSemBaixa.id eq acessoGaragem.id ? 'active' : ''}">
-							<c:set var="dataEntrada">
-								<fmt:formatDate value="${acessoGaragemSemBaixa.entrada}" type="both" dateStyle="MEDIUM" timeStyle="SHORT" />
-							</c:set>
+							<fmt:formatDate value="${acessoGaragemSemBaixa.entrada}" type="both" dateStyle="MEDIUM" timeStyle="SHORT" var="dataEntrada" />
 							<td title="${dataEntrada}">
 								<fmt:formatDate value="${acessoGaragemSemBaixa.entrada}" type="time" timeStyle="SHORT" />
 							</td>

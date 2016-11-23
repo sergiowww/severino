@@ -1,6 +1,5 @@
 package br.mp.mpt.prt8.severino.mediator;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +17,8 @@ import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.Fluxo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
-import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
+import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -59,7 +59,26 @@ public class ControleMotoristaMediator extends AbstractMediator<ControleMotorist
 	@Transactional
 	@Override
 	public ControleMotorista save(ControleMotorista controleMotorista) {
-		motoristaMediator.checkMotorista(controleMotorista.getMotorista());
+		Motorista motorista = controleMotorista.getMotorista();
+		motoristaMediator.checkMotorista(motorista);
+		Integer idNaoNulo = EntidadeUtil.getIdNaoNulo(controleMotorista);
+		Date dataHoraCorrente = controleMotorista.getDataHora();
+		ControleMotorista controleAnterior = controleMotoristaRepository.findControleAnterior(dataHoraCorrente, motorista.getId());
+		if (controleAnterior != null && controleAnterior.getFluxo().equals(controleMotorista.getFluxo())) {
+			Date dataHora = controleAnterior.getDataHora();
+			throw new NegocioException("O ponto anterior " + DateUtils.toString(dataHora) + " é uma " + controleAnterior.getFluxo());
+		}
+
+		ControleMotorista controlePosterior = controleMotoristaRepository.findControleProximo(dataHoraCorrente, motorista.getId());
+		if (controlePosterior != null && controlePosterior.getFluxo().equals(controleMotorista.getFluxo())) {
+			Date dataHora = controlePosterior.getDataHora();
+			throw new NegocioException("O registro de ponto " + DateUtils.toString(dataHora) + " posterior a este é uma " + controlePosterior.getFluxo());
+		}
+
+		Long total = controleMotoristaRepository.countByDataHoraAndMotoristaAndIdNot(dataHoraCorrente, motorista, idNaoNulo);
+		if (total > 0) {
+			throw new NegocioException("Não é possível registrar uma data e hora que tenha sido registrada antes!");
+		}
 		return super.save(controleMotorista);
 	}
 
@@ -120,8 +139,7 @@ public class ControleMotoristaMediator extends AbstractMediator<ControleMotorist
 	private void checkDataHora(ControleMotorista controle) {
 		Date ultimaDataHoraRegistrada = controleMotoristaRepository.findMaxDataHoraByMotorista(controle.getMotorista().getId());
 		if (ultimaDataHoraRegistrada != null && ultimaDataHoraRegistrada.after(controle.getDataHora())) {
-			DateFormat format = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
-			String message = "Não é possível inserir um horário antes do último horário registrado: " + format.format(ultimaDataHoraRegistrada);
+			String message = "Não é possível inserir um horário antes do último horário registrado: " + DateUtils.toString(ultimaDataHoraRegistrada);
 			throw new NegocioException(message);
 		}
 	}

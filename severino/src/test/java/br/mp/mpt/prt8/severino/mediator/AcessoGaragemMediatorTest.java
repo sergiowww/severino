@@ -26,10 +26,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.parameter.SearchParameter;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
-import br.mp.mpt.prt8.severino.TestUtil;
 import br.mp.mpt.prt8.severino.dao.AcessoGaragemRepository;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
 import br.mp.mpt.prt8.severino.entity.Empresa;
@@ -468,14 +468,15 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 	}
 
 	@Test
+	@Sql("/testFindUltimaDisponibilidade.sql")
 	public void testFindUltimaDisponibilidade() throws Exception {
-		TestUtil.executarScript(entityManager, "testFindUltimaDisponibilidade.sql");
 		List<PessoaDisponibilidade> ultimas = acessoGaragemMediator.findUltimaDisponibilidade();
 		assertEquals(3, ultimas.size());
 
 		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, ultimas);
 		checkPassageiro("2016-11-16 08:07", null, "Carla Afonso de Novoa Melo", true, ultimas);
 		checkPassageiro("2016-11-16 08:54", null, "Faustino Bartolomeu Alves Pimenta", true, ultimas);
+		deleteFromTables("passageiro", "viagem", "controle_motorista", "acesso_garagem", "veiculo", "usuario", "motorista");
 
 	}
 

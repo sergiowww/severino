@@ -37,7 +37,7 @@ CesDataTableUtils.createDataTable = function(contextPath, urlJsonList, urlEdit, 
 				columnData.render = function(data, type, row) {
 					if (data != null) {
 						var date = new Date(data);
-						return $.datepicker.formatDate("dd/mm/yy", date) + " " + date.getHours() + ":" + date.getMinutes();
+						return date.toLocaleString();
 					}
 					return null;
 				};

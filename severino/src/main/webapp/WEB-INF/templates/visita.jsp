@@ -6,7 +6,7 @@
 <head>
 <jsp:include page="includes/head.jsp"></jsp:include>
 <script type="text/javascript" src="js/helpers/visita.js" charset="UTF-8"></script>
-<title>Registro de visitantes</title>
+<title>Registro de Visitante</title>
 </head>
 <body>
 	<tags:menu selectedItem="visita/" />

@@ -2,6 +2,7 @@ package br.mp.mpt.prt8.severino.entity;
 
 import static javax.persistence.EnumType.ORDINAL;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -67,6 +68,18 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	/**
 	 * Construtor.
 	 * 
+	 * @param dataHora
+	 * @param fluxo
+	 */
+	public ControleMotorista(Date dataHora, Fluxo fluxo) {
+		super();
+		this.dataHora = dataHora;
+		this.fluxo = fluxo;
+	}
+
+	/**
+	 * Construtor.
+	 * 
 	 * @param motorista
 	 */
 	public ControleMotorista(Motorista motorista) {
@@ -125,9 +138,7 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 
 	@Override
 	public int compareTo(ControleMotorista o) {
-		Integer id2 = o.getMotorista().getId();
-		Integer id1 = motorista.getId();
-		return id1.compareTo(id2);
+		return Comparator.comparing(ControleMotorista::getId, Comparator.nullsFirst(Comparator.naturalOrder())).compare(o, this);
 	}
 
 }

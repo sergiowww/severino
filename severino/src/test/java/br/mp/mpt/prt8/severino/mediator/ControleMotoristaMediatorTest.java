@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -129,8 +130,7 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 		controle.setDataHora(SDF.parse(dataHora));
 		controle.setMotorista(motorista);
 		controle.setFluxo(fluxo);
-		controleMotoristaMediator.save(controle);
-		return controle;
+		return controleMotoristaMediator.save(controle);
 	}
 
 	private Motorista saveMotorista(int index) {
@@ -162,6 +162,91 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 		assertEquals(DATE_FORMAT.format(new Date()), DATE_FORMAT.format(controleGravado.getDataHora()));
 
 		testFind(motorista);
+	}
+
+	@Test(expected = NegocioException.class)
+	public void testRegistrarForaDeOrdem2() throws Exception {
+		Motorista motorista1 = saveMotorista(1);
+		try {
+			registrarControle(Fluxo.ENTRADA, "05/10/2016 08:10", motorista1);
+			registrarControle(Fluxo.SAIDA, "05/10/2016 09:10", motorista1);
+		} catch (NegocioException e) {
+			fail("Deu exceção onde não deveria..." + e.getMessage());
+		}
+		try {
+			registrarControle(Fluxo.SAIDA, "05/10/2016 08:12", motorista1);
+		} catch (NegocioException e) {
+			assertEquals("O registro de ponto 05/10/2016 09:10 posterior a este é uma SAIDA", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = NegocioException.class)
+	public void testRegistrarDuplicado() throws Exception {
+		Motorista motorista1 = saveMotorista(1);
+		try {
+			registrarControle(Fluxo.SAIDA, "05/10/2016 08:12", motorista1);
+		} catch (NegocioException e) {
+			fail("Deu exceção onde não deveria..." + e.getMessage());
+		}
+		try {
+			registrarControle(Fluxo.ENTRADA, "05/10/2016 08:12", motorista1);
+		} catch (NegocioException e) {
+			assertEquals("Não é possível registrar uma data e hora que tenha sido registrada antes!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void testRegistroEAlteracao() throws Exception {
+		Motorista motorista1 = saveMotorista(1);
+		ControleMotorista controle = registrarControle(Fluxo.ENTRADA, "05/10/2016 08:10", motorista1);
+		entityManager.flush();
+		entityManager.clear();
+		assertNotNull(controle.getId());
+
+		controle = controleMotoristaRepository.findOne(controle.getId());
+		assertEquals(Fluxo.ENTRADA, controle.getFluxo());
+		assertEquals(motorista1, controle.getMotorista());
+		assertEquals("05/10/2016 08:10", SDF.format(controle.getDataHora()));
+		controle.setFluxo(Fluxo.SAIDA);
+		controleMotoristaMediator.save(controle);
+		entityManager.flush();
+		entityManager.clear();
+
+		controle = controleMotoristaRepository.findOne(controle.getId());
+
+		assertEquals(Fluxo.SAIDA, controle.getFluxo());
+		assertEquals(motorista1, controle.getMotorista());
+		assertEquals("05/10/2016 08:10", SDF.format(controle.getDataHora()));
+
+		controle.setDataHora(SDF.parse("05/10/2016 08:12"));
+
+		controleMotoristaMediator.save(controle);
+		entityManager.flush();
+		entityManager.clear();
+
+		controle = controleMotoristaRepository.findOne(controle.getId());
+		assertEquals(Fluxo.SAIDA, controle.getFluxo());
+		assertEquals(motorista1, controle.getMotorista());
+		assertEquals("05/10/2016 08:12", SDF.format(controle.getDataHora()));
+	}
+
+	@Test(expected = NegocioException.class)
+	public void testRegistrarForaDeOrdem() throws Exception {
+		Motorista motorista1 = saveMotorista(1);
+		try {
+			registrarControle(Fluxo.ENTRADA, "05/10/2016 08:10", motorista1);
+
+		} catch (NegocioException e) {
+			fail("Deu exceção onde não deveria..." + e.getMessage());
+		}
+		try {
+			registrarControle(Fluxo.ENTRADA, "05/10/2016 09:10", motorista1);
+		} catch (NegocioException e) {
+			assertEquals("O ponto anterior 05/10/2016 08:10 é uma ENTRADA", e.getMessage());
+			throw e;
+		}
 	}
 
 	/**

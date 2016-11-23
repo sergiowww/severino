@@ -8,15 +8,16 @@
 <c:set var="menuItens">
 	Empresas;empresa/registros,
 	Setores;setor/registros,
-	Usuários do Sistema;usuario/registros,
+	Usuários;usuario/registros,
 	Visitantes;visitante/registros,
-	Registro de Visitantes;visita/registros,
+	Visitas;visita/registros,
 	<span class="text-primary">Nova visita</span>;visita/
 </c:set>
 <c:set var="garagemItens">
 	Condutores;motorista/registros,
 	Veículos;veiculo/registros,
 	Histórico;viagem/registros,
+	Acessos;acessoGaragem/registros,
 	Controle de Ponto;controleMotorista/registros,
 	<span class="text-primary">Fluxo Motoristas</span>;viagem/,
 	<span class="text-primary">Acesso Garagem</span>;acessoGaragem/
