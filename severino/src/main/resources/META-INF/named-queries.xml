@@ -98,7 +98,8 @@
 						inner join v2.controleSaida as cs2
 						inner join v2.passageiros as p2
 					where
-						p2.id.nome = p.id.nome
+						p2.id.nome = p.id.nome and
+						cs2.dataHora between :inicio and :fim
 				)
 		</query>
 	</named-query>
@@ -121,7 +122,8 @@
 					from 
 						AcessoGaragem as ag2
 					where
-						ag2.motorista.id = ag.motorista.id
+						ag2.motorista.id = ag.motorista.id and
+						ag2.entrada between :inicio and :fim
 				)
 		</query>
 	</named-query>

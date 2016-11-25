@@ -1,5 +1,7 @@
 package br.mp.mpt.prt8.severino.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.mediator.ControleMotoristaMediator;
 import br.mp.mpt.prt8.severino.mediator.PessoaDisponibilidadeMediator;
 import br.mp.mpt.prt8.severino.mediator.UsuarioMediator;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
@@ -45,10 +48,12 @@ public class HomeController {
 	public ModelAndView inicio(Authentication auth) {
 		usuarioMediator.save(auth);
 		ModelAndView mav = new ModelAndView("home");
-		List<PessoaDisponibilidade> pessoas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade();
+		Date inicio = DateUtils.toDate(LocalDateTime.now().minusDays(10));
+		Date fim = new Date();
+		List<PessoaDisponibilidade> pessoas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade(inicio, fim);
 		mav.addObject("totalPessoasNaCasa", pessoas.stream().filter(p -> p.isEntrou()).count());
 		mav.addObject("pessoasDisponiveis", pessoas);
-		
+
 		List<ControleMotorista> motoristas = controleMotoristaMediator.findDisponiveis();
 		mav.addObject("totalMotoristasNaCasa", motoristas.stream().filter(m -> m.isFluxoEntrada()).count());
 		mav.addObject("controleMotoristas", motoristas);

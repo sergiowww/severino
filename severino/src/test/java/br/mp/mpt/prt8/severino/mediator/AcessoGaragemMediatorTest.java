@@ -57,8 +57,9 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 @ContextConfiguration(classes = { CargaMotorista.class, CargaUsuario.class, CargaSetor.class })
 public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 	private static final String PLACA_VEICULO = "HFG4577";
-	private DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
-	private DateFormat DATE_TIME_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
+	private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
+	private static final DateFormat DATE_TIME_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
+	private static final DateFormat DTF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	@Autowired
 	private AcessoGaragemMediator acessoGaragemMediator;
@@ -470,7 +471,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 	@Test
 	@Sql("/testFindUltimaDisponibilidade.sql")
 	public void testFindUltimaDisponibilidade() throws Exception {
-		List<PessoaDisponibilidade> ultimas = acessoGaragemMediator.findUltimaDisponibilidade();
+		List<PessoaDisponibilidade> ultimas = acessoGaragemMediator.findUltimaDisponibilidade(DTF.parse("2016-01-01 00:00"), DTF.parse("2017-01-01 00:00"));
 		assertEquals(3, ultimas.size());
 
 		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, ultimas);
@@ -481,17 +482,16 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 	}
 
 	private void checkPassageiro(String entrada, String saida, String nomePassageiro, boolean entrou, List<PessoaDisponibilidade> ultimas) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Optional<PessoaDisponibilidade> optional = ultimas.stream().filter(p -> p.getNome().equals(nomePassageiro)).findFirst();
 		assertTrue(optional.isPresent());
 		PessoaDisponibilidade pessoaDisponibilidade = optional.get();
 		assertEquals(FonteDisponibilidade.ACESSO_GARAGEM, pessoaDisponibilidade.getFonte());
 		assertEquals(entrou, pessoaDisponibilidade.isEntrou());
-		assertEquals(entrada, df.format(pessoaDisponibilidade.getEntrada()));
+		assertEquals(entrada, DTF.format(pessoaDisponibilidade.getEntrada()));
 		if (saida == null) {
 			assertNull(pessoaDisponibilidade.getSaida());
 		} else {
-			assertEquals(saida, df.format(pessoaDisponibilidade.getSaida()));
+			assertEquals(saida, DTF.format(pessoaDisponibilidade.getSaida()));
 		}
 	}
 

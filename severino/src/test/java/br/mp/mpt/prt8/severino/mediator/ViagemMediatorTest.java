@@ -578,7 +578,9 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		viagem2 = salvarRegistro(viagem2);
 		assertEquals(1, viagem2.getPassageiros().size());
 
-		List<PessoaDisponibilidade> ultimas = viagemMediator.findUltimaDisponibilidade();
+		Date inicio = DateUtils.toDate(LocalDateTime.now().minusMonths(10));
+		Date fim = DateUtils.toDate(LocalDateTime.now().plusMonths(10));
+		List<PessoaDisponibilidade> ultimas = viagemMediator.findUltimaDisponibilidade(inicio, fim);
 		assertEquals(3, ultimas.size());
 		checkPassageiro(saidaViagem1, retornoViagem1, nomePassageiro1, true, ultimas);
 		checkPassageiro(saidaViagem1, retornoViagem1, nomePassageiro2, true, ultimas);

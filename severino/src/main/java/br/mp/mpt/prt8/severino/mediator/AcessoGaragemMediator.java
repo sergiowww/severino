@@ -1,6 +1,7 @@
 package br.mp.mpt.prt8.severino.mediator;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,10 +143,13 @@ public class AcessoGaragemMediator extends AbstractMediator<AcessoGaragem, Integ
 	/**
 	 * Buscar o ultimo horario de entrada e saída de cada motorista.
 	 * 
+	 * @param inicio
+	 * @param fim
+	 * 
 	 * @return
 	 */
-	public List<PessoaDisponibilidade> findUltimaDisponibilidade() {
-		List<PessoaDisponibilidade> acessos = acessoGaragemRepository.findUltimaDisponibilidade();
+	public List<PessoaDisponibilidade> findUltimaDisponibilidade(Date inicio, Date fim) {
+		List<PessoaDisponibilidade> acessos = acessoGaragemRepository.findUltimaDisponibilidade(inicio, fim);
 		acessos.forEach(p -> p.setFonte(FonteDisponibilidade.ACESSO_GARAGEM));
 		return acessos;
 	}

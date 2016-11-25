@@ -32,8 +32,8 @@ public class PessoaDisponibilidadeMediatorTest extends AbstractSeverinoTests {
 	private PessoaDisponibilidadeMediator pessoaDisponibilidadeMediator;
 
 	@Test
-	public void testFindUltimaDisponibilidade() {
-		List<PessoaDisponibilidade> ultimas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade();
+	public void testFindUltimaDisponibilidade() throws Exception {
+		List<PessoaDisponibilidade> ultimas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade(DTF.parse("2016-01-01 00:00"), DTF.parse("2017-01-01 00:00"));
 		assertEquals(5, ultimas.size());
 
 		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, FonteDisponibilidade.ACESSO_GARAGEM, ultimas);

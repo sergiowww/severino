@@ -74,8 +74,11 @@ public interface AcessoGaragemRepository extends BaseRepositorySpecification<Ace
 	/**
 	 * Buscar o ultimo horario de entrada e saída de cada motorista.
 	 * 
+	 * @param inicio
+	 * @param fim
+	 * 
 	 * @return
 	 */
 	@Query
-	List<PessoaDisponibilidade> findUltimaDisponibilidade();
+	List<PessoaDisponibilidade> findUltimaDisponibilidade(@Param("inicio") Date inicio, @Param("fim") Date fim);
 }

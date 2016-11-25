@@ -1,5 +1,6 @@
 package br.mp.mpt.prt8.severino.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -66,8 +67,10 @@ public interface ViagemRepository extends BaseRepositorySpecification<Viagem, In
 	/**
 	 * Buscar a ultima viagem com cada passageiro.
 	 * 
+	 * @param inicio
+	 * @param fim
 	 * @return
 	 */
 	@Query
-	List<PessoaDisponibilidade> findPassageirosUltimaViagem();
+	List<PessoaDisponibilidade> findPassageirosUltimaViagem(@Param("inicio") Date inicio, @Param("fim") Date fim);
 }

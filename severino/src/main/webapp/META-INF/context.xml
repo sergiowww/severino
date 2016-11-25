@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context docBase="severino" path="/severino" reloadable="true" source="org.eclipse.jst.jee.server:severino">
+<Context docBase="severino" path="/severino" reloadable="false" source="org.eclipse.jst.jee.server:severino">
 	<Resource 
 		name="jdbc/ces" 
 		type="javax.sql.DataSource" 

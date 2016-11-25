@@ -181,10 +181,13 @@ public class ViagemMediator extends AbstractMediator<Viagem, Integer> {
 	/**
 	 * Buscar passageiros com a última entrada e saída.
 	 * 
+	 * @param inicio
+	 * @param fim
+	 * 
 	 * @return
 	 */
-	public List<PessoaDisponibilidade> findUltimaDisponibilidade() {
-		List<PessoaDisponibilidade> passageiros = viagemRepository.findPassageirosUltimaViagem();
+	public List<PessoaDisponibilidade> findUltimaDisponibilidade(Date inicio, Date fim) {
+		List<PessoaDisponibilidade> passageiros = viagemRepository.findPassageirosUltimaViagem(inicio, fim);
 		passageiros.forEach(p -> p.setFonte(FonteDisponibilidade.VIAGEM));
 		return passageiros;
 	}
