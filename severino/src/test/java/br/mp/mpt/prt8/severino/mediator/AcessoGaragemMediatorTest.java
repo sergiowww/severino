@@ -32,11 +32,15 @@ import org.springframework.validation.SmartValidator;
 
 import br.mp.mpt.prt8.severino.dao.AcessoGaragemRepository;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
+import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
 import br.mp.mpt.prt8.severino.entity.Motorista;
+import br.mp.mpt.prt8.severino.entity.Passageiro;
+import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
+import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
@@ -477,7 +481,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, ultimas);
 		checkPassageiro("2016-11-16 08:07", null, "Carla Afonso de Novoa Melo", true, ultimas);
 		checkPassageiro("2016-11-16 08:54", null, "Faustino Bartolomeu Alves Pimenta", true, ultimas);
-		deleteFromTables("passageiro", "viagem", "controle_motorista", "acesso_garagem", "veiculo", "usuario", "motorista");
+		deleteFromTables(Passageiro.class, Viagem.class, ControleMotorista.class, AcessoGaragem.class, Veiculo.class, Usuario.class, Motorista.class);
 
 	}
 

@@ -16,7 +16,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
+import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
+import br.mp.mpt.prt8.severino.entity.Motorista;
+import br.mp.mpt.prt8.severino.entity.Passageiro;
+import br.mp.mpt.prt8.severino.entity.Usuario;
+import br.mp.mpt.prt8.severino.entity.Veiculo;
+import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
@@ -45,7 +52,7 @@ public class PessoaDisponibilidadeMediatorTest extends AbstractSeverinoTests {
 
 	@After
 	public void cleanUp() {
-		deleteFromTables("passageiro", "viagem", "controle_motorista", "acesso_garagem", "veiculo", "usuario", "motorista");
+		deleteFromTables(Passageiro.class, Viagem.class, ControleMotorista.class, AcessoGaragem.class, Veiculo.class, Usuario.class, Motorista.class);
 	}
 
 	private void checkPassageiro(String entrada, String saida, String nomePassageiro, boolean entrou, FonteDisponibilidade fonte, List<PessoaDisponibilidade> ultimas) {
