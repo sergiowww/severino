@@ -2,12 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
+<c:set var="totalPessoas" value="${fn:length(pessoasDisponiveis)}" />
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
 			Procuradores e Servidores na Casa
 			<c:if test="${not empty pessoasDisponiveis}">
-				<span class="badge" style="float: right;" title="técnicos disponíveis/total">${totalPessoasNaCasa}/${fn:length(pessoasDisponiveis)}</span>
+				<span class="badge" style="float: right;" title="técnicos disponíveis/total">${totalPessoasNaCasa}/${totalPessoas}</span>
 			</c:if>
 		</h3>
 	</div>
@@ -24,9 +25,8 @@
 						<tr>
 							<c:set var="pessoa" value="${p}" scope="request" />
 							<jsp:include page="home-servidores-item.jsp" />
-
-							<c:set var="pessoa" value="${pessoasDisponiveis[status.index + 1]}" scope="request" />
-							<c:if test="${not empty pessoa }">
+							<c:if test="${status.index + 1 lt totalPessoas}">
+								<c:set var="pessoa" value="${pessoasDisponiveis[status.index + 1]}" scope="request" />
 								<jsp:include page="home-servidores-item.jsp" />
 							</c:if>
 						</tr>
