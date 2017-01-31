@@ -36,6 +36,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 
@@ -46,7 +47,6 @@ import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 @Entity
 @Table(name = "viagem")
 public class Viagem extends AbstractEntity<Integer> {
-
 	private static final long serialVersionUID = -2416567901140832750L;
 
 	@Id
@@ -133,7 +133,7 @@ public class Viagem extends AbstractEntity<Integer> {
 	@Transient
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = "Não pode ser uma data futura", groups = CadastrarViagem.class)
+	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA, groups = CadastrarViagem.class)
 	public Date getRetorno() {
 		if (getControleRetorno() != null) {
 			return getControleRetorno().getDataHora();
@@ -156,7 +156,7 @@ public class Viagem extends AbstractEntity<Integer> {
 	@Transient
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = "Não pode ser uma data futura", groups = CadastrarViagem.class)
+	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA, groups = CadastrarViagem.class)
 	public Date getSaida() {
 		if (getControleSaida() != null) {
 			return getControleSaida().getDataHora();

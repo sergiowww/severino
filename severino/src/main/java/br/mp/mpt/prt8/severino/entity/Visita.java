@@ -1,5 +1,6 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.MENSAGEM_DATA_FUTURA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_DATA_ENTRADA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_INTERVALO_ENTRADA_SAIDA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isDataEntradaValida;
@@ -60,7 +61,7 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = "Não pode ser uma data futura", groups = CadastrarVisita.class)
+	@Past(message = MENSAGEM_DATA_FUTURA, groups = CadastrarVisita.class)
 	private Date entrada;
 
 	@Column(name = "nome_procurado", length = 45)
@@ -81,7 +82,7 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = "Não pode ser uma data futura", groups = CadastrarVisita.class)
+	@Past(message = MENSAGEM_DATA_FUTURA, groups = CadastrarVisita.class)
 	private Date saida;
 
 	// uni-directional many-to-one association to Empresa

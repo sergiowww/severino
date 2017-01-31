@@ -10,13 +10,12 @@ import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.repository.DataTablesUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.DeleteSomentePeloCriador;
-import br.mp.mpt.prt8.severino.dao.ExampleSpecificationDisjunction;
-import br.mp.mpt.prt8.severino.utils.DataTableUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -46,7 +45,7 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 */
 	private Page<T> find(String searchValue, Pageable pageable) {
 		ExampleMatcher exampleMather = getExampleMatcher();
-		return repositoryBean().findAll(new ExampleSpecificationDisjunction<>(Example.of(getExampleForSearching(searchValue), exampleMather)), pageable);
+		return repositoryBean().findAll(Example.of(getExampleForSearching(searchValue), exampleMather), pageable);
 	}
 
 	/**
@@ -55,7 +54,7 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 * @return
 	 */
 	protected ExampleMatcher getExampleMatcher() {
-		return ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
+		return ExampleMatcher.matchingAny().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
 	}
 
 	/**
@@ -87,7 +86,7 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 */
 	public Page<T> find(DataTablesInput dataTablesInput) {
 		String searchValue = dataTablesInput.getSearch().getValue();
-		Pageable pageable = DataTableUtils.getPageable(dataTablesInput);
+		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
 		if (StringUtils.isEmpty(searchValue)) {
 			return repositoryBean().findAll(pageable);
 		}

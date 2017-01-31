@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visitante;
@@ -54,7 +54,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter("joão", false));
+		dataTablesInput.setSearch(new Search("joão", false));
 		Page<Visitante> resultado = visitanteMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
 		assertEquals(NOME_VISITANTE1, resultado.getContent().get(0).getNome());

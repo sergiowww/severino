@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -41,6 +41,7 @@ import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
+import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
@@ -303,7 +304,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 			entityManager.clear();
 		} catch (ConstraintViolationException e) {
 			String message = e.getConstraintViolations().stream().map(c -> c.getMessage()).collect(Collectors.joining());
-			assertEquals("Não pode ser uma data futura", message);
+			assertEquals(ValidarIntervalo.MENSAGEM_DATA_FUTURA, message);
 			throw e;
 		}
 	}
@@ -508,7 +509,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(viagem.getMotorista().getNome(), false));
+		dataTablesInput.setSearch(new Search(viagem.getMotorista().getNome(), false));
 		Page<Viagem> page = viagemMediator.find(dataTablesInput);
 		assertEquals(1, page.getTotalElements());
 	}

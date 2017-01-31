@@ -1,5 +1,6 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.MENSAGEM_DATA_FUTURA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_DATA_ENTRADA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_INTERVALO_ENTRADA_SAIDA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isDataEntradaValida;
@@ -64,11 +65,11 @@ public class AcessoGaragem extends AbstractEntityIntervaloData<Integer> {
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = "Não pode ser uma data futura")
+	@Past(message = MENSAGEM_DATA_FUTURA)
 	private Date entrada;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Past(message = "Não pode ser uma data futura")
+	@Past(message = MENSAGEM_DATA_FUTURA)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
 	private Date saida;

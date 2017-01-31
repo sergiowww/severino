@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
 
@@ -55,7 +55,7 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(USUARIO_LOGIN, false));
+		dataTablesInput.setSearch(new Search(USUARIO_LOGIN, false));
 		Page<Usuario> resultado = usuarioMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
 		Usuario usuario = resultado.getContent().get(0);
@@ -73,7 +73,7 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(USUARIO_LOGIN, false));
+		dataTablesInput.setSearch(new Search(USUARIO_LOGIN, false));
 		Page<Usuario> resultado = usuarioMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
 		Usuario usuario = resultado.getContent().get(0);
@@ -102,7 +102,7 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(USUARIO_LOGIN, false));
+		dataTablesInput.setSearch(new Search(USUARIO_LOGIN, false));
 		Page<Usuario> resultado = usuarioMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
 		Usuario usuario = resultado.getContent().get(0);

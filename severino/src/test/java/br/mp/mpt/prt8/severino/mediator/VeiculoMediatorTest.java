@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 import org.springframework.test.context.ContextConfiguration;
 
 import br.mp.mpt.prt8.severino.entity.Cargo;
@@ -74,7 +74,7 @@ public class VeiculoMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter("Nissan", false));
+		dataTablesInput.setSearch(new Search("Nissan", false));
 		Page<Veiculo> page = veiculoMediator.find(dataTablesInput);
 		assertEquals(2, page.getTotalElements());
 	}

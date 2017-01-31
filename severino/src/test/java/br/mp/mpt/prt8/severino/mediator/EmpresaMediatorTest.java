@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
@@ -55,7 +55,7 @@ public class EmpresaMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter("Teste 1", false));
+		dataTablesInput.setSearch(new Search("Teste 1", false));
 		Page<Empresa> resultado = empresaMediator.find(dataTablesInput);
 		assertEquals(2, resultado.getTotalElements());
 	}

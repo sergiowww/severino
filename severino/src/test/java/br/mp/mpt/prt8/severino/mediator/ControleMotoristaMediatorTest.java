@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.parameter.SearchParameter;
+import org.springframework.data.jpa.datatables.mapping.Search;
 import org.springframework.test.context.ContextConfiguration;
 
 import br.mp.mpt.prt8.severino.dao.ControleMotoristaRepository;
@@ -291,7 +291,7 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new SearchParameter(motorista.getNome(), false));
+		dataTablesInput.setSearch(new Search(motorista.getNome(), false));
 		Page<ControleMotorista> page = controleMotoristaMediator.find(dataTablesInput);
 		assertEquals(2, page.getTotalElements());
 	}

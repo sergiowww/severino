@@ -1,9 +1,11 @@
 package br.mp.mpt.prt8.severino.mediator;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 
 import org.junit.Before;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,9 +31,17 @@ public abstract class AbstractSeverinoTests extends AbstractTransactionalJUnit4S
 	@Before
 	public void setUpCarga() {
 		Map<String, ICarga> beansMap = applicationContext.getBeansOfType(ICarga.class);
-		for (ICarga carga : beansMap.values()) {
-			carga.carga();
-		}
+		beansMap.values().forEach(c -> c.carga());
+	}
+
+	/**
+	 * Apagar os dados das tabelas.
+	 * 
+	 * @param entityClasses
+	 */
+	protected void deleteFromTables(Class<?>... entityClasses) {
+		String[] tables = Arrays.stream(entityClasses).map(cls -> cls.getAnnotation(Table.class).name()).toArray(String[]::new);
+		deleteFromTables(tables);
 	}
 
 }

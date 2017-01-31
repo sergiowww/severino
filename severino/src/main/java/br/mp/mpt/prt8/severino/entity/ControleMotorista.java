@@ -25,6 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.validators.PastOrPresent;
 
@@ -46,7 +47,7 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_hora", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@PastOrPresent(message = "Não pode ser uma data futura")
+	@PastOrPresent(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA)
 	@NotNull
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	private Date dataHora;

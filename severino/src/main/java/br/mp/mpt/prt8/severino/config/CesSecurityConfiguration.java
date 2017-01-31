@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 
 /**
  * Configurações de segurança e acesso.
@@ -24,6 +26,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CesSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	private static final String ROLE_PREFIX = "";
 
 	@Autowired
 	@Qualifier("ldapContextSource")
@@ -64,12 +68,17 @@ public class CesSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.groupSearchBase(ldapProperties.getProperty("groupSearchBase"))
 			.groupRoleAttribute(ldapProperties.getProperty("groupRoleAttribute"))
 			.groupSearchFilter(ldapProperties.getProperty("groupSearchFilter"))
-			.rolePrefix("")
+			.rolePrefix(ROLE_PREFIX)
 			.userSearchBase(ldapProperties.getProperty("userSearchBase"))
 			.userSearchFilter(ldapProperties.getProperty("userSearchFilter"))
 			.contextSource(this.ldapContextSource)
 		;
 		//@formatter:on
+	}
+
+	@Bean
+	public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+		return new GrantedAuthorityDefaults(ROLE_PREFIX);
 	}
 
 }
