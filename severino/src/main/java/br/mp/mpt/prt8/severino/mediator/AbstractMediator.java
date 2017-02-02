@@ -4,15 +4,9 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.repository.DataTablesUtils;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.DeleteSomentePeloCriador;
@@ -37,35 +31,6 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	protected abstract BaseRepositorySpecification<T, ID> repositoryBean();
 
 	/**
-	 * Realizar uma busca com os parâmetros informados.
-	 * 
-	 * @param searchValue
-	 * @param pageable
-	 * @return
-	 */
-	private Page<T> find(String searchValue, Pageable pageable) {
-		ExampleMatcher exampleMather = getExampleMatcher();
-		return repositoryBean().findAll(Example.of(getExampleForSearching(searchValue), exampleMather), pageable);
-	}
-
-	/**
-	 * Example matcher.
-	 * 
-	 * @return
-	 */
-	protected ExampleMatcher getExampleMatcher() {
-		return ExampleMatcher.matchingAny().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
-	}
-
-	/**
-	 * Retorna a entidade de exemplo para buscar nos registros.
-	 * 
-	 * @param searchValue
-	 * @return
-	 */
-	protected abstract T getExampleForSearching(String searchValue);
-
-	/**
 	 * Buscar um registro pelo identificador.
 	 * 
 	 * @param id
@@ -79,21 +44,6 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	}
 
 	/**
-	 * Buscar registros.
-	 * 
-	 * @param dataTablesInput
-	 * @return
-	 */
-	public Page<T> find(DataTablesInput dataTablesInput) {
-		String searchValue = dataTablesInput.getSearch().getValue();
-		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
-		if (StringUtils.isEmpty(searchValue)) {
-			return repositoryBean().findAll(pageable);
-		}
-		return find(searchValue, pageable);
-	}
-
-	/**
 	 * Gravar um registro.
 	 * 
 	 * @param entity
@@ -103,6 +53,14 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	public T save(T entity) {
 		return repositoryBean().save(entity);
 	}
+
+	/**
+	 * Procurar registros por página.
+	 * 
+	 * @param dataTablesInput
+	 * @return
+	 */
+	public abstract Page<T> find(DataTablesInput dataTablesInput);
 
 	/**
 	 * Remover registro.
@@ -129,4 +87,5 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 			throw new NegocioException("Este registro só pode ser removido no mesmo dia pelo usuário criador!");
 		}
 	}
+
 }

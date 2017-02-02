@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
-import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.MotoristaMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.validators.CadastrarMotorista;
@@ -33,7 +33,7 @@ public class MotoristaController extends AbstractFullCrudController<Motorista, I
 	private MotoristaMediator motoristaMediator;
 
 	@Override
-	protected AbstractMediator<Motorista, Integer> getMediatorBean() {
+	protected AbstractExampleMediator<Motorista, Integer> getMediatorBean() {
 		return motoristaMediator;
 	}
 

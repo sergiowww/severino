@@ -31,7 +31,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  *
  */
 @Service
-public class AcessoGaragemMediator extends AbstractMediator<AcessoGaragem, Integer> {
+public class AcessoGaragemMediator extends AbstractExampleMediator<AcessoGaragem, Integer> {
 
 	private static final String MENSAGEM_CONFLITO = "O acesso a garagem do veículo placa %s possui intervalo de entrada e saída conflitante com a(s) acessos(s) %s";
 

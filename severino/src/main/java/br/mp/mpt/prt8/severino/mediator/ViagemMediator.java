@@ -37,7 +37,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  *
  */
 @Service
-public class ViagemMediator extends AbstractMediator<Viagem, Integer> {
+public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 
 	@Autowired
 	private ViagemRepository viagemRepository;
@@ -47,9 +47,6 @@ public class ViagemMediator extends AbstractMediator<Viagem, Integer> {
 
 	@Autowired
 	private ControleMotoristaMediator controleMotoristaMediator;
-
-	@Autowired
-	private UsuarioHolder usuarioHolder;
 
 	@Autowired
 	private VeiculoMediator veiculoMediator;

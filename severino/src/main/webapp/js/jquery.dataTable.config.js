@@ -1,5 +1,5 @@
 /**
- * ConfiguraÃ§Ã£o do jquery datatable.
+ * Configuração do jquery datatable.
  */
 var CesDataTableUtils = {};
 CesDataTableUtils.actionButtons = function(row, contextPath, urlEdit, urlRemove) {

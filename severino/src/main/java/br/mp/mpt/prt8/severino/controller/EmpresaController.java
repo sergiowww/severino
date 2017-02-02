@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.entity.Empresa;
-import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.EmpresaMediator;
 
 /**
@@ -31,7 +31,7 @@ public class EmpresaController extends AbstractFullCrudController<Empresa, Integ
 	private EmpresaMediator empresaMediator;
 
 	@Override
-	protected AbstractMediator<Empresa, Integer> getMediatorBean() {
+	protected AbstractExampleMediator<Empresa, Integer> getMediatorBean() {
 		return empresaMediator;
 	}
 

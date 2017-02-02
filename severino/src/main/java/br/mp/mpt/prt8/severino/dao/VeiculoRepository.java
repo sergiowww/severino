@@ -2,6 +2,8 @@ package br.mp.mpt.prt8.severino.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -56,4 +58,14 @@ public interface VeiculoRepository extends BaseRepositorySpecification<Veiculo, 
 	 * @return
 	 */
 	Long countByMotoristaIsNullAndViaturaMpFalseAndId(String id);
+
+	/**
+	 * Buscar veículos pelos parâmetros informados.
+	 * 
+	 * @param pageable
+	 * @param searchValue
+	 * @return
+	 */
+	@Query("select v from Veiculo as v left join v.motorista as m where lower(v.cor) like :searchValue or lower(v.id) like :searchValue or lower(v.marca) like :searchValue or lower(v.modelo) like :searchValue or lower(m.nome) like :searchValue")
+	Page<Veiculo> findByTerm(Pageable pageable, @Param("searchValue") String searchValue);
 }

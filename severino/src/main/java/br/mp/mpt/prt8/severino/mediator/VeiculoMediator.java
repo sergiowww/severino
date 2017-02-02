@@ -6,7 +6,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.repository.DataTablesUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -40,23 +43,18 @@ public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
 	}
 
 	@Override
+	public Page<Veiculo> find(DataTablesInput dataTablesInput) {
+		String searchValue = dataTablesInput.getSearch().getValue();
+		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
+		if (StringUtils.isEmpty(searchValue)) {
+			return veiculoRepository.findAll(pageable);
+		}
+		return veiculoRepository.findByTerm(pageable, "%" + searchValue.toLowerCase() + "%");
+	}
+
+	@Override
 	protected BaseRepositorySpecification<Veiculo, String> repositoryBean() {
 		return veiculoRepository;
-	}
-
-	@Override
-	protected ExampleMatcher getExampleMatcher() {
-		return super.getExampleMatcher().withIgnorePaths("viaturaMp");
-	}
-
-	@Override
-	protected Veiculo getExampleForSearching(String searchValue) {
-		Veiculo veiculo = new Veiculo();
-		veiculo.setId(searchValue);
-		veiculo.setMarca(searchValue);
-		veiculo.setModelo(searchValue);
-		veiculo.setCor(searchValue);
-		return veiculo;
 	}
 
 	/**

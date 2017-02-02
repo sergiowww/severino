@@ -24,7 +24,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class SetorMediator extends AbstractMediator<Setor, Integer> {
+public class SetorMediator extends AbstractExampleMediator<Setor, Integer> {
 
 	@Autowired
 	private SetorRepository setorRepository;

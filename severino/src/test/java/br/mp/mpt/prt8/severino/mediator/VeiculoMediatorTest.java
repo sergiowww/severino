@@ -77,6 +77,24 @@ public class VeiculoMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new Search("Nissan", false));
 		Page<Veiculo> page = veiculoMediator.find(dataTablesInput);
 		assertEquals(2, page.getTotalElements());
+
+		dataTablesInput.setSearch(new Search("João do Cam", false));
+
+		page = veiculoMediator.find(dataTablesInput);
+		assertEquals(1, page.getTotalElements());
+		Veiculo unico = page.getContent().get(0);
+		assertNotNull(unico.getMotorista());
+		assertEquals("João do Caminhão", unico.getMotorista().getNome());
+
+		dataTablesInput.setSearch(new Search("", false));
+		page = veiculoMediator.find(dataTablesInput);
+		assertEquals(3, page.getTotalElements());
+
+		dataTablesInput.setSearch(new Search("AQT4577", false));
+		page = veiculoMediator.find(dataTablesInput);
+		assertEquals(1, page.getTotalElements());
+		assertEquals("AQT4577", page.getContent().get(0).getId());
+
 	}
 
 	@Test

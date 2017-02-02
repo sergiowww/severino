@@ -22,7 +22,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class EmpresaMediator extends AbstractMediator<Empresa, Integer> {
+public class EmpresaMediator extends AbstractExampleMediator<Empresa, Integer> {
 
 	@Autowired
 	private EmpresaRepository empresaRepository;

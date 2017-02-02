@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.mp.mpt.prt8.severino.entity.Setor;
-import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.SetorMediator;
 
 /**
@@ -22,7 +22,7 @@ public class SetorController extends AbstractFullCrudController<Setor, Integer> 
 	private SetorMediator setorMediator;
 
 	@Override
-	protected AbstractMediator<Setor, Integer> getMediatorBean() {
+	protected AbstractExampleMediator<Setor, Integer> getMediatorBean() {
 		return setorMediator;
 	}
 

@@ -20,7 +20,7 @@ import br.mp.mpt.prt8.severino.utils.LdapStringUtil;
  *
  */
 @Service
-public class UsuarioMediator extends AbstractMediator<Usuario, String> {
+public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;

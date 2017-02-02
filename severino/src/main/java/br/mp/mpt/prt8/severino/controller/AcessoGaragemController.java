@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
-import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.AcessoGaragemMediator;
 import br.mp.mpt.prt8.severino.mediator.VeiculoMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitaMediator;
@@ -45,7 +45,7 @@ public class AcessoGaragemController extends AbstractFullCrudController<AcessoGa
 	private SmartValidator smartValidator;
 
 	@Override
-	protected AbstractMediator<AcessoGaragem, Integer> getMediatorBean() {
+	protected AbstractExampleMediator<AcessoGaragem, Integer> getMediatorBean() {
 		return acessoGaragemMediator;
 	}
 

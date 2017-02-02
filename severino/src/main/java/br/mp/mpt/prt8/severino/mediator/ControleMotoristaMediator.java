@@ -28,7 +28,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class ControleMotoristaMediator extends AbstractMediator<ControleMotorista, Integer> {
+public class ControleMotoristaMediator extends AbstractExampleMediator<ControleMotorista, Integer> {
 
 	@Autowired
 	private ControleMotoristaRepository controleMotoristaRepository;
