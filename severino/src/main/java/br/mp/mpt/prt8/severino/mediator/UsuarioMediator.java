@@ -25,9 +25,6 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	@Autowired
-	private UsuarioHolder holder;
-
 	@Override
 	protected BaseRepositorySpecification<Usuario, String> repositoryBean() {
 		return usuarioRepository;
@@ -48,7 +45,7 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 	 * @return
 	 */
 	public void save(Authentication auth) {
-		if (holder.getUsuario() == null) {
+		if (usuarioHolder.getUsuario() == null) {
 			String login = auth.getName();
 			Usuario usuario = usuarioRepository.findOne(login);
 			LdapUserDetails details = (LdapUserDetails) auth.getPrincipal();
@@ -64,7 +61,7 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 				usuario.setNome(nomeUsuario);
 				usuario = usuarioRepository.save(usuario);
 			}
-			holder.setUsuario(usuario);
+			usuarioHolder.setUsuario(usuario);
 		}
 	}
 
