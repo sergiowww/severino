@@ -18,6 +18,7 @@
 				<tags:inputField label="Documento de identificação" name="documento" type="text" requiredField="true" />
 				<tags:inputField label="Órgão Emissor" name="orgaoEmissor" type="text" requiredField="true" />
 				<tags:inputField label="Profissão" name="profissao" type="text" requiredField="false" />
+				<tags:inputField label="Telefone de contato" name="telefone" type="text" requiredField="false" mask="tel" />
 				<tags:selectField label="UF de Emissão" name="uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="false" requiredField="true" />
 			</div>
 			<tags:defaultButtons backUrl="visitante/registros" />

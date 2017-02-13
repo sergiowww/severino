@@ -3,6 +3,7 @@ package br.mp.mpt.prt8.severino.mediator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.VisitanteRepository;
@@ -31,7 +32,9 @@ public class VisitanteMediator extends AbstractExampleMediator<Visitante, Intege
 	@Override
 	public Visitante save(Visitante visitante) {
 		Integer id = EntidadeUtil.getIdNaoNulo(visitante);
-
+		if (!StringUtils.isEmpty(visitante.getTelefone())) {
+			visitante.setTelefone(visitante.getTelefone().replaceAll("\\D+", ""));
+		}
 		Long totalPorDocumento = visitanteRepository.countByDocumentoIgnoreCaseAndIdNot(visitante.getDocumento(), id);
 		if (totalPorDocumento > 0) {
 			throw new NegocioException("Já existe um visitante com o mesmo número de documento informado");

@@ -38,6 +38,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		visitante1.setNome(NOME_VISITANTE1);
 		visitante1.setOrgaoEmissor("SSP");
 		visitante1.setUf(Estado.DF);
+		visitante1.setTelefone("(61) 996013799");
 
 		Visitante visitante2 = new Visitante();
 		visitante2.setDocumento("45621");
@@ -85,6 +86,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		Visitante visitante = visitanteMediator.findByDocumento(DOCUMENTO1);
 		assertNotNull(visitante);
 		assertEquals(DOCUMENTO1, visitante.getDocumento());
+		assertEquals("61996013799", visitante.getTelefone());
 	}
 
 }

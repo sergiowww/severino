@@ -54,6 +54,7 @@ public abstract class AbstractExampleMediator<T, ID extends Serializable> extend
 	 * @param dataTablesInput
 	 * @return
 	 */
+	@Override
 	public Page<T> find(DataTablesInput dataTablesInput) {
 		String searchValue = dataTablesInput.getSearch().getValue();
 		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);

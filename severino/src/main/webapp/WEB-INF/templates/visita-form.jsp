@@ -52,6 +52,7 @@
 				<form:hidden path="visitante.uf" id="visitante.uf_hidden" />
 				<form:hidden path="visitante.orgaoEmissor" id="visitante.orgaoEmissor_hidden" />
 				<form:hidden path="visitante.profissao" id="visitante.profissao_hidden" />
+				<form:hidden path="visitante.telefone" id="visitante.telefone_hidden" />
 				<div class="row">
 					<tags:inputField label="Documento" name="visitante.documento" type="text" extraCssClass="col-md-6" requiredField="true" />
 					<tags:inputField label="Nome" name="visitante.nome" type="text" extraCssClass="col-md-6" requiredField="true" />
@@ -59,7 +60,8 @@
 				<div class="row">
 					<tags:selectField label="UF de Emissão" name="visitante.uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="false" extraCssClass="col-md-3" requiredField="true" />
 					<tags:inputField label="Órgão Emissor" name="visitante.orgaoEmissor" type="text" extraCssClass="col-md-3" requiredField="true" />
-					<tags:inputField label="Profissão / Cargo" name="visitante.profissao" type="text" requiredField="false" extraCssClass="col-md-6" readonlyField="false" />
+					<tags:inputField label="Profissão / Cargo" name="visitante.profissao" type="text" requiredField="false" extraCssClass="col-md-3" readonlyField="false" />
+					<tags:inputField label="Telefone de contato" name="visitante.telefone" type="text" requiredField="false" extraCssClass="col-md-3" readonlyField="false" mask="tel"/>
 				</div>
 			</fieldset>
 			<div class="form-group">

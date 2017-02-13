@@ -3,7 +3,7 @@
  */
 
 function VisitaClass() {
-	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor", "profissao" ];
+	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor", "profissao", "telefone" ];
 	this.FIELD_PREFIX = "#visitante\\.";
 	this.HIDDEN_SUFFIX = "_hidden";
 	this.configurarAutoCompleteNomeProcurado = function() {
@@ -96,8 +96,8 @@ function VisitaClass() {
 			var fieldHidden = $(this.FIELD_PREFIX + fieldName + this.HIDDEN_SUFFIX);
 			var field = $(this.FIELD_PREFIX + this.FIELDS_VISITANTE[i]);
 			if (visitantePresente) {
-				fieldHidden.val(visitante[fieldName]);
-				field.val(visitante[fieldName]);
+				field.val(visitante[fieldName]).trigger("keyup");
+				fieldHidden.val(field.val());
 			} else if (eventoUsuario) {
 				field.val("");
 			}

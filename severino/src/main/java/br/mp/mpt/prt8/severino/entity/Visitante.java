@@ -69,6 +69,11 @@ public class Visitante extends AbstractEntity<Integer> {
 	@JsonView(DataTablesOutput.View.class)
 	private String profissao;
 
+	@Column(length = 11)
+	@Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O formato do telefone deve ser (##) ####-#### - digite apenas números.", groups = CadastrarVisita.class)
+	@JsonView(DataTablesOutput.View.class)
+	private String telefone;
+
 	public String getOrgaoEmissor() {
 		return orgaoEmissor;
 	}
@@ -133,5 +138,13 @@ public class Visitante extends AbstractEntity<Integer> {
 	@Transient
 	public String getDadosResumo() {
 		return String.format(FORMATO_DADOS_RESUMO, getNome(), getDocumento(), getOrgaoEmissor(), getUf().name());
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 }
