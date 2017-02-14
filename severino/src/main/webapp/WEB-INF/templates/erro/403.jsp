@@ -1,14 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="../includes/head.jsp"></jsp:include>
-<title>Acesso Negado</title>
-</head>
-<body>
-	<tags:menu />
-	<div class="container">
+
+<tags:base-template title="Acesso Negado">
+	<jsp:body>
 		<div class="centering text-center error-container">
 			<div class="text-center">
 				<h4 class="text-warning">403</h4>
@@ -22,7 +16,5 @@
 			<hr>
 
 		</div>
-	</div>
-	<jsp:include page="../includes/footer.jsp"></jsp:include>
-</body>
-</html>
+	</jsp:body>
+</tags:base-template>

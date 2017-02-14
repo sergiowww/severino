@@ -9,3 +9,7 @@ div.toggle {
 div.bodycontainer {
 	height: 420px;
 }
+
+.page-header {
+	display: none;
+}

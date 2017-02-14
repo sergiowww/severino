@@ -1,16 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="includes/head.jsp"></jsp:include>
-<title>Setor</title>
-</head>
-<body>
-	<tags:menu selectedItem="setor/registros" />
-	<div class="container">
-		<jsp:include page="includes/message-panel.jsp"></jsp:include>
+
+<tags:base-template title="Setor" menuSelecionado="setor/registros">
+	<jsp:body>
 		<form:form servletRelativeAction="/setor" cssClass="form-horizontal" modelAttribute="setor">
 			<form:hidden path="id" />
 			<div class="form-group">
@@ -20,7 +13,5 @@
 			</div>
 			<tags:defaultButtons backUrl="setor/registros" />
 		</form:form>
-	</div>
-	<jsp:include page="includes/footer.jsp"></jsp:include>
-</body>
-</html>
+	</jsp:body>
+</tags:base-template>

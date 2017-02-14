@@ -1,16 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="includes/head.jsp"></jsp:include>
-<link rel="stylesheet" type="text/css" href="css/helpers/home.css" />
-<title>Início</title>
-</head>
-<body>
-	<tags:menu />
-	<div class="container">
+<tags:base-template title="Início">
+	<jsp:attribute name="head">
+		<link rel="stylesheet" type="text/css" href="css/helpers/home.css" />
+	</jsp:attribute>
+	<jsp:body>
 		<div class="btn-group">
 			<a href="visita/" class="btn btn-default btn-sm">
 				<span class="glyphicon glyphicon-briefcase"></span>
@@ -37,7 +32,5 @@
 				<jsp:include page="home-servidores.jsp" />
 			</div>
 		</div>
-	</div>
-	<jsp:include page="includes/footer.jsp"></jsp:include>
-</body>
-</html>
+	</jsp:body>
+</tags:base-template>

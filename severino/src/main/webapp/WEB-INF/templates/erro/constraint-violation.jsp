@@ -1,14 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="../includes/head.jsp"></jsp:include>
-<title>Erro de vínculo ao excluir</title>
-</head>
-<body>
-	<tags:menu />
-	<div class="container">
+
+<tags:base-template title="Erro de vínculo ao excluir">
+	<jsp:body>
 		<div class="centering text-center error-container">
 			<div class="text-center">
 				<h4 class="text-warning">Registro relacionado em outros locais</h4>
@@ -21,7 +15,5 @@
 			</div>
 			<hr>
 		</div>
-	</div>
-	<jsp:include page="../includes/footer.jsp"></jsp:include>
-</body>
-</html>
+	</jsp:body>
+</tags:base-template>

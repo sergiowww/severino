@@ -1,15 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
-<!DOCTYPE html>
-<html>
-<head>
-<jsp:include page="includes/head.jsp"></jsp:include>
-<title>Usuário - ${usuario.id}</title>
-</head>
-<body>
-	<tags:menu selectedItem="usuario/registros" />
-	<div class="container">
-		<jsp:include page="includes/message-panel.jsp"></jsp:include>
+
+<tags:base-template title="Usuário - ${usuario.id}" menuSelecionado="usuario/registros">
+	<jsp:body>
 		<div class="form-group">
 			<div class="form-group row">
 				<label class="col-sm-2 form-control-label">Login</label>
@@ -30,7 +23,5 @@
 				</a>
 			</div>
 		</div>
-	</div>
-	<jsp:include page="includes/footer.jsp"></jsp:include>
-</body>
-</html>
+	</jsp:body>
+</tags:base-template>

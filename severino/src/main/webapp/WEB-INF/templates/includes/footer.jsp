@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <footer class="footer">
 	<div class="container">
 		<p class="text-muted">
