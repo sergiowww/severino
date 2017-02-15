@@ -8,5 +8,5 @@
 <c:forTokens items="${menuItens}" delims="," var="menuItem">
 	<c:set var="urlMenu" value="${fn:substringAfter(menuItem, ';')}" />
 	<c:set var="labelMenu" value="${fn:substringBefore(menuItem, ';')}" />
-	<li ${selectedItem eq  urlMenu ? 'class=\"active\"' : ''}><a href="${urlMenu}">${labelMenu}</a></li>
+	<li ${selectedItem eq urlMenu ? 'class=\"active\"' : ''}><a href="${urlMenu}">${labelMenu}</a></li>
 </c:forTokens>

@@ -2,7 +2,7 @@
 <%@ attribute name="title" fragment="false" required="true"%>
 <%@ attribute name="head" fragment="true" required="false"%>
 <%@ attribute name="menuSelecionado" fragment="false" required="false"%>
-<%@ taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
+<%@ taglib tagdir="/WEB-INF/tags/menu" prefix="menu"%>
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,7 @@
 <jsp:invoke fragment="head"></jsp:invoke>
 </head>
 <body>
-	<tags:menu selectedItem="${menuSelecionado}" />
+	<menu:menu selectedItem="${menuSelecionado}" />
 	<div class="container">
 		<jsp:include page="/WEB-INF/templates/includes/message-panel.jsp"></jsp:include>
 		<jsp:doBody />

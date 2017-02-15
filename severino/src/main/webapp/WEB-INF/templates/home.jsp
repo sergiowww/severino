@@ -6,20 +6,6 @@
 		<link rel="stylesheet" type="text/css" href="css/helpers/home.css" />
 	</jsp:attribute>
 	<jsp:body>
-		<div class="btn-group">
-			<a href="visita/" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-briefcase"></span>
-				Nova visita
-			</a>
-			<a href="viagem/" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-road"></span>
-				Fluxo Motoristas
-			</a>
-			<a href="acessoGaragem/" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-list-alt"></span>
-				Acesso Garagem
-			</a>
-		</div>
 		<h3>
 			Severino
 			<small class="text-muted">Controle de acesso da Procuradoria Regional do Trabalho da 8ª Região - PRT8</small>

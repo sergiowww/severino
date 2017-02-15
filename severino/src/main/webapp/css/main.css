@@ -17,10 +17,6 @@
 	margin-bottom: 86px;
 }
 
-ul.divider li:LAST-CHILD {
-	border-right: 14px double gray;
-}
-
 .has-error .tooltip-inner {
 	background-color: #a94442 !important;
 }
