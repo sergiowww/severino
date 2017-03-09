@@ -1,0 +1,40 @@
+@CHARSET "ISO-8859-1";
+
+.nomeVisitante {
+	overflow: hidden;
+	width: 104px;
+	white-space: nowrap;
+}
+
+.mesmaAltura>div {
+	min-height: 147px;
+}
+
+.camposDetalhe {
+	display: table;
+	width: 100%;
+}
+
+.camposDetalhe>dl {
+	display: inline-table !important;
+	margin-bottom: 2px !important;
+	width: 25%;
+	float: left;
+}
+
+.camposDetalhe dd {
+	margin-bottom: 2px !important;
+	height: 41px;
+	margin-right: 2px;
+	font-size: 11px;
+	border-radius: 3px;
+	border: 1px solid #e3e3e3;
+	padding: 5px;
+}
+
+.botoesDetalhar {
+	border-left: solid 1px #ddd;
+	border-right: solid 1px #ddd;
+	border-bottom: solid 1px #ddd;
+	height: 48px;
+}

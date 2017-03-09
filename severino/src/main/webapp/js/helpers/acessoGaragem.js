@@ -1,5 +1,5 @@
 /**
- * Javascript da p√°gina acessoGaragem.jsp
+ * Javascript da p·gina acessoGaragem.jsp
  */
 function AcessoGaragemClass() {
 	this.CAMPOS_VEICULO = [ "input#veiculo\\.id", "#veiculo\\.marca", "#veiculo\\.modelo", "input#veiculo\\.cor" ];

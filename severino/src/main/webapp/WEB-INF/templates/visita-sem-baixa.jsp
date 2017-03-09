@@ -13,7 +13,7 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div class="table-responsive bodycontainer scrollable">
+		<div class="table-responsive bodycontainer scrollable" style="height: 370px;">
 			<table class="table table-scrollable">
 				<tbody>
 					<c:if test="${empty visitantesSemBaixa}">
@@ -22,13 +22,16 @@
 						</tr>
 					</c:if>
 					<c:forEach items="${visitantesSemBaixa}" var="visitaSemBaixa">
-						<tr class="${visitaSemBaixa.id eq visita.id ? 'active' : ''}">
-							<td>
-								<fmt:formatDate value="${visitaSemBaixa.entrada}" type="both" dateStyle="MEDIUM" timeStyle="SHORT" />
+						<tr ${visitaSemBaixa.id eq visita.id ? 'class="active"' : ''}>
+							<fmt:formatDate value="${visitaSemBaixa.entrada}" type="both" dateStyle="MEDIUM" timeStyle="SHORT" var="dataEntradaCompleta" />
+							<td title="${dataEntradaCompleta}">
+								<fmt:formatDate value="${visitaSemBaixa.entrada}" type="time" dateStyle="MEDIUM" timeStyle="SHORT" />
 							</td>
-							<td>${visitaSemBaixa.visitante.nome}</td>
 							<td>
-								<a href="visita/${visitaSemBaixa.id}" class="btn btn-xs btn-default">
+								<div class="nomeVisitante" title="${visitaSemBaixa.visitante.nome}">${visitaSemBaixa.visitante.nome}</div>
+							</td>
+							<td>
+								<a href="${param.baseUrl}/${visitaSemBaixa.id}" class="btn btn-xs btn-default">
 									<span class="glyphicon glyphicon-edit"></span>
 								</a>
 							</td>

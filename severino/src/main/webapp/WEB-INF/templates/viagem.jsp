@@ -3,8 +3,8 @@
 
 <tags:base-template title="Fluxo de Técnicos de Transporte" menuSelecionado="viagem/">
 	<jsp:attribute name="head">
-		<script type="text/javascript" src="js/helpers/viagem.js" charset="UTF-8"></script>
-		<script type="text/javascript" src="js/RadioButtonToggleArea.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="js/helpers/viagem.js" charset="ISO-8859-1"></script>
+		<script type="text/javascript" src="js/RadioButtonToggleArea.js" charset="ISO-8859-1"></script>
 		<script type="text/javascript" src="resources/jquery.tmpl.min.js"></script>
 		<script type="text/x-jquery-tmpl" id="templatePassageiro">
 			<jsp:include page="viagem-template-passageiro.jsp" />

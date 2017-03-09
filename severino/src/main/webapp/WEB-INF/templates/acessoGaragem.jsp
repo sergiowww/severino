@@ -4,8 +4,8 @@
 
 <tags:base-template title="Acesso a Garagem" menuSelecionado="acessoGaragem/">
 	<jsp:attribute name="head">
-		<script type="text/javascript" src="js/RadioButtonToggleArea.js" charset="UTF-8"></script>
-		<script type="text/javascript" src="js/helpers/acessoGaragem.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="js/RadioButtonToggleArea.js" charset="ISO-8859-1"></script>
+		<script type="text/javascript" src="js/helpers/acessoGaragem.js" charset="ISO-8859-1"></script>
 		<link rel="stylesheet" type="text/css" href="css/helpers/acessoGaragem.css" />
 	</jsp:attribute>
 	<jsp:body>

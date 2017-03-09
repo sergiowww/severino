@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.UsuarioRepository;
 import br.mp.mpt.prt8.severino.entity.Usuario;
-import br.mp.mpt.prt8.severino.utils.LdapStringUtil;
+import br.mp.mpt.prt8.severino.utils.StringUtilApp;
 
 /**
  * Mediador de operações.
@@ -69,7 +69,7 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 		if (StringUtils.isEmpty(dn)) {
 			return login;
 		}
-		String nomeUsuario = LdapStringUtil.extrairNomeUsuario(dn);
+		String nomeUsuario = StringUtilApp.extrairNomeUsuario(dn);
 		if (StringUtils.isEmpty(nomeUsuario)) {
 			return login;
 		}

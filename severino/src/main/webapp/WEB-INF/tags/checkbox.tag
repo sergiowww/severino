@@ -10,7 +10,7 @@
 
 <spring:bind path="${name}">
 	<c:if test="${status.error}">
-		<c:set var="extraCssClass" value="${extraCssClass += ' has-error'}"></c:set>
+		<c:set var="extraCssClass" value="${extraCssClass} has-error"></c:set>
 	</c:if>
 	<div class="${extraCssClass}">
 		<form:label path="${name}" cssClass="control-lable" for="${name}">

@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 
-
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">
@@ -30,42 +29,53 @@
 			<form:hidden path="dataHoraCadastro" id="dataHoraCadastro" />
 			<form:hidden path="usuario.id" />
 			<div class="row">
-				<c:if test="${empty visita.id}">
-					<tags:inputField name="entrada" label="Entrada" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-6" tip="Preencha a data de entrada, ao deixá-la vazia será preenchido com a data/hora atual" requiredField="true" />
-				</c:if>
-				<c:if test="${not empty visita.id}">
-					<tags:inputField name="entrada" label="Entrada" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-3" requiredField="true" />
-					<tags:inputField name="saida" label="Saída" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-3${empty visita.saida ? ' has-error' : ''}" />
-				</c:if>
-				<tags:inputField name="empresa.nome" label="Empresa ou órgão" type="text" extraCssClass="col-md-3" />
-				<tags:selectField name="setor.id" label="Local" collection="${setores}" itemLabel="descricaoCompleta" itemValue="id" searchItems="true" extraCssClass="col-md-3" requiredField="true" />
+				<div class="col-md-5 nestedColumn">
+					<c:if test="${empty visita.id}">
+						<tags:inputField name="entrada" label="Entrada" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-12" tip="Preencha a data de entrada, ao deixá-la vazia será preenchido com a data/hora atual" requiredField="true" />
+					</c:if>
+					<c:if test="${not empty visita.id}">
+						<tags:inputField name="entrada" label="Entrada" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-6" requiredField="true" />
+						<tags:inputField name="saida" label="Saída" type="date" mask="00/00/0000 00:00" extraCssClass="col-md-6${empty visita.saida ? ' has-error' : ''}" />
+					</c:if>
+				</div>
+				<tags:inputField name="empresa.nome" label="Empresa" type="text" extraCssClass="col-md-3" tip="Empresa ou órgão" />
+				<tags:selectField name="setor.id" label="Local" collection="${setores}" itemLabel="descricaoCompleta" itemValue="id" searchItems="true" extraCssClass="col-md-4" requiredField="true" />
 			</div>
 			<div class="row">
-				<tags:inputField name="nomeProcurado" label="Servidor responsável" type="text" tip="Nome do servidor responsável ou procurado pelo visitante" extraCssClass="col-md-6" />
-				<tags:inputField name="setorProcurado" label="Setor" type="text" tip="Departamento ou divisão" extraCssClass="col-md-6" />
+				<tags:inputField name="nomeProcurado" label="Servidor responsável" type="text" tip="Nome do servidor responsável ou procurado pelo visitante" extraCssClass="col-md-5" />
+				<tags:inputField name="setorProcurado" label="Setor" type="text" tip="Departamento ou divisão" extraCssClass="col-md-7" />
 			</div>
 			<form:hidden path="empresa.id" id="empresa.id" />
-
-			<fieldset style="margin-bottom: 10px; margin-top: 5px;">
-				<legend>Dados do visitante</legend>
-				<form:hidden path="visitante.nome" id="visitante.nome_hidden" />
-				<form:hidden path="visitante.uf" id="visitante.uf_hidden" />
-				<form:hidden path="visitante.orgaoEmissor" id="visitante.orgaoEmissor_hidden" />
-				<form:hidden path="visitante.profissao" id="visitante.profissao_hidden" />
-				<form:hidden path="visitante.telefone" id="visitante.telefone_hidden" />
-				<div class="row">
-					<tags:inputField label="Documento" name="visitante.documento" type="text" extraCssClass="col-md-6" requiredField="true" />
-					<tags:inputField label="Nome" name="visitante.nome" type="text" extraCssClass="col-md-6" requiredField="true" />
+			<ul class="nav nav-tabs" style="margin-top: 18px;">
+				<li class="active">
+					<a data-toggle="tab" href="#tabdados">Dados do visitante</a>
+				</li>
+				<li>
+					<a data-toggle="tab" href="#tabendereco">
+						Endereço
+						<c:if test="${not empty visita.visitante.endereco}">
+							<span class="badge" title="${visita.visitante.endereco}">1</span>
+						</c:if>
+					</a>
+				</li>
+			</ul>
+			<div class="tab-content mesmaAltura" style="margin-bottom: 10px;">
+				<div id="tabdados" class="tab-pane fade in active">
+					<form:hidden path="visitante.nome" id="visitante.nome_hidden" />
+					<form:hidden path="visitante.uf" id="visitante.uf_hidden" />
+					<form:hidden path="visitante.orgaoEmissor" id="visitante.orgaoEmissor_hidden" />
+					<jsp:include page="visitante-dados.jsp">
+						<jsp:param value="visitante." name="prefixName" />
+					</jsp:include>
 				</div>
-				<div class="row">
-					<tags:selectField label="UF de Emissão" name="visitante.uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="false" extraCssClass="col-md-3" requiredField="true" />
-					<tags:inputField label="Órgão Emissor" name="visitante.orgaoEmissor" type="text" extraCssClass="col-md-3" requiredField="true" />
-					<tags:inputField label="Profissão / Cargo" name="visitante.profissao" type="text" requiredField="false" extraCssClass="col-md-3" readonlyField="false" />
-					<tags:inputField label="Telefone de contato" name="visitante.telefone" type="text" requiredField="false" extraCssClass="col-md-3" readonlyField="false" mask="tel"/>
+				<div id="tabendereco" class="tab-pane fade">
+					<jsp:include page="visitante-endereco.jsp">
+						<jsp:param value="visitante." name="prefixName" />
+					</jsp:include>
 				</div>
-			</fieldset>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+			</div>
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="btn-group" role="group">
 					<button type="submit" class="btn btn-primary active" title="Persistir dados no sistema">
 						<span class="glyphicon glyphicon-floppy-save"></span>
 						Salvar
@@ -81,12 +91,17 @@
 							<span class="glyphicon glyphicon-trash"></span>
 							Apagar
 						</a>
+						<a class="btn btn-default" href="visita/detalhe/${visita.id}" title="Voltar para a tela de detalhe">
+							<span class="glyphicon glyphicon-circle-arrow-left"></span>
+							Voltar
+						</a>
 					</c:if>
-					<a class="btn btn-default" href="visita/registros" title="Voltar para a tela de listagem de registros">
-						<span class="glyphicon glyphicon-circle-arrow-left"></span>
-						Voltar
-					</a>
-
+					<c:if test="${empty visita.id}">
+						<a class="btn btn-default" href="visita/registros" title="Voltar para a tela de listagem de registros">
+							<span class="glyphicon glyphicon-circle-arrow-left"></span>
+							Voltar
+						</a>
+					</c:if>
 					<c:if test="${not empty visita.id}">
 						<a class="btn btn-default" href="visita/" title="Criar um novo registro">
 							<span class="glyphicon glyphicon-file"></span>

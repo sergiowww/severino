@@ -12,7 +12,7 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div class="table-responsive bodycontainer scrollable" style="height: 405px;">
+		<div class="table-responsive bodycontainer scrollable" style="height: 392px;">
 			<table class="table table-scrollable">
 				<tbody>
 					<c:if test="${empty acessosSemBaixa}">

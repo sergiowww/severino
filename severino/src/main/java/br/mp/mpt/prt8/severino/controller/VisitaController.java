@@ -1,12 +1,16 @@
 package br.mp.mpt.prt8.severino.controller;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.SmartValidator;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visita;
+import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.SetorMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitaMediator;
@@ -36,6 +41,9 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 	@Autowired
 	private SetorMediator setorMediator;
 
+	@Autowired
+	private SmartValidator smartValidator;
+
 	@Override
 	protected void addCollections(ModelAndView mav, Visita entity) {
 		mav.addObject("setores", setorMediator.findAll());
@@ -53,11 +61,34 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 		return "redirect:/visita/" + entity.getId();
 	}
 
+	/**
+	 * Exibir tela com detalhes da visita.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping({ "/detalhe/{id:.+}", "/detalhe/" })
+	public ModelAndView detalhar(@PathVariable Optional<Integer> id) {
+		ModelAndView mav = new ModelAndView(getModelName() + "-detalhe");
+		Visita visita = visitaMediator.findOne(id);
+		if (visita != null) {
+			mav.addObject("visita", visita);
+			mav.addObject("visitantesSemBaixa", visitaMediator.findVisitasSemBaixa());
+			return mav;
+		}
+		return new ModelAndView("redirect:/visita/");
+	}
+
 	@PostMapping("")
 	@PreAuthorize(Roles.PADRAO)
 	@Override
-	public ModelAndView salvar(@Validated(CadastrarVisita.class) Visita entity, BindingResult result, RedirectAttributes redirectAttributes) {
-		return super.salvar(entity, result, redirectAttributes);
+	public ModelAndView salvar(@ModelAttribute("visita") Visita visita, BindingResult result, RedirectAttributes redirectAttributes) {
+		Visitante visitante = visita.getVisitante();
+		if (visitante.getEndereco() != null && !visitante.getEndereco().algumDadoPreenchido()) {
+			visitante.setEndereco(null);
+		}
+		smartValidator.validate(visita, result, CadastrarVisita.class);
+		return super.salvar(visita, result, redirectAttributes);
 	}
 
 }

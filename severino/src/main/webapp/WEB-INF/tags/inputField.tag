@@ -54,15 +54,15 @@
 </c:if>
 <spring:bind path="${name}">
 	<c:if test="${status.error}">
-		<c:set var="extraCssClass" value="${extraCssClass += ' has-error has-feedback'}"></c:set>
+		<c:set var="extraCssClass" value="${extraCssClass} has-error has-feedback"></c:set>
 	</c:if>
 	<div class="${extraCssClass}">
-		<label class="control-lable">
+		<form:label path="${name}" cssClass="control-lable" for="${name}">
 			${label}
 			<c:if test="${requiredField}">
-				<span style="color: red;">*</span>
+				<span style="color: red;" title="${fn:join(status.errorMessages, ', ') }">*</span>
 			</c:if>
-		</label>
+		</form:label>
 		<form:input type="${type}" path="${name}" cssClass="form-control" id="${name}" title="${tip}" readonly="${readonlyField}" onkeyup="${onkeyup}" />
 		<c:if test="${status.error}">
 			<i class="form-control-feedback glyphicon glyphicon-remove" data-fv-icon-for="${name}" data-toggle="tooltip" data-placement="left" data-delay="3000" data-animation="true" title="${fn:join(status.errorMessages, ', ') }"></i>

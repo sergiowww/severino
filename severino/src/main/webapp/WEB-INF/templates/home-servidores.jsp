@@ -8,7 +8,7 @@
 		<h3 class="panel-title">
 			Procuradores e Servidores na Casa
 			<c:if test="${not empty pessoasDisponiveis}">
-				<span class="badge" style="float: right;" title="técnicos disponíveis/total">${totalPessoasNaCasa}/${totalPessoas}</span>
+				<span class="badge" style="float: right;" title="servidores na casa/total">${totalPessoasNaCasa}/${totalPessoas}</span>
 			</c:if>
 		</h3>
 	</div>

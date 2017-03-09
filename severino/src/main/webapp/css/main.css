@@ -41,3 +41,8 @@
 	display: flex;
 	flex: 1 1 auto;
 }
+
+.nestedColumn {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}

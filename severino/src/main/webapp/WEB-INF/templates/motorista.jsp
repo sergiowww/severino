@@ -4,7 +4,7 @@
 
 <tags:base-template title="Condutor" menuSelecionado="motorista/registros">
 	<jsp:attribute name="head">
-		<script type="text/javascript" src="js/helpers/motorista.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="js/helpers/motorista.js" charset="ISO-8859-1"></script>
 	</jsp:attribute>
 	<jsp:body>
 		<form:form servletRelativeAction="/motorista" cssClass="form-horizontal" modelAttribute="motorista">

@@ -48,6 +48,7 @@ fi
 echo "Removendo WAR atual ..."
 sudo rm -rf ${WEBAPPS_DIR}severino*
 mv $SEVERINO_WAR $WEBAPPS_DIR
+sudo chown tomcat:tomcat $WEBAPPS_DIR/$(basename $SEVERINO_WAR)
 echo "severino.war instalado em $WEBAPPS_DIR"
 echo 'iniciando servico do tomcat...'
 sudo service tomcat start

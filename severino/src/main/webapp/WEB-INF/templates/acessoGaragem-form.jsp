@@ -82,8 +82,8 @@
 				</fieldset>
 			</div>
 
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="btn-group" role="group">
 					<button type="submit" class="btn btn-primary active" title="Persistir dados no sistema">
 						<span class="glyphicon glyphicon-floppy-save"></span>
 						Salvar

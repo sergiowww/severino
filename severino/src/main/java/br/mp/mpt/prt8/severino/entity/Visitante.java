@@ -1,5 +1,7 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static javax.persistence.CascadeType.ALL;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,18 +9,23 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 
 /**
  * The persistent class for the visitante database table.
@@ -31,48 +38,67 @@ import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 public class Visitante extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 1L;
 
+	private static final String PADRAO_TELEFONE = "\\(\\d{2}\\) \\d{4,5}-\\d{4}";
+	private static final String MENSAGEM_TELEFONE = "O formato do telefone deve ser (##) ####-#### - digite apenas números.";
 	private static final String FORMATO_DADOS_RESUMO = "%s (%s %s-%s)";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_visitante", unique = true, nullable = false)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private Integer id;
 
 	@Column(nullable = false, length = 20)
 	@NotEmpty(groups = CadastrarVisita.class)
 	@Size(max = 20, min = 3, groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	@Pattern(regexp = "[\\dxX]+", message = "Digite apenas números neste campo", groups = CadastrarVisita.class)
 	private String documento;
 
 	@Column(name = "orgao_emissor", nullable = false, length = 45)
 	@NotEmpty(groups = CadastrarVisita.class)
 	@Size(max = 45, groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String orgaoEmissor;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 2, nullable = false)
 	@NotNull(groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private Estado uf;
 
 	@Column(nullable = false, length = 200)
 	@NotEmpty(groups = CadastrarVisita.class)
 	@Size(max = 200, min = 5, groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String nome;
 
 	@Column(length = 120)
 	@Size(max = 120, min = 2, groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String profissao;
 
 	@Column(length = 11)
-	@Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O formato do telefone deve ser (##) ####-#### - digite apenas números.", groups = CadastrarVisita.class)
-	@JsonView(DataTablesOutput.View.class)
+	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
+	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String telefone;
+
+	@Column(name = "telefone_alternativo", length = 11)
+	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
+	@JsonView(PesquisaDoc.class)
+	private String telefoneAlternativo;
+
+	@Column(length = 45)
+	@Size(max = 45, groups = CadastrarVisita.class)
+	@Email(message = "O e-mail informado é inválido", groups = CadastrarVisita.class)
+	@JsonView(PesquisaDoc.class)
+	private String email;
+
+	@OneToOne(orphanRemoval = true, cascade = ALL)
+	@PrimaryKeyJoinColumn
+	@Valid
+	@JsonView(PesquisaDoc.class)
+	private Endereco endereco;
 
 	public String getOrgaoEmissor() {
 		return orgaoEmissor;
@@ -146,5 +172,32 @@ public class Visitante extends AbstractEntity<Integer> {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+
+	public String getTelefoneAlternativo() {
+		return telefoneAlternativo;
+	}
+
+	public void setTelefoneAlternativo(String telefoneAlternativo) {
+		this.telefoneAlternativo = telefoneAlternativo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+		if (endereco != null) {
+			endereco.setVisitante(this);
+		}
 	}
 }

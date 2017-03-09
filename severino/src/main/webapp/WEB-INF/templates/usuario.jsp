@@ -4,18 +4,13 @@
 <tags:base-template title="Usuário - ${usuario.id}" menuSelecionado="usuario/registros">
 	<jsp:body>
 		<div class="form-group">
-			<div class="form-group row">
-				<label class="col-sm-2 form-control-label">Login</label>
-				<div class="col-sm-10">
-					<p class="form-control-static">${usuario.id}</p>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 form-control-label">Nome</label>
-				<div class="col-sm-10">
-					<p class="form-control-static">${usuario.nome}</p>
-				</div>
-			</div>
+			<dl class="dl-horizontal">
+				<dt>Login:</dt>
+				<dd>${usuario.id}</dd>
+				<dt>Nome:</dt>
+				<dd>${usuario.nome}</dd>
+			</dl>
+		
 			<div class="col-sm-offset-2 col-sm-10">
 				<a class="btn btn-default" href="usuario/registros">
 					<span class="glyphicon glyphicon-circle-arrow-left"></span>

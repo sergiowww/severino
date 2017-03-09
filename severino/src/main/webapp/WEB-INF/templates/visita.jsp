@@ -3,14 +3,17 @@
 
 <tags:base-template title="Registro de Visitante" menuSelecionado="visita/">
 	<jsp:attribute name="head">
-		<script type="text/javascript" src="js/helpers/visita.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="js/helpers/visita.js" charset="ISO-8859-1"></script>
+		<link rel="stylesheet" type="text/css" href="css/helpers/visita.css" />
 	</jsp:attribute>
 	<jsp:body>
-		<div class="col-md-8">
+		<div class="col-md-9">
 			<jsp:include page="visita-form.jsp" />
 		</div>
-		<div class="col-md-4">
-			<jsp:include page="visita-sem-baixa.jsp"></jsp:include>
+		<div class="col-md-3">
+			<jsp:include page="visita-sem-baixa.jsp">
+				<jsp:param value="visita" name="baseUrl" />
+			</jsp:include>
 		</div>
 	</jsp:body>
 </tags:base-template>

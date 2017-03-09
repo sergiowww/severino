@@ -79,10 +79,12 @@ public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
 		String documento = visitanteTransient.getDocumento();
 		Visitante visitante = visitanteMediator.findByDocumento(documento);
 		if (visitante != null) {
-			visita.setVisitante(visitante);
-		} else {
-			visita.setVisitante(visitanteMediator.save(visitanteTransient));
+			visitanteTransient.setId(visitante.getId());
+			visitanteTransient.setNome(visitante.getNome());
+			visitanteTransient.setOrgaoEmissor(visitante.getOrgaoEmissor());
+			visitanteTransient.setUf(visitante.getUf());
 		}
+		visita.setVisitante(visitanteMediator.save(visitanteTransient));
 		checkVisita(visita, documento);
 	}
 

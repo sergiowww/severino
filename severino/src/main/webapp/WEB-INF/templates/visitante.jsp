@@ -7,12 +7,11 @@
 		<form:form servletRelativeAction="/visitante" cssClass="form-horizontal" modelAttribute="visitante">
 			<form:hidden path="id" />
 			<div class="form-group">
-				<tags:inputField label="Nome" name="nome" type="text" requiredField="true" />
-				<tags:inputField label="Documento de identificação" name="documento" type="text" requiredField="true" />
-				<tags:inputField label="Órgão Emissor" name="orgaoEmissor" type="text" requiredField="true" />
-				<tags:inputField label="Profissão" name="profissao" type="text" requiredField="false" />
-				<tags:inputField label="Telefone de contato" name="telefone" type="text" requiredField="false" mask="tel" />
-				<tags:selectField label="UF de Emissão" name="uf" collection="${ufs}" itemLabel="name" itemValue="name" searchItems="false" requiredField="true" />
+				<jsp:include page="visitante-dados.jsp"></jsp:include>
+				<fieldset>
+					<legend>Endereço</legend>
+					<jsp:include page="visitante-endereco.jsp"></jsp:include>
+				</fieldset>
 			</div>
 			<tags:defaultButtons backUrl="visitante/registros" />
 		</form:form>

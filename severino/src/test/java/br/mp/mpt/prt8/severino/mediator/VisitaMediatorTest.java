@@ -171,10 +171,14 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		visitante.setOrgaoEmissor(indice + VISITANTE_ORGAO);
 		visitante.setUf(VISITANTE_ESTADO);
 		visita.setVisitante(visitanteMediator.save(visitante));
+		entityManager.flush();
+		entityManager.clear();
 		Date entrada = getDataEntradaValida();
 		visita.setEntrada(entrada);
 		assertNotNull(visita.getVisitante().getId());
 		validarVisita(visita);
+		String email = "sergiowww@gmail.com";
+		visita.getVisitante().setEmail(email);
 
 		visitaMediator.save(visita);
 
@@ -182,6 +186,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 		assertVisita(indice, visitaCheckar);
 		assertEmpresa(indice, visitaCheckar);
 		assertEquals(entrada, visitaCheckar.getEntrada());
+		assertEquals(email, visitaCheckar.getVisitante().getEmail());
 	}
 
 	/**
@@ -413,6 +418,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 	}
 
 	private Visita getFirst() {
+		entityManager.flush();
 		entityManager.clear();
 		List<Visita> registros = visitaRepository.findAll();
 		Visita visitaCheckar = registros.stream().findFirst().get();

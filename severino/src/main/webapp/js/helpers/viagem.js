@@ -1,5 +1,5 @@
 /**
- * Javascript da p√°gina viagem.jsp
+ * Javascript da p·gina viagem.jsp
  */
 function ViagemClass() {
 

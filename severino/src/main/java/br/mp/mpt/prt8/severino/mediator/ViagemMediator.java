@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.SmartValidator;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.ViagemRepository;
@@ -52,7 +49,7 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 	private VeiculoMediator veiculoMediator;
 
 	@Autowired
-	private SmartValidator validator;
+	private ValidatorServiceBean<Viagem> validator;
 
 	@Override
 	protected BaseRepositorySpecification<Viagem, Integer> repositoryBean() {
@@ -165,12 +162,11 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 		if (ultimaViagem != null) {
 			ultimaViagem.setRetorno(dataHoraRetorno);
 
-			Set<ConstraintViolation<Viagem>> validate = ((LocalValidatorFactoryBean) validator).getValidator().validate(ultimaViagem, CadastrarViagem.class);
+			Set<ConstraintViolation<Viagem>> validate = validator.getValidationConstraints(ultimaViagem, CadastrarViagem.class);
 			if (validate.isEmpty()) {
 				return ultimaViagem.getControleRetorno();
 			}
-			String messages = validate.stream().map(c -> c.getMessage()).collect(Collectors.joining(","));
-			throw new NegocioException(messages);
+			throw new NegocioException(validator.constraintsToMessage(validate));
 		}
 		return null;
 	}

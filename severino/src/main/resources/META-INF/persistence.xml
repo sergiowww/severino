@@ -16,6 +16,7 @@
 		<class>br.mp.mpt.prt8.severino.entity.PassageiroPK</class>
 		<class>br.mp.mpt.prt8.severino.entity.Veiculo</class>
 		<class>br.mp.mpt.prt8.severino.entity.Viagem</class>
+		<class>br.mp.mpt.prt8.severino.entity.Endereco</class>
 		<validation-mode>AUTO</validation-mode>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57InnoDBDialect" />

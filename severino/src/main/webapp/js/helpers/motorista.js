@@ -1,5 +1,5 @@
 /**
- * Javascript da p√°gina motorista.js
+ * Javascript da p·gina motorista.jsp
  */
 
 function MotoristaClass() {

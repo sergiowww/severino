@@ -41,7 +41,7 @@ public class HomeController {
 	/**
 	 * Url de início.
 	 * 
-	 * @param request
+	 * @param auth
 	 * @return
 	 */
 	@GetMapping("/")

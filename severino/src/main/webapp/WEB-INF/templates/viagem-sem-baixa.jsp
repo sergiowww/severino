@@ -12,7 +12,7 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div class="table-responsive bodycontainer scrollable" style="height: 251px;">
+		<div class="table-responsive bodycontainer scrollable" style="height: 238px;">
 			<table class="table table-scrollable">
 				<tbody>
 					<c:if test="${empty viagensSemBaixa}">

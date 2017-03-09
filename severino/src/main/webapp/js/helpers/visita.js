@@ -1,9 +1,12 @@
 /**
- * Javascript da pÃ¡gina visita.jsp
+ * Javascript da página visita.jsp
  */
 
 function VisitaClass() {
-	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor", "profissao", "telefone" ];
+	/**
+	 * Campos que não permitem alteração por esta tela.
+	 */
+	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor" ];
 	this.FIELD_PREFIX = "#visitante\\.";
 	this.HIDDEN_SUFFIX = "_hidden";
 	this.configurarAutoCompleteNomeProcurado = function() {
@@ -91,18 +94,35 @@ function VisitaClass() {
 	this.pesquisarVisitantePeloDocumento = function(visitante, eventoUsuario) {
 		var visitantePresente = visitante != null;
 		this.toggleElementsState(visitantePresente);
-		for (var i = 0; i < this.FIELDS_VISITANTE.length; i++) {
-			var fieldName = this.FIELDS_VISITANTE[i];
-			var fieldHidden = $(this.FIELD_PREFIX + fieldName + this.HIDDEN_SUFFIX);
-			var field = $(this.FIELD_PREFIX + this.FIELDS_VISITANTE[i]);
-			if (visitantePresente) {
-				field.val(visitante[fieldName]).trigger("keyup");
+		this.setFormValues(eventoUsuario, visitante, this.FIELD_PREFIX);
+		if (visitantePresente && visitante.endereco != undefined && visitante.endereco != null) {
+			this.setFormValues(eventoUsuario, visitante.endereco, this.FIELD_PREFIX + "endereco\\.");
+		}
+		if (eventoUsuario && !visitantePresente) {
+			$('[id^=visitante]').not("#visitante\\.documento").val("");
+		}
+	};
+
+	this.setFormValues = function(eventoUsuario, object, prefix) {
+		for ( var fieldName in object) {
+			var valor = object[fieldName];
+			if (object.hasOwnProperty(fieldName) && jQuery.type(valor) !== "object") {
+				var fieldHidden = $(prefix + fieldName + this.HIDDEN_SUFFIX);
+				var field = $(prefix + fieldName);
+                                
+				if (field.is(":disabled")) {
+					field.val(valor);
+				} else if (eventoUsuario) {
+					field.val(valor);
+				}
+				if (field.prop("placeholder") !== "") {
+					field.trigger("keyup")
+				}
 				fieldHidden.val(field.val());
-			} else if (eventoUsuario) {
-				field.val("");
 			}
 		}
 	};
+
 	$(document).ready(this.configurarAutoCompleteEmpresa.bind(this));
 	$(document).ready(this.configurarConsultaPeloDocumento.bind(this));
 	$(document).ready(this.configurarAutoCompleteNomeProcurado.bind(this));

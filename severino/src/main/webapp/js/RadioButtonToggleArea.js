@@ -1,5 +1,5 @@
 /**
- * Habilitar e desabilitar Ã¡rea de elementos de acordo com a seleÃ§Ã£o.
+ * Habilitar e desabilitar área de elementos de acordo com a seleção.
  */
 function RadioButtonToggleArea(radioButtonName) {
 	this.radioButtonName = radioButtonName;

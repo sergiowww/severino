@@ -1,5 +1,5 @@
 /**
- * Configurar o t√≠tulo da p√°gina com o t√≠tulo do HTML.
+ * Configurar o tÌtulo da p·gina com o tÌtulo do HTML.
  */
 /**
  * Retorna o context path das chamadas.

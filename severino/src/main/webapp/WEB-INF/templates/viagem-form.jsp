@@ -8,9 +8,7 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">
-			Viagem (quando o motorista sai em serviço com a viatura)
-		</h3>
+		<h3 class="panel-title">Viagem (quando o motorista sai em serviço com a viatura)</h3>
 		<div class="label label-default" style="float: right;">
 			<c:if test="${empty viagem.id}">
 				novo registro
@@ -109,8 +107,8 @@
 					<script type="text/javascript">new RadioButtonToggleArea("gravarVeiculo");</script>
 				</div>
 			</fieldset>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="btn-group" role="group">
 					<button type="submit" class="btn btn-primary active" title="Persistir dados no sistema">
 						<span class="glyphicon glyphicon-floppy-save"></span>
 						Salvar

@@ -15,14 +15,14 @@
 
 <spring:bind path="${name}">
 	<c:if test="${status.error}">
-		<c:set var="extraCssClass" value="${extraCssClass += ' has-feedback has-error'}"></c:set>
+		<c:set var="extraCssClass" value="${extraCssClass} has-feedback has-error"></c:set>
 	</c:if>
 
 	<div class="${extraCssClass}">
 		<c:if test="${not empty label }">
 			<form:label path="${name}" cssClass="control-lable" for="${name}">
-			${label}
-			<c:if test="${requiredField}">
+				${label}
+				<c:if test="${requiredField}">
 					<span style="color: red;" title="${fn:join(status.errorMessages, ', ') }">*</span>
 				</c:if>
 			</form:label>
