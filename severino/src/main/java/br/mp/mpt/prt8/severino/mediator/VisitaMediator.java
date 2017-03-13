@@ -1,5 +1,8 @@
 package br.mp.mpt.prt8.severino.mediator;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +20,8 @@ import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.CheckConflitoIntervalo;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.FluxoCamposIntervalo;
+import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
@@ -28,6 +33,10 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  */
 @Service
 public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
+
+	private static final int MAXIMO_DIAS_ALTERACAO = 30;
+	private static final String MENSAGEM_FORA_INTERVALO_ALTERACAO = "Este registro foi cadastrado em %s a alteração somente é permitida nos "
+			+ "%d dias subsequentes ao cadastro. Entre em contato com a TI caso queira promover alterações neste registro";
 
 	@Autowired
 	private VisitaRepository visitaRepository;
@@ -89,6 +98,14 @@ public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
 	}
 
 	private void checkVisita(Visita visita, String documento) {
+		if (visita.getId() != null) {
+			Date dataHoraCadastro = visitaRepository.findDataHoraCadastroById(visita.getId());
+			LocalDate ultimoDiaAlteracao = DateUtils.toLocalDate(dataHoraCadastro).plusDays(MAXIMO_DIAS_ALTERACAO);
+			if (ultimoDiaAlteracao.isBefore(LocalDate.now())) {
+				String dataHoraFormatada = DateFormat.getDateInstance(DateFormat.MEDIUM, Constantes.DEFAULT_LOCALE).format(dataHoraCadastro);
+				throw new NegocioException(String.format(MENSAGEM_FORA_INTERVALO_ALTERACAO, dataHoraFormatada, MAXIMO_DIAS_ALTERACAO));
+			}
+		}
 		Integer id = EntidadeUtil.getIdNaoNulo(visita);
 		if (visitaRepository.countByUsuarioAndSaida(documento, id) > 0) {
 			throw new NegocioException("O visitante com documento " + documento + " já entrou no prédio e não saiu!");

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +32,8 @@ import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaSetor;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
+import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
@@ -468,5 +472,39 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 		assertEquals(1, visitaMediator.findAllRegistradasHoje(null).size());
 		assertEquals(1, visitaMediator.findAllRegistradasHoje(resultado.getContent().get(0)).size());
+	}
+
+	@Test(expected = NegocioException.class)
+	public void testAlterarForaDoIntervalo() throws Exception {
+		Visita visita = new Visita();
+		LocalDateTime dataBase = LocalDateTime.now().minusYears(2);
+		visita.setDataHoraCadastro(DateUtils.toDate(dataBase));
+		visita.setEntrada(DateUtils.toDate(dataBase.minusMinutes(1)));
+		visita.setSaida(DateUtils.toDate(dataBase.plusHours(2)));
+		visita.setSetor(cargaSetor.getSetor1());
+		visita.setUsuario(usuarioHolder.getUsuario());
+
+		Visitante visitante = new Visitante();
+		visita.setVisitante(visitante);
+		visitante.setDocumento("123456787");
+		visitante.setNome("José de almeida");
+		visitante.setOrgaoEmissor("ssp");
+		visitante.setUf(Estado.DF);
+		entityManager.persist(visitante);
+		visita.setVisitante(visitante);
+		entityManager.persist(visita);
+		entityManager.flush();
+		entityManager.clear();
+		visita.setNomeProcurado("Alteração");
+
+		try {
+			visitaMediator.save(visita);
+			fail("deveria ter falhado");
+		} catch (NegocioException e) {
+			String dataHoraEsperada = DateFormat.getDateInstance(DateFormat.MEDIUM, Constantes.DEFAULT_LOCALE).format(visita.getDataHoraCadastro());
+			assertEquals("Este registro foi cadastrado em " + dataHoraEsperada
+					+ " a alteração somente é permitida nos 30 dias subsequentes ao cadastro. Entre em contato com a TI caso queira promover alterações neste registro", e.getMessage());
+			throw e;
+		}
 	}
 }

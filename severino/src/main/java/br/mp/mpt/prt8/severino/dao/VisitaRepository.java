@@ -68,4 +68,13 @@ public interface VisitaRepository extends BaseRepositorySpecification<Visita, In
 	@Query("select v from Visita as v inner join v.visitante as vi where cast(v.entrada as date) = current_date or v.id = :idVisita order by vi.nome")
 	List<Visita> findAllRegistradasHoje(@Param("idVisita") Integer idVisita);
 
+	/**
+	 * Buscar a data de cadastro do registro.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@Query("select v.dataHoraCadastro from Visita as v where v.id = :id")
+	Date findDataHoraCadastroById(@Param("id") Integer id);
+
 }
