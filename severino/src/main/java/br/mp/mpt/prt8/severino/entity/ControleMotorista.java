@@ -37,7 +37,7 @@ import br.mp.mpt.prt8.severino.validators.PastOrPresent;
 @Table(name = "controle_motorista")
 public class ControleMotorista extends AbstractEntity<Integer> implements Comparable<ControleMotorista> {
 	private static final long serialVersionUID = 2886563297565235407L;
-	private static final Comparator<ControleMotorista> COMPARE_ID = Comparator.comparing(ControleMotorista::getId, Comparator.nullsFirst(Comparator.naturalOrder()));
+	private static final Comparator<ControleMotorista> COMPARE_ID = Comparator.comparing(ControleMotorista::getMotorista, Comparator.nullsFirst(Comparator.naturalOrder()));
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,11 @@ package br.mp.mpt.prt8.severino.entity;
 
 import static javax.persistence.CascadeType.ALL;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -21,9 +27,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 
@@ -38,6 +46,7 @@ import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 public class Visitante extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 1L;
 
+	private static final String PREFIXO_ARQUIVO = "foto";
 	private static final String PADRAO_TELEFONE = "\\(\\d{2}\\) \\d{4,5}-\\d{4}";
 	private static final String MENSAGEM_TELEFONE = "O formato do telefone deve ser (##) ####-#### - digite apenas números.";
 	private static final String FORMATO_DADOS_RESUMO = "%s (%s %s-%s)";
@@ -99,6 +108,12 @@ public class Visitante extends AbstractEntity<Integer> {
 	@Valid
 	@JsonView(PesquisaDoc.class)
 	private Endereco endereco;
+
+	/**
+	 * Token para armazenar e recuperar a foto do upload.
+	 */
+	@Transient
+	private String tokenFoto;
 
 	public String getOrgaoEmissor() {
 		return orgaoEmissor;
@@ -199,5 +214,78 @@ public class Visitante extends AbstractEntity<Integer> {
 		if (endereco != null) {
 			endereco.setVisitante(this);
 		}
+	}
+
+	public String getTokenFoto() {
+		return tokenFoto;
+	}
+
+	public void setTokenFoto(String tokenFoto) {
+		this.tokenFoto = tokenFoto;
+	}
+
+	/**
+	 * Gerar um novo token pra foto.
+	 */
+	@PostLoad
+	public void gerarToken() {
+		this.tokenFoto = UUID.randomUUID().toString();
+	}
+
+	/**
+	 * Verifica se a foto está cadastrada para este visitante.
+	 * 
+	 * @return
+	 */
+	@Transient
+	@JsonView(PesquisaDoc.class)
+	public boolean isFotoCadastrada() {
+		return getArquivoFinal() != null || getArquivoTemp() != null;
+	}
+
+	/**
+	 * Retorna a referência para o arquivo recém subido pelo usuário (antes de
+	 * clicar no botão salvar).
+	 * 
+	 * @return
+	 */
+	public Path getArquivoTemp() {
+		if (!StringUtils.isEmpty(tokenFoto)) {
+			Path arquivoTemp = FileUtilsApp.getArquivoTemp(tokenFoto);
+			return Files.exists(arquivoTemp) ? arquivoTemp : null;
+		}
+		return null;
+	}
+
+	/**
+	 * Retorna a referência para o arquivo final, gravado pelo usuário.
+	 * 
+	 * @return
+	 */
+	public Path getArquivoFinal() {
+		if (id == null) {
+			return null;
+		}
+		Path arquivoFinal = getReferenciaArquivoFinal();
+		return Files.exists(arquivoFinal) ? arquivoFinal : null;
+	}
+
+	/**
+	 * Retorna uma referência ao arquivo.
+	 * 
+	 * @return
+	 */
+	public Path getReferenciaArquivoFinal() {
+		return Paths.get(FileUtilsApp.getDiretorioFotos().toString(), getNomeArquivoFoto());
+	}
+
+	/**
+	 * Retorna o nome do arquivo final da foto.
+	 * 
+	 * @return
+	 */
+	@Transient
+	public String getNomeArquivoFoto() {
+		return PREFIXO_ARQUIVO + id + FileUtilsApp.EXTENSAO_PADRAO;
 	}
 }

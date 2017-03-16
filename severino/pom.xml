@@ -53,6 +53,7 @@
 							<archive>
 								<manifestEntries>
 									<Implementation-Build>${maven.build.timestamp}</Implementation-Build>
+									<AppHome-Dir>/home/severino</AppHome-Dir>
 								</manifestEntries>
 							</archive>
 						</configuration>

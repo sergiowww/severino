@@ -57,6 +57,14 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 	}
 
 	@Override
+	protected Visita getNewEntity() {
+		Visita visita = super.getNewEntity();
+		visita.setVisitante(new Visitante());
+		visita.getVisitante().gerarToken();
+		return visita;
+	}
+
+	@Override
 	protected String redirectAposGravar(Visita entity) {
 		return "redirect:/visita/" + entity.getId();
 	}

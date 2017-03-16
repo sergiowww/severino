@@ -1,17 +1,29 @@
 package br.mp.mpt.prt8.severino.mediator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.TypedQuery;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -20,6 +32,7 @@ import org.springframework.data.jpa.datatables.mapping.Search;
 import br.mp.mpt.prt8.severino.entity.Endereco;
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visitante;
+import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -29,14 +42,33 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 public class VisitanteMediatorTest extends AbstractSeverinoTests {
-
+	private static final Logger LOG = LoggerFactory.getLogger(VisitanteMediatorTest.class);
+	private static final int TAMANHO_FOTO_1954_JPG = 47417;
+	private static final int TAMANHO_FOTO_954_JPG = 39776;
 	private static final String DOCUMENTO1 = "1234";
 	private static final String NOME_VISITANTE1 = "João do Caminhão";
+
 	@Autowired
 	private VisitanteMediator visitanteMediator;
 
+	@BeforeClass
+	public static void setFileDirs() throws IOException {
+		Path tempDir = Files.createTempDirectory("severino_tests");
+		FileUtilsApp.setHomeDir(tempDir.toString());
+		FileUtilsApp.setTempDir(tempDir.toString());
+		LOG.info("Diretório criado em " + tempDir);
+		tempDir.toFile().deleteOnExit();
+	}
+
+	@AfterClass
+	public static void removerTempdir() throws IOException {
+		Path tempDir = Paths.get(FileUtilsApp.getTempDir());
+		LOG.info("Removendo diretório temp: " + tempDir.toString());
+		FileUtils.deleteDirectory(tempDir.toFile());
+	}
+
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		Visitante visitante1 = new Visitante();
 		visitante1.setDocumento(DOCUMENTO1);
 		visitante1.setNome(NOME_VISITANTE1);
@@ -183,7 +215,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 	}
 
 	@Test(expected = NegocioException.class)
-	public void testSaveVisitanteComMesmoDocumento() {
+	public void testSaveVisitanteComMesmoDocumento() throws IOException {
 		Visitante visitante = new Visitante();
 		visitante.setDocumento(DOCUMENTO1);
 		visitante.setNome("Outro Cidadão");
@@ -210,4 +242,117 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		assertEquals("61996013799", visitante.getTelefone());
 	}
 
+	@Test
+	public void testGravarImagemTemp() throws Exception {
+		InputStream conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		Visitante visitante = new Visitante();
+		visitante.gerarToken();
+		String tokenFoto = visitante.getTokenFoto();
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		assertTrue(Files.exists(visitante.getArquivoTemp()));
+
+		visitanteMediator.removerFotoTemporaria(tokenFoto);
+		assertNull(visitante.getArquivoTemp());
+	}
+
+	@Test
+	public void testSalvarComImagem() throws Exception {
+		InputStream conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		Visitante visitante = new Visitante();
+		String documentoTeste = "457882";
+		visitante.setDocumento(documentoTeste);
+		visitante.setNome("João do maranhão");
+		visitante.setOrgaoEmissor("SSP");
+		visitante.setUf(Estado.SP);
+		visitante.gerarToken();
+		String tokenFoto = visitante.getTokenFoto();
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		visitanteMediator.save(visitante);
+		Visitante visitanteGravado = visitanteMediator.findByDocumento(documentoTeste);
+		assertNotNull(visitanteGravado.getArquivoFinal());
+		assertTrue(Files.exists(visitanteGravado.getArquivoFinal()));
+
+		Path arquivoDocumento = visitanteMediator.getFotoByDocumento(documentoTeste, tokenFoto);
+		assertNotNull(arquivoDocumento);
+		assertTrue(Files.exists(arquivoDocumento));
+		assertTrue(arquivoDocumento.toFile().getName().startsWith("foto"));
+
+		conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		arquivoDocumento = visitanteMediator.getFotoByDocumento(documentoTeste, tokenFoto);
+		assertNotNull(arquivoDocumento);
+		assertTrue(Files.exists(arquivoDocumento));
+		assertTrue(arquivoDocumento.toFile().getName().startsWith(tokenFoto));
+
+		visitanteGravado.gerarToken();
+		tokenFoto = visitanteGravado.getTokenFoto();
+		conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+
+		arquivoDocumento = visitanteMediator.getFotoByDocumento(documentoTeste, tokenFoto);
+		assertNotNull(arquivoDocumento);
+		assertTrue(Files.exists(arquivoDocumento));
+		assertTrue(arquivoDocumento.toFile().getName().startsWith(tokenFoto));
+
+		visitanteMediator.apagar(visitanteGravado.getId());
+
+		assertFalse(Files.exists(visitanteGravado.getReferenciaArquivoFinal()));
+	}
+
+	@Test
+	public void testAlterarComImagem() throws Exception {
+		InputStream conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		Visitante visitante = new Visitante();
+		String documentoTeste = "555448";
+		visitante.setDocumento(documentoTeste);
+		visitante.setNome("José do maranhão");
+		visitante.setOrgaoEmissor("SSP");
+		visitante.setUf(Estado.SP);
+		visitante.gerarToken();
+		String tokenFoto = visitante.getTokenFoto();
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		entityManager.clear();
+		visitanteMediator.save(visitante);
+
+		Visitante visitanteGravado = visitanteMediator.findByDocumento(documentoTeste);
+		assertNotNull(visitanteGravado.getArquivoFinal());
+		assertTrue(Files.exists(visitanteGravado.getArquivoFinal()));
+		assertEquals(TAMANHO_FOTO_1954_JPG, Files.size(visitanteGravado.getArquivoFinal()));
+		Path arquivoDocumento = visitanteMediator.getFotoByDocumento(documentoTeste, tokenFoto);
+		assertEquals(TAMANHO_FOTO_1954_JPG, Files.size(arquivoDocumento));
+
+		testOutraAlteracao(visitanteGravado);
+	}
+
+	private void testOutraAlteracao(Visitante visitanteGravado) throws IOException {
+		visitanteGravado.gerarToken();
+		InputStream conteudoArquivo = this.getClass().getResourceAsStream("/foto954.jpg");
+		visitanteMediator.gravarImagemTemporaria(visitanteGravado.getTokenFoto(), conteudoArquivo);
+
+		Path arquivoDocumento = visitanteMediator.getFotoByDocumento(visitanteGravado.getDocumento(), visitanteGravado.getTokenFoto());
+		assertEquals(TAMANHO_FOTO_954_JPG, Files.size(arquivoDocumento));
+		entityManager.clear();
+		visitanteMediator.save(visitanteGravado);
+		assertNull("Provavelente algum problema com o tokenFoto não preenchido", visitanteGravado.getArquivoTemp());
+		assertFalse(visitanteGravado.getArquivoTemp() != null && Files.exists(visitanteGravado.getArquivoTemp()));
+
+		arquivoDocumento = visitanteMediator.getFotoByDocumento(visitanteGravado.getDocumento(), visitanteGravado.getTokenFoto());
+		assertEquals(TAMANHO_FOTO_954_JPG, Files.size(arquivoDocumento));
+	}
+
+	@Test
+	public void testGetFotoByDocumento() throws Exception {
+		InputStream conteudoArquivo = this.getClass().getResourceAsStream("/foto1954.jpg");
+		Visitante visitante = new Visitante();
+		visitante.gerarToken();
+		String tokenFoto = visitante.getTokenFoto();
+		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		Path path = visitanteMediator.getFotoByDocumento(null, tokenFoto);
+		assertNotNull(path);
+		assertTrue(Files.exists(path));
+
+		path = visitanteMediator.getFotoByDocumento("444777", tokenFoto);
+		assertNotNull(path);
+		assertTrue(Files.exists(path));
+	}
 }

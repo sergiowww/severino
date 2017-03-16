@@ -1,9 +1,9 @@
 package br.mp.mpt.prt8.severino.entity;
 
-import static javax.persistence.AccessType.PROPERTY;
 import static javax.persistence.EnumType.ORDINAL;
 
-import javax.persistence.Access;
+import java.util.Comparator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -28,14 +28,34 @@ import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
  */
 @Entity
 @Table(name = "motorista")
-@Access(PROPERTY)
-public class Motorista extends AbstractEntity<Integer> {
-
+public class Motorista extends AbstractEntity<Integer> implements Comparable<Motorista> {
 	private static final long serialVersionUID = -7425879325275604313L;
+	private static final Comparator<Motorista> COMPARE_ID = Comparator.comparing(Motorista::getId, Comparator.nullsFirst(Comparator.naturalOrder()));
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_motorista", unique = true, nullable = false)
+	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = CadastrarViagem.class)
 	private Integer id;
+
+	@Column(nullable = false, length = 9)
+	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = CadastrarMotorista.class)
+	@Pattern(regexp = "\\d{3,}-[0-9xX]{1}", message = "O formato da está inválido, digite a matrícula com no formato 999-9", groups = CadastrarMotorista.class)
+	@Size(max = 9, groups = CadastrarMotorista.class)
 	private String matricula;
+
+	@Column(nullable = false, length = 200)
+	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = CadastrarMotorista.class)
+	@Size(min = 5, max = 200, groups = CadastrarMotorista.class)
 	private String nome;
+
+	@Column(nullable = false, name = "tipo")
+	@Enumerated(ORDINAL)
+	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = CadastrarMotorista.class)
 	private Cargo cargo;
 
 	/**
@@ -55,11 +75,6 @@ public class Motorista extends AbstractEntity<Integer> {
 		this.id = id;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_motorista", unique = true, nullable = false)
-	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarViagem.class)
 	@Override
 	public Integer getId() {
 		return this.id;
@@ -69,11 +84,6 @@ public class Motorista extends AbstractEntity<Integer> {
 		this.id = id;
 	}
 
-	@Column(nullable = false, length = 9)
-	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
-	@Pattern(regexp = "\\d{3,}-[0-9xX]{1}", message = "O formato da está inválido, digite a matrícula com no formato 999-9", groups = CadastrarMotorista.class)
-	@Size(max = 9, groups = CadastrarMotorista.class)
 	public String getMatricula() {
 		return this.matricula;
 	}
@@ -82,10 +92,6 @@ public class Motorista extends AbstractEntity<Integer> {
 		this.matricula = matricula;
 	}
 
-	@Column(nullable = false, length = 200)
-	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
-	@Size(min = 5, max = 200, groups = CadastrarMotorista.class)
 	public String getNome() {
 		return this.nome;
 	}
@@ -94,16 +100,17 @@ public class Motorista extends AbstractEntity<Integer> {
 		this.nome = nome;
 	}
 
-	@Column(nullable = false, name = "tipo")
-	@Enumerated(ORDINAL)
-	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
 	public Cargo getCargo() {
 		return this.cargo;
 	}
 
 	public void setCargo(Cargo tipo) {
 		this.cargo = tipo;
+	}
+
+	@Override
+	public int compareTo(Motorista o) {
+		return COMPARE_ID.compare(o, this);
 	}
 
 }

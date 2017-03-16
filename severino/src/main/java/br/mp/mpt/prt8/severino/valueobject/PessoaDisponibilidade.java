@@ -13,6 +13,10 @@ import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
  */
 public class PessoaDisponibilidade implements Comparable<PessoaDisponibilidade> {
 
+	private static final Comparator<PessoaDisponibilidade> COMPARE_PESSOA = Comparator.comparing(PessoaDisponibilidade::getNome)
+			.thenComparing(PessoaDisponibilidade::getEntrada, Comparator.nullsLast(Comparator.naturalOrder()))
+			.thenComparing(PessoaDisponibilidade::getSaida, Comparator.nullsLast(Comparator.naturalOrder()));
+
 	private Integer id;
 	private String nome;
 	private Date entrada;
@@ -77,8 +81,7 @@ public class PessoaDisponibilidade implements Comparable<PessoaDisponibilidade> 
 
 	@Override
 	public int compareTo(PessoaDisponibilidade o) {
-		return Comparator.comparing(PessoaDisponibilidade::getNome).thenComparing(PessoaDisponibilidade::getEntrada, Comparator.nullsLast(Comparator.naturalOrder()))
-				.thenComparing(PessoaDisponibilidade::getSaida, Comparator.nullsLast(Comparator.naturalOrder())).compare(this, o);
+		return COMPARE_PESSOA.compare(this, o);
 	}
 
 	/**

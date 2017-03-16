@@ -67,39 +67,49 @@
 					</div>
 					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
-							<div class="camposDetalhe">
-								<dl>
-									<dt>Nome</dt>
-									<dd>${visita.visitante.nome}</dd>
-								</dl>
-								<dl>
-									<dt>Documento</dt>
-									<dd>${visita.visitante.documento}</dd>
-								</dl>
-								<dl>
-									<dt>Órgao Emissor</dt>
-									<dd>${visita.visitante.orgaoEmissor}</dd>
-								</dl>
-								<dl>
-									<dt>UF de Emissão</dt>
-									<dd>${visita.visitante.uf}</dd>
-								</dl>
-								<dl>
-									<dt>Profissão ou Cargo</dt>
-									<dd>${visita.visitante.profissao}</dd>
-								</dl>
-								<dl>
-									<dt>E-mail</dt>
-									<dd>${visita.visitante.email}</dd>
-								</dl>
-								<dl>
-									<dt>Telefone 1</dt>
-									<dd>${visita.visitante.telefone}</dd>
-								</dl>
-								<dl>
-									<dt>Telefone 2</dt>
-									<dd>${visita.visitante.telefoneAlternativo}</dd>
-								</dl>
+							<div class="col-md-10">
+								<div class="row camposDetalhe">
+									<dl>
+										<dt>Nome</dt>
+										<dd>${visita.visitante.nome}</dd>
+									</dl>
+									<dl>
+										<dt>Documento</dt>
+										<dd>${visita.visitante.documento}</dd>
+									</dl>
+									<dl>
+										<dt>Órgao Emissor</dt>
+										<dd>${visita.visitante.orgaoEmissor}</dd>
+									</dl>
+									<dl>
+										<dt>UF de Emissão</dt>
+										<dd>${visita.visitante.uf}</dd>
+									</dl>
+									<dl>
+										<dt>Profissão ou Cargo</dt>
+										<dd>${visita.visitante.profissao}</dd>
+									</dl>
+									<dl>
+										<dt>E-mail</dt>
+										<dd>${visita.visitante.email}</dd>
+									</dl>
+									<dl>
+										<dt>Telefone 1</dt>
+										<dd>${visita.visitante.telefone}</dd>
+									</dl>
+									<dl>
+										<dt>Telefone 2</dt>
+										<dd>${visita.visitante.telefoneAlternativo}</dd>
+									</dl>
+								</div>
+							</div>
+							<div class="col-md-2 imagemVisitante">
+								<c:if test="${visita.visitante.fotoCadastrada}">
+									<img src="visitante/foto?documento=${visita.visitante.documento}" alt="Foto visitante" />
+								</c:if>
+								<c:if test="${not visita.visitante.fotoCadastrada}">
+									<img alt="Sem imagem" src="img/No_Image.png">
+								</c:if>
 							</div>
 						</div>
 					</div>

@@ -1,0 +1,21 @@
+@CHARSET "ISO-8859-1";
+
+/*.cameraContainer div div:LAST-CHILD:BEFORE {
+	content: "Câmera não instalada ou configurada";
+	padding: 5px;
+}*/
+.cameraContainer div div:FIRST-CHILD {
+	padding-top: 10px !important;
+	visibility: hidden;
+}
+
+.cameraContainer {
+	background-color: #eee;
+	height: 193px;
+	margin-top: 12px;
+	border: 1px solid #ccc;
+}
+
+.cameraContainer img {
+	height: 193px;
+}

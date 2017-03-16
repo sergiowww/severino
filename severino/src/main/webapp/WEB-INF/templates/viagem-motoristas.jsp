@@ -30,7 +30,7 @@
 								<div class="nomeMotorista">${controle.motorista.nome}</div>
 							</td>
 							<td>
-								<form action="viagem/atualizarDisponibilidade" method="post">
+								<form action="viagem/atualizarDisponibilidade" method="post" onsubmit="return viagem.confirmarFluxo(this, '${controle.motorista.nome}', ${controle.fluxoEntrada});">
 									<input type="hidden" name="idViagem" value="${viagem.id}" />
 									<input type="hidden" name="idMotorista" value="${controle.motorista.id}" />
 									<input type="text" placeholder="hh:mm" class="form-control" id="horario-${controle.motorista.id}" name="horario" />

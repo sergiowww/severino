@@ -9,6 +9,7 @@ import java.util.TimeZone;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 
 /**
  * Mediator para recuperar informações sobre o deploy da aplicação.
@@ -46,8 +49,7 @@ public class DeployInfoMediator {
 				for (Entry<Object, Object> entry : entradas) {
 					LOG.info(String.format("Manifest Entry: %s => %s", entry.getKey(), entry.getValue()));
 				}
-				String timestampString = Objects.toString(mainAttributes.getValue("Implementation-Build"),
-						"2016-07-12T10:08:00Z");
+				String timestampString = Objects.toString(mainAttributes.getValue("Implementation-Build"), "2016-07-12T10:08:00Z");
 
 				Calendar calendar = DatatypeConverter.parseDateTime(timestampString);
 				calendar.setTimeZone(TimeZone.getDefault());
@@ -57,6 +59,13 @@ public class DeployInfoMediator {
 			}
 		}
 		return dataHoraPublicacao;
+	}
 
+	@PostConstruct
+	public void setUpFileDirs() {
+		Attributes mainAttributes = manifest.getMainAttributes();
+		String homeDir = Objects.toString(mainAttributes.getValue("AppHome-Dir"), FileUtilsApp.getHomeDir());
+		FileUtilsApp.setHomeDir(homeDir);
+		LOG.info("Arquivos do serverino serão gravados em: " + homeDir);
 	}
 }

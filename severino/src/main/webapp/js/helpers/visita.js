@@ -9,6 +9,7 @@ function VisitaClass() {
 	this.FIELDS_VISITANTE = [ "nome", "uf", "orgaoEmissor" ];
 	this.FIELD_PREFIX = "#visitante\\.";
 	this.HIDDEN_SUFFIX = "_hidden";
+
 	this.configurarAutoCompleteNomeProcurado = function() {
 		var contextPath = Utils.getContextPath();
 		$("#nomeProcurado").autocomplete({
@@ -99,7 +100,10 @@ function VisitaClass() {
 			this.setFormValues(eventoUsuario, visitante.endereco, this.FIELD_PREFIX + "endereco\\.");
 		}
 		if (eventoUsuario && !visitantePresente) {
-			$('[id^=visitante]').not("#visitante\\.documento").val("");
+			$('[id^=visitante]').not("#visitante\\.tokenFoto, #visitante\\.documento").val("");
+		}
+		if (visitantePresente) {
+			CameraController.carregarFoto();
 		}
 	};
 
@@ -109,7 +113,7 @@ function VisitaClass() {
 			if (object.hasOwnProperty(fieldName) && jQuery.type(valor) !== "object") {
 				var fieldHidden = $(prefix + fieldName + this.HIDDEN_SUFFIX);
 				var field = $(prefix + fieldName);
-                                
+
 				if (field.is(":disabled")) {
 					field.val(valor);
 				} else if (eventoUsuario) {

@@ -80,6 +80,18 @@ function ViagemClass() {
 		}
 	};
 
+	this.confirmarFluxo = function(form, nomeMotorista, entrou) {
+		entrou = !entrou;
+		var acao = entrou ? "entrada" : "saída";
+
+		bootbox.confirm("Confirma a <b>" + acao.toUpperCase() + "</b> de <b>" + nomeMotorista + "</b>?", function(result) {
+			if (result) {
+				form.submit();
+			}
+		});
+		return false;
+	};
+
 	this.getTbodyPassageiros = function() {
 		return $("#passageirosTable tbody");
 	};

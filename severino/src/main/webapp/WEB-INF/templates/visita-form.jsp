@@ -28,6 +28,7 @@
 			<form:hidden path="id" id="id" />
 			<form:hidden path="dataHoraCadastro" id="dataHoraCadastro" />
 			<form:hidden path="usuario.id" />
+
 			<div class="row">
 				<div class="col-md-5 nestedColumn">
 					<c:if test="${empty visita.id}">
@@ -46,33 +47,40 @@
 				<tags:inputField name="setorProcurado" label="Setor" type="text" tip="Departamento ou divisão" extraCssClass="col-md-7" />
 			</div>
 			<form:hidden path="empresa.id" id="empresa.id" />
-			<ul class="nav nav-tabs" style="margin-top: 18px;">
-				<li class="active">
-					<a data-toggle="tab" href="#tabdados">Dados do visitante</a>
-				</li>
-				<li>
-					<a data-toggle="tab" href="#tabendereco">
-						Endereço
-						<c:if test="${not empty visita.visitante.endereco}">
-							<span class="badge" title="${visita.visitante.endereco}">1</span>
-						</c:if>
-					</a>
-				</li>
-			</ul>
-			<div class="tab-content mesmaAltura" style="margin-bottom: 10px;">
-				<div id="tabdados" class="tab-pane fade in active">
-					<form:hidden path="visitante.nome" id="visitante.nome_hidden" />
-					<form:hidden path="visitante.uf" id="visitante.uf_hidden" />
-					<form:hidden path="visitante.orgaoEmissor" id="visitante.orgaoEmissor_hidden" />
-					<jsp:include page="visitante-dados.jsp">
-						<jsp:param value="visitante." name="prefixName" />
-					</jsp:include>
+			<div class="col-md-9">
+				<ul class="nav nav-tabs" style="margin-top: 18px;">
+					<li class="active">
+						<a data-toggle="tab" href="#tabdados">Dados do visitante</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#tabendereco">
+							Endereço
+							<c:if test="${not empty visita.visitante.endereco}">
+								<span class="badge" title="${visita.visitante.endereco}">1</span>
+							</c:if>
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content mesmaAltura" style="margin-bottom: 10px;">
+					<div id="tabdados" class="tab-pane fade in active">
+						<form:hidden path="visitante.nome" id="visitante.nome_hidden" />
+						<form:hidden path="visitante.uf" id="visitante.uf_hidden" />
+						<form:hidden path="visitante.orgaoEmissor" id="visitante.orgaoEmissor_hidden" />
+						
+						<jsp:include page="visitante-dados.jsp">
+							<jsp:param value="visitante." name="prefixName" />
+						</jsp:include>
+					</div>
+					<div id="tabendereco" class="tab-pane fade">
+						<jsp:include page="visitante-endereco.jsp">
+							<jsp:param value="visitante." name="prefixName" />
+						</jsp:include>
+					</div>
 				</div>
-				<div id="tabendereco" class="tab-pane fade">
-					<jsp:include page="visitante-endereco.jsp">
-						<jsp:param value="visitante." name="prefixName" />
-					</jsp:include>
-				</div>
+
+			</div>
+			<div class="col-md-3">
+				<jsp:include page="camera.jsp" />
 			</div>
 			<div class="col-sm-offset-2 col-sm-10">
 				<div class="btn-group" role="group">
