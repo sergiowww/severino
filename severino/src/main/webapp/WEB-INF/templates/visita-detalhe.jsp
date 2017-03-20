@@ -105,7 +105,9 @@
 							</div>
 							<div class="col-md-2 imagemVisitante">
 								<c:if test="${visita.visitante.fotoCadastrada}">
-									<img src="visitante/foto?documento=${visita.visitante.documento}" alt="Foto visitante" />
+									<a class="thumbnail" href="visitante/foto?documento=${visita.visitante.documento}" target="_blank">
+										<img src="visitante/foto?documento=${visita.visitante.documento}" alt="Foto visitante" />
+									</a>
 								</c:if>
 								<c:if test="${not visita.visitante.fotoCadastrada}">
 									<img alt="Sem imagem" src="img/No_Image.png">

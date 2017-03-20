@@ -1,5 +1,6 @@
+
 <div id="camera" class="cameraContainer row"></div>
-<div class="row">
+<div class="row cameraBotoes">
 	<a class="btn btn-default col-md-8" href="javascript:CameraController.tirarFoto()" title="Tirar uma foto utilizando a webcam">
 		<span class="glyphicon glyphicon-camera"></span>
 		Capturar
