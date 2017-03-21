@@ -34,6 +34,7 @@ import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
+import br.mp.mpt.prt8.severino.utils.StringUtilApp;
 
 /**
  * Teste para o visitante.
@@ -194,11 +195,12 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 
 	private void assertVisitante(Visitante visitanteGravado, Visitante visitante) {
 		assertNotSame(visitanteGravado, visitante);
-		assertEquals(visitante.getTelefone(), visitanteGravado.getTelefone());
-		assertEquals(visitante.getTelefoneAlternativo(), visitanteGravado.getTelefoneAlternativo());
+		assertEquals(StringUtilApp.limparMascara(visitante.getTelefone()), visitanteGravado.getTelefone());
+		assertEquals(StringUtilApp.limparMascara(visitante.getTelefoneAlternativo()), visitanteGravado.getTelefoneAlternativo());
 		assertEquals(visitante.getDadosResumo(), visitante.getDadosResumo());
 		assertNotNull(visitanteGravado.getEndereco());
 		assertNotSame(visitanteGravado.getEndereco(), visitante.getEndereco());
+		visitante.getEndereco().setCep(StringUtilApp.limparMascara(visitante.getEndereco().getCep()));
 		assertEquals(Objects.toString(visitanteGravado.getEndereco()), Objects.toString(visitante.getEndereco()));
 		assertEquals(visitanteGravado.getEndereco().getReferencia(), visitanteGravado.getEndereco().getReferencia());
 	}
@@ -236,6 +238,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 
 	@Test
 	public void testFindByDocumento() throws Exception {
+		entityManager.clear();
 		Visitante visitante = visitanteMediator.findByDocumento(DOCUMENTO1);
 		assertNotNull(visitante);
 		assertEquals(DOCUMENTO1, visitante.getDocumento());

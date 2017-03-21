@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +19,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import br.mp.mpt.prt8.severino.utils.ConversorLimparMascara;
 import br.mp.mpt.prt8.severino.utils.StringUtilApp;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
@@ -47,6 +49,7 @@ public class Endereco implements Serializable {
 	@Column(length = 8)
 	@Pattern(regexp = "\\d{5}-\\d{3}", message = "o formato do CEP deve ser 00000-000", groups = CadastrarVisita.class)
 	@JsonView(PesquisaDoc.class)
+	@Convert(converter = ConversorLimparMascara.class)
 	private String cep;
 
 	@Column(length = 50)

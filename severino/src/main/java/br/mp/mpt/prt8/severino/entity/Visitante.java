@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -31,6 +32,7 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import br.mp.mpt.prt8.severino.utils.ConversorLimparMascara;
 import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
@@ -90,11 +92,13 @@ public class Visitante extends AbstractEntity<Integer> {
 	@Column(length = 11)
 	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
+	@Convert(converter = ConversorLimparMascara.class)
 	private String telefone;
 
 	@Column(name = "telefone_alternativo", length = 11)
 	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
 	@JsonView(PesquisaDoc.class)
+	@Convert(converter = ConversorLimparMascara.class)
 	private String telefoneAlternativo;
 
 	@Column(length = 45)
