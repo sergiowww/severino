@@ -6,20 +6,22 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Visita
 			<c:if test="${not empty visita.id}">
-					- ${visita.visitante.nome}
-				</c:if>
+				${visita.visitante.nome}
+			</c:if>
+			<c:if test="${empty visita.id}">
+				Visita
+			</c:if>
 		</h3>
 		<div class="label label-default" style="float: right;">
 			<c:if test="${empty visita.id}">
-					novo registro
-				</c:if>
+				novo registro
+			</c:if>
 			<c:if test="${not empty visita.id}">
-					cadastrado em
-					<fmt:formatDate value="${visita.dataHoraCadastro}" dateStyle="medium" timeStyle="short" type="both" />
-					por ${visita.usuario.id}
-				</c:if>
+				cadastrado em
+				<fmt:formatDate value="${visita.dataHoraCadastro}" dateStyle="medium" timeStyle="short" type="both" />
+				por ${visita.usuario.id}
+			</c:if>
 		</div>
 	</div>
 	<div class="panel-body">
