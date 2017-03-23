@@ -20,7 +20,6 @@ import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.utils.StringUtilApp;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
@@ -56,8 +55,6 @@ public class VisitanteMediator extends AbstractExampleMediator<Visitante, Intege
 
 		Integer id = EntidadeUtil.getIdNaoNulo(visitante);
 
-		visitante.setTelefone(StringUtilApp.limparMascara(visitante.getTelefone()));
-		visitante.setTelefoneAlternativo(StringUtilApp.limparMascara(visitante.getTelefoneAlternativo()));
 		checkEndereco(visitante);
 
 		Long totalPorDocumento = visitanteRepository.countByDocumentoIgnoreCaseAndIdNot(visitante.getDocumento(), id);
@@ -89,7 +86,6 @@ public class VisitanteMediator extends AbstractExampleMediator<Visitante, Intege
 			if (visitante.getId() != null && endereco.getId() == null) {
 				endereco.setId(visitante.getId());
 			}
-			endereco.setCep(StringUtilApp.limparMascara(endereco.getCep()));
 		}
 	}
 
