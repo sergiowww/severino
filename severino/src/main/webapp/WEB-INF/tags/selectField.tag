@@ -20,7 +20,7 @@
 
 	<div class="${extraCssClass}">
 		<c:if test="${not empty label }">
-			<form:label path="${name}" cssClass="control-lable" for="${name}">
+			<form:label path="${name}" cssClass="control-label" for="${name}">
 				${label}
 				<c:if test="${requiredField}">
 					<span style="color: red;" title="${fn:join(status.errorMessages, ', ') }">*</span>

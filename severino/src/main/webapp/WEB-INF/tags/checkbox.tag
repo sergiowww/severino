@@ -13,7 +13,7 @@
 		<c:set var="extraCssClass" value="${extraCssClass} has-error"></c:set>
 	</c:if>
 	<div class="${extraCssClass}">
-		<form:label path="${name}" cssClass="control-lable" for="${name}">
+		<form:label path="${name}" cssClass="control-label" for="${name}">
 			<form:checkbox path="${name}" id="${name}" title="${tip}" />
 			${label}
 		</form:label>

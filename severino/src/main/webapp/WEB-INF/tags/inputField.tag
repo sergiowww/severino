@@ -57,7 +57,7 @@
 		<c:set var="extraCssClass" value="${extraCssClass} has-error has-feedback"></c:set>
 	</c:if>
 	<div class="${extraCssClass}">
-		<form:label path="${name}" cssClass="control-lable" for="${name}">
+		<form:label path="${name}" cssClass="control-label" for="${name}">
 			${label}
 			<c:if test="${requiredField}">
 				<span style="color: red;" title="${fn:join(status.errorMessages, ', ') }">*</span>
