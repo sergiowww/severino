@@ -7,9 +7,9 @@
 		<form:form servletRelativeAction="/controleMotorista" cssClass="form-horizontal" modelAttribute="controleMotorista">
 			<form:hidden path="id" />
 			<div class="form-group">
-				<tags:inputField name="dataHora" label="Data e hora" type="date" mask="00/00/0000 00:00" requiredField="true" />
-				<tags:selectField name="fluxo" label="Fluxo" collection="${fluxos}" itemLabel="descricao" itemValue="name" searchItems="false" requiredField="true" />
-				<tags:selectField name="motorista.id" label="Técnico" collection="${motoristas}" itemLabel="nome" itemValue="id" searchItems="false" requiredField="true" />
+				<tags:selectField name="motorista.id" label="Técnico" collection="${motoristas}" itemLabel="nome" itemValue="id" searchItems="false" requiredField="true" extraCssClass="col-md-6" />
+				<tags:inputField name="dataHora" label="Data e hora" type="date" mask="00/00/0000 00:00" requiredField="true" extraCssClass="col-md-3" />
+				<tags:selectField name="fluxo" label="Fluxo" collection="${fluxos}" itemLabel="descricao" itemValue="name" searchItems="false" requiredField="true" extraCssClass="col-md-3" />
 			</div>
 			<tags:defaultButtons backUrl="controleMotorista/registros" />
 		</form:form>
