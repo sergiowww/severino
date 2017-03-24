@@ -252,6 +252,7 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		visitante.gerarToken();
 		String tokenFoto = visitante.getTokenFoto();
 		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
+		assertTrue(visitante.isFotoCadastrada());
 		assertTrue(Files.exists(visitante.getArquivoTemp()));
 
 		visitanteMediator.removerFotoTemporaria(tokenFoto);
@@ -268,12 +269,14 @@ public class VisitanteMediatorTest extends AbstractSeverinoTests {
 		visitante.setOrgaoEmissor("SSP");
 		visitante.setUf(Estado.SP);
 		visitante.gerarToken();
+		assertFalse(visitante.isFotoCadastrada());
 		String tokenFoto = visitante.getTokenFoto();
 		visitanteMediator.gravarImagemTemporaria(tokenFoto, conteudoArquivo);
 		visitanteMediator.save(visitante);
 		Visitante visitanteGravado = visitanteMediator.findByDocumento(documentoTeste);
 		assertNotNull(visitanteGravado.getArquivoFinal());
 		assertTrue(Files.exists(visitanteGravado.getArquivoFinal()));
+		assertTrue(visitanteGravado.isFotoCadastrada());
 
 		Path arquivoDocumento = visitanteMediator.getFotoByDocumento(documentoTeste, tokenFoto);
 		assertNotNull(arquivoDocumento);
