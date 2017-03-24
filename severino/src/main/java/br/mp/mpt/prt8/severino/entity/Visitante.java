@@ -79,7 +79,7 @@ public class Visitante extends AbstractEntity<Integer> {
 	private Estado uf;
 
 	@Column(nullable = false, length = 200)
-	@NotEmpty(groups = CadastrarVisita.class)
+	@NotNull(groups = CadastrarVisita.class)
 	@Size(max = 200, min = 5, groups = CadastrarVisita.class)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String nome;

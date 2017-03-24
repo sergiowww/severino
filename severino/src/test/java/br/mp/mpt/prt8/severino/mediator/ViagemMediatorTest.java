@@ -602,4 +602,42 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 			assertEquals(DTF.format(entrada), DTF.format(pessoaDisponibilidade.getEntrada()));
 		}
 	}
+
+	/**
+	 * Simular a reinserção do mesmo passageiro
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void testInserirPassageiroAlterarPassageiro() throws Exception {
+		Date saidaViagem1 = DateUtils.toDate(LocalDateTime.now().minusHours(10));
+		Date retornoViagem1 = DateUtils.toDate(LocalDateTime.now().minusMinutes(1));
+		Viagem viagem = new Viagem();
+		viagem.setMotorista(cargaMotorista.getMotorista());
+		viagem.setGravarVeiculo(false);
+		viagem.setSaida(saidaViagem1);
+		viagem.setRetorno(retornoViagem1);
+
+		Passageiro passageiro1 = new Passageiro();
+		String nomePassageiro1 = "Passageiro 1";
+		passageiro1.setNome(nomePassageiro1);
+		passageiro1.setMatricula("12");
+		viagem.addPassageiro(passageiro1);
+
+		Passageiro passageiro2 = new Passageiro();
+		String nomePassageiro2 = "Passageiro 2";
+		passageiro2.setNome(nomePassageiro2);
+		passageiro2.setMatricula("13");
+
+		viagem.addPassageiro(passageiro2);
+		viagem = salvarRegistro(viagem);
+		viagem.getPassageiros().clear();
+		entityManager.clear();
+		passageiro1.getId().setIdViagem(0);
+		viagem.getPassageiros().add(passageiro1);
+
+		viagem = salvarRegistro(viagem);
+		assertEquals(1, viagem.getPassageiros().size());
+
+	}
 }
