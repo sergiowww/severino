@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.ControleMotoristaRepository;
 import br.mp.mpt.prt8.severino.dao.MotoristaRepository;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.ControleMotoristaSpec;
 import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.Fluxo;
@@ -28,7 +30,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class ControleMotoristaMediator extends AbstractExampleMediator<ControleMotorista, Integer> {
+public class ControleMotoristaMediator extends AbstractSpecMediator<ControleMotorista, Integer> {
 
 	@Autowired
 	private ControleMotoristaRepository controleMotoristaRepository;
@@ -45,15 +47,6 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 	@Override
 	protected BaseRepositorySpecification<ControleMotorista, Integer> repositoryBean() {
 		return controleMotoristaRepository;
-	}
-
-	@Override
-	protected ControleMotorista getExampleForSearching(String searchValue) {
-		ControleMotorista controleMotorista = new ControleMotorista();
-		Motorista motorista = new Motorista();
-		motorista.setNome(searchValue);
-		controleMotorista.setMotorista(motorista);
-		return controleMotorista;
 	}
 
 	@Transactional
@@ -79,6 +72,7 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 		if (total > 0) {
 			throw new NegocioException("Não é possível registrar uma data e hora que tenha sido registrada antes!");
 		}
+		controleMotorista.setLocal(usuarioHolder.getLocal());
 		return super.save(controleMotorista);
 	}
 
@@ -88,8 +82,9 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 	 * @return
 	 */
 	public List<ControleMotorista> findDisponiveis() {
-		List<ControleMotorista> controles = controleMotoristaRepository.findUltimoAgrupadoPorMotorista();
-		List<Motorista> motoristas = motoristaRepository.findMotoristasSemRegistroPonto(Cargo.MOTORISTA);
+		Integer idLocal = usuarioHolder.getLocal().getId();
+		List<ControleMotorista> controles = controleMotoristaRepository.findUltimoAgrupadoPorMotorista(idLocal);
+		List<Motorista> motoristas = motoristaRepository.findMotoristasSemRegistroPonto(Cargo.MOTORISTA, idLocal);
 		List<ControleMotorista> motoristasSemRegistro = motoristas.stream().map(m -> new ControleMotorista(m)).collect(Collectors.toList());
 		controles.addAll(motoristasSemRegistro);
 		Collections.sort(controles);
@@ -105,7 +100,8 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 	 * @return
 	 */
 	public List<Motorista> findMotoristasDisponiveis(Integer idMotorista) {
-		List<Motorista> motoristas = controleMotoristaRepository.findMotoristasDisponiveis(Fluxo.ENTRADA);
+		Integer idLocal = usuarioHolder.getLocal().getId();
+		List<Motorista> motoristas = controleMotoristaRepository.findMotoristasDisponiveis(Fluxo.ENTRADA, idLocal);
 		if (idMotorista != null && !motoristas.contains(new Motorista(idMotorista))) {
 			Motorista motorista = motoristaRepository.findOne(idMotorista);
 			motoristas.add(motorista);
@@ -133,6 +129,7 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 			controle.setDataHora(dataHora);
 		}
 		checkDataHora(controle);
+		controle.setLocal(usuarioHolder.getLocal());
 		controleMotoristaRepository.save(controle);
 	}
 
@@ -182,6 +179,11 @@ public class ControleMotoristaMediator extends AbstractExampleMediator<ControleM
 			return null;
 		}
 		return result.get(0);
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<ControleMotorista>> specClass() {
+		return ControleMotoristaSpec.class;
 	}
 
 }

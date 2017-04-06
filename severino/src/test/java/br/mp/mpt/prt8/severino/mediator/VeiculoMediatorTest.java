@@ -20,6 +20,7 @@ import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
+import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
 
 /**
  * Teste do veículo.
@@ -27,7 +28,7 @@ import br.mp.mpt.prt8.severino.mediator.carga.CargaMotorista;
  * @author sergio.eoliveira
  *
  */
-@ContextConfiguration(classes = { CargaMotorista.class })
+@ContextConfiguration(classes = { CargaUsuario.class, CargaMotorista.class })
 public class VeiculoMediatorTest extends AbstractSeverinoTests {
 	@Autowired
 	private CargaMotorista cargaMotorista;

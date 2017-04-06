@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.Search;
+import org.springframework.test.context.ContextConfiguration;
 
 import br.mp.mpt.prt8.severino.entity.Setor;
+import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -22,6 +24,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  * @author sergio.eoliveira
  *
  */
+@ContextConfiguration(classes = CargaUsuario.class)
 public class SetorMediatorTest extends AbstractSeverinoTests {
 
 	private static final String NOME_SETOR1 = "SETOR 1";
@@ -30,18 +33,23 @@ public class SetorMediatorTest extends AbstractSeverinoTests {
 	@Autowired
 	private SetorMediator setorMediator;
 
+	@Autowired
+	private UsuarioHolder usuarioHolder;
+
 	@Before
 	public void setUp() {
 		Setor setor1 = new Setor();
 		setor1.setAndar((short) 1);
 		setor1.setNome(NOME_SETOR1);
 		setor1.setSala("123");
+		setor1.setLocal(usuarioHolder.getLocal());
 		setorMediator.save(setor1);
 
 		Setor setor2 = new Setor();
 		setor2.setAndar((short) 1);
 		setor2.setNome(NOME_SETOR2);
 		setor2.setSala("142");
+		setor2.setLocal(usuarioHolder.getLocal());
 		setorMediator.save(setor2);
 	}
 
@@ -50,8 +58,11 @@ public class SetorMediatorTest extends AbstractSeverinoTests {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		dataTablesInput.setSearch(new Search("setor", false));
+		dataTablesInput.setSearch(new Search(NOME_SETOR2, false));
 		Page<Setor> resultado = setorMediator.find(dataTablesInput);
+		assertEquals(1, resultado.getTotalElements());
+		dataTablesInput.setSearch(new Search(null, false));
+		resultado = setorMediator.find(dataTablesInput);
 		assertEquals(2, resultado.getTotalElements());
 	}
 

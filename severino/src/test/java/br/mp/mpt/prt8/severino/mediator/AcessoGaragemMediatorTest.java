@@ -36,7 +36,9 @@ import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.Empresa;
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Motorista;
+import br.mp.mpt.prt8.severino.entity.Organizacao;
 import br.mp.mpt.prt8.severino.entity.Passageiro;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
@@ -58,7 +60,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  * @author sergio.eoliveira
  *
  */
-@ContextConfiguration(classes = { CargaMotorista.class, CargaUsuario.class, CargaSetor.class })
+@ContextConfiguration(classes = { CargaUsuario.class, CargaMotorista.class, CargaSetor.class })
 public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 	private static final String PLACA_VEICULO = "HFG4577";
 	private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.SHORT, Constantes.DEFAULT_LOCALE);
@@ -82,6 +84,9 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 
 	@Autowired
 	private CargaSetor cargaSetor;
+
+	@Autowired
+	private UsuarioHolder usuarioHolder;
 
 	@Autowired
 	private SmartValidator smartValidator;
@@ -300,6 +305,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		veiculo.setId(PLACA_VEICULO);
 		veiculo.setMarca("Toyota");
 		veiculo.setModelo("Hilux");
+		veiculo.setLocal(usuarioHolder.getLocal());
 		return veiculo;
 	}
 
@@ -405,6 +411,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		veiculo.setModelo("Livina");
 		Motorista motorista = cargaMotorista.getMotorista();
 		veiculo.setMotorista(motorista);
+		veiculo.setLocal(usuarioHolder.getLocal());
 		entityManager.persist(veiculo);
 		entityManager.flush();
 		entityManager.clear();
@@ -449,6 +456,9 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new Search(motorista.getNome(), false));
 		Page<AcessoGaragem> page = acessoGaragemMediator.find(dataTablesInput);
 		assertEquals(1, page.getTotalElements());
+		dataTablesInput.setSearch(new Search(null, false));
+		page = acessoGaragemMediator.find(dataTablesInput);
+		assertEquals(1, page.getTotalElements());
 	}
 
 	private Date getDataEntradaHoje() throws ParseException {
@@ -481,7 +491,7 @@ public class AcessoGaragemMediatorTest extends AbstractSeverinoTests {
 		checkPassageiro("2016-11-14 13:06", "2016-11-14 15:29", "Cintia Nazare Pantoja Leao", false, ultimas);
 		checkPassageiro("2016-11-16 08:07", null, "Carla Afonso de Novoa Melo", true, ultimas);
 		checkPassageiro("2016-11-16 08:54", null, "Faustino Bartolomeu Alves Pimenta", true, ultimas);
-		deleteFromTables(Passageiro.class, Viagem.class, ControleMotorista.class, AcessoGaragem.class, Veiculo.class, Usuario.class, Motorista.class);
+		deleteFromTables(Passageiro.class, Viagem.class, ControleMotorista.class, AcessoGaragem.class, Veiculo.class, Usuario.class, Motorista.class, Local.class, Organizacao.class);
 
 	}
 

@@ -51,6 +51,13 @@ public abstract class AbstractEntityIntervaloData<ID> extends AbstractEntity<ID>
 	public abstract void setUsuario(Usuario usuario);
 
 	/**
+	 * Atribuir o local de criação.
+	 * 
+	 * @param local
+	 */
+	public abstract void setLocal(Local local);
+
+	/**
 	 * Atribuir a data de cadastro.
 	 * 
 	 * @param dataHoraCadastro

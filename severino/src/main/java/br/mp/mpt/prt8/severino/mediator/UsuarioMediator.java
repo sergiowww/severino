@@ -1,7 +1,5 @@
 package br.mp.mpt.prt8.severino.mediator;
 
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
@@ -24,6 +22,9 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private LocalMediator localMediator;
 
 	@Override
 	protected BaseRepositorySpecification<Usuario, String> repositoryBean() {
@@ -49,26 +50,25 @@ public class UsuarioMediator extends AbstractExampleMediator<Usuario, String> {
 			String login = auth.getName();
 			Usuario usuario = usuarioRepository.findOne(login);
 			LdapUserDetails details = (LdapUserDetails) auth.getPrincipal();
-			String nomeUsuario = getNomeUsuario(login, details.getDn());
+
+			String dn = details.getDn();
+			if (StringUtils.isEmpty(dn)) {
+				throw new IllegalArgumentException("O valor do DN é obrigatório, porque cargas dágua não veio preenchido?!");
+			}
+			String nomeUsuario = getNomeUsuario(login, dn);
 			if (usuario == null) {
 				usuario = new Usuario();
 				usuario.setId(login);
-				usuario.setNome(nomeUsuario);
-				usuario = usuarioRepository.save(usuario);
 			}
+			usuario.setNome(nomeUsuario);
+			usuario.setLocal(localMediator.findByDn(dn));
+			usuario = usuarioRepository.save(usuario);
 
-			if (!Objects.equals(nomeUsuario, usuario.getNome())) {
-				usuario.setNome(nomeUsuario);
-				usuario = usuarioRepository.save(usuario);
-			}
 			usuarioHolder.setUsuario(usuario);
 		}
 	}
 
 	private String getNomeUsuario(String login, String dn) {
-		if (StringUtils.isEmpty(dn)) {
-			return login;
-		}
 		String nomeUsuario = StringUtilApp.extrairNomeUsuario(dn);
 		if (StringUtils.isEmpty(nomeUsuario)) {
 			return login;

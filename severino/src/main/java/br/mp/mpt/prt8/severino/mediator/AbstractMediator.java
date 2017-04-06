@@ -1,6 +1,7 @@
 package br.mp.mpt.prt8.severino.mediator;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,15 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 		} else {
 			throw new NegocioException("Este registro só pode ser removido no mesmo dia pelo usuário criador!");
 		}
+	}
+
+	/**
+	 * Listar todos os locais.
+	 * 
+	 * @return
+	 */
+	public List<T> findAll() {
+		return repositoryBean().findAll();
 	}
 
 }

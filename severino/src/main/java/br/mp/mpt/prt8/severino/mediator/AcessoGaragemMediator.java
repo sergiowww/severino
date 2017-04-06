@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.mp.mpt.prt8.severino.dao.AcessoGaragemRepository;
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.AcessoGaragemSpec;
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
-import br.mp.mpt.prt8.severino.entity.Motorista;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.CheckConflitoIntervalo;
@@ -31,7 +33,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  *
  */
 @Service
-public class AcessoGaragemMediator extends AbstractExampleMediator<AcessoGaragem, Integer> {
+public class AcessoGaragemMediator extends AbstractSpecMediator<AcessoGaragem, Integer> {
 
 	private static final String MENSAGEM_CONFLITO = "O acesso a garagem do veículo placa %s possui intervalo de entrada e saída conflitante com a(s) acessos(s) %s";
 
@@ -57,15 +59,6 @@ public class AcessoGaragemMediator extends AbstractExampleMediator<AcessoGaragem
 	@PostConstruct
 	public void setUp() {
 		this.checkConflitoIntervaloMembro = new CheckConflitoIntervalo<String, AcessoGaragem>(acessoGaragemRepository, MENSAGEM_CONFLITO);
-	}
-
-	@Override
-	protected AcessoGaragem getExampleForSearching(String searchValue) {
-		AcessoGaragem acessoGaragem = new AcessoGaragem();
-		Motorista motorista = new Motorista();
-		motorista.setNome(searchValue);
-		acessoGaragem.setMotorista(motorista);
-		return acessoGaragem;
 	}
 
 	@Transactional
@@ -137,7 +130,8 @@ public class AcessoGaragemMediator extends AbstractExampleMediator<AcessoGaragem
 	 * @return
 	 */
 	public List<AcessoGaragem> findAllSemBaixa() {
-		return acessoGaragemRepository.findBySaidaIsNull();
+		Local local = usuarioHolder.getLocal();
+		return acessoGaragemRepository.findBySaidaIsNullAndLocal(local);
 	}
 
 	/**
@@ -149,9 +143,15 @@ public class AcessoGaragemMediator extends AbstractExampleMediator<AcessoGaragem
 	 * @return
 	 */
 	public List<PessoaDisponibilidade> findUltimaDisponibilidade(Date inicio, Date fim) {
-		List<PessoaDisponibilidade> acessos = acessoGaragemRepository.findUltimaDisponibilidade(inicio, fim);
+		Integer idLocal = usuarioHolder.getLocal().getId();
+		List<PessoaDisponibilidade> acessos = acessoGaragemRepository.findUltimaDisponibilidade(inicio, fim, idLocal);
 		acessos.forEach(p -> p.setFonte(FonteDisponibilidade.ACESSO_GARAGEM));
 		return acessos;
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<AcessoGaragem>> specClass() {
+		return AcessoGaragemSpec.class;
 	}
 
 }

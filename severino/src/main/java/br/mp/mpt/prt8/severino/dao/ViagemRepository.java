@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Viagem;
@@ -33,9 +34,11 @@ public interface ViagemRepository extends BaseRepositorySpecification<Viagem, In
 	/**
 	 * Buscar viagens que ainda não retornaram.
 	 * 
+	 * @param local
+	 * 
 	 * @return
 	 */
-	List<Viagem> findByControleRetornoIsNull();
+	List<Viagem> findByControleRetornoIsNullAndLocal(Local local);
 
 	/**
 	 * Buscar viagem onde o retorno estiver nulo e o motorista igual ao
@@ -69,8 +72,9 @@ public interface ViagemRepository extends BaseRepositorySpecification<Viagem, In
 	 * 
 	 * @param inicio
 	 * @param fim
+	 * @param idLocal
 	 * @return
 	 */
 	@Query
-	List<PessoaDisponibilidade> findPassageirosUltimaViagem(@Param("inicio") Date inicio, @Param("fim") Date fim);
+	List<PessoaDisponibilidade> findPassageirosUltimaViagem(@Param("inicio") Date inicio, @Param("fim") Date fim, @Param("idLocal") Integer idLocal);
 }

@@ -294,6 +294,9 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new Search(motorista.getNome(), false));
 		Page<ControleMotorista> page = controleMotoristaMediator.find(dataTablesInput);
 		assertEquals(2, page.getTotalElements());
+		dataTablesInput.setSearch(new Search(null, false));
+		page = controleMotoristaMediator.find(dataTablesInput);
+		assertEquals(2, page.getTotalElements());
 	}
 
 	@Test
@@ -349,6 +352,8 @@ public class ControleMotoristaMediatorTest extends AbstractSeverinoTests {
 	}
 
 	private void retornouViagem(Motorista motorista) {
+		entityManager.clear();
+		entityManager.flush();
 		controleMotoristaMediator.atualizarDisponibilidade(motorista.getId(), null);
 
 		assertEquals(3, controleMotoristaRepository.count());

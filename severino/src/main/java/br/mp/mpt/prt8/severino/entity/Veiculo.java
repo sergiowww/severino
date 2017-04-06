@@ -1,5 +1,7 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,11 +61,19 @@ public class Veiculo extends AbstractEntity<String> {
 	@JsonView(DataTablesOutput.View.class)
 	private boolean viaturaMp;
 
+	@Column(nullable = false)
+	@JsonView(DataTablesOutput.View.class)
+	private boolean ativo = true;
+
 	// bi-directional many-to-one association to Motorista
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_motorista")
 	@JsonView(DataTablesOutput.View.class)
 	private Motorista motorista;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false, updatable = false)
+	private Local local;
 
 	@Override
 	public String getId() {
@@ -134,6 +144,22 @@ public class Veiculo extends AbstractEntity<String> {
 			nomeMotorista = getMotorista().getNome();
 		}
 		return String.format(FORMATO_MOTORISTA, nomeMotorista, getId(), getMarca(), getModelo(), getCor());
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 
 }

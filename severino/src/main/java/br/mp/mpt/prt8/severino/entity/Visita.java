@@ -5,6 +5,7 @@ import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.V
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.VALIDACAO_INTERVALO_ENTRADA_SAIDA;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isDataEntradaValida;
 import static br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo.isIntervaloEntradaSaidaValido;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 import java.time.LocalDate;
@@ -113,6 +114,10 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@NotNull(groups = CadastrarVisita.class)
 	private Visitante visitante;
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false, updatable = false)
+	private Local local;
+
 	@AssertFalse(message = VALIDACAO_DATA_ENTRADA, groups = CadastrarVisita.class)
 	public boolean isValidacaoDataEntrada() {
 		return isDataEntradaValida(this);
@@ -211,6 +216,15 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 
 	public void setVisitante(Visitante visitante) {
 		this.visitante = visitante;
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	@Override
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 
 }

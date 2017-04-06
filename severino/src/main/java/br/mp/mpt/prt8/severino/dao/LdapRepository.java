@@ -20,6 +20,8 @@ import org.springframework.ldap.query.ContainerCriteria;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Repository;
 
+import br.mp.mpt.prt8.severino.mediator.UsuarioHolder;
+import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.valueobject.PessoaLdap;
 
 /**
@@ -30,19 +32,22 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaLdap;
  */
 @Repository
 public class LdapRepository {
-	private static final String KEY_USER_SEARCH_BASE = "userSearchBase";
 	private static final Logger LOG = LoggerFactory.getLogger(LdapRepository.class);
 	private static final String KEY_ATRIBUTOS_TRAZER = "attributesToShow";
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
 
+	@Autowired
+	private UsuarioHolder usuarioHolder;
+
 	@Resource(name = "ldapProperties")
 	private Properties ldapProperties;
 
 	public List<PessoaLdap> findByNomeLike(String parteNome) {
 		LOG.info(String.format("Consultando LDAP por \"%s\" ...", parteNome));
-		String base = ldapProperties.getProperty(KEY_USER_SEARCH_BASE);
+		String ldapName = usuarioHolder.getLocal().getOrganizacao().getLdapName();
+		String base = ldapName + ldapProperties.getProperty(Constantes.KEY_USER_SEARCH_BASE);
 		String atributos = ldapProperties.getProperty(KEY_ATRIBUTOS_TRAZER);
 
 		String[] attr = atributos.split(",");

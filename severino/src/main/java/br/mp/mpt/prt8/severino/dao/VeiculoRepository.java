@@ -2,12 +2,11 @@ package br.mp.mpt.prt8.severino.dao;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import br.mp.mpt.prt8.severino.entity.Cargo;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 
 /**
@@ -21,9 +20,11 @@ public interface VeiculoRepository extends BaseRepositorySpecification<Veiculo, 
 	/**
 	 * Buscar viaturas do mp.
 	 * 
+	 * @param local
+	 * 
 	 * @return
 	 */
-	List<Veiculo> findByViaturaMpTrue();
+	List<Veiculo> findByViaturaMpTrueAndAtivoTrueAndLocal(Local local);
 
 	/**
 	 * Selecionar o valor do campo viaturamp do veículo pela placa
@@ -38,10 +39,11 @@ public interface VeiculoRepository extends BaseRepositorySpecification<Veiculo, 
 	 * Listar todos os veículos de servidores e membros.
 	 * 
 	 * @param cargos
+	 * @param idLocal
 	 * @return
 	 */
-	@Query("select v from Veiculo as v inner join v.motorista as m where m.cargo in (:cargos)")
-	List<Veiculo> findByCargoIn(@Param("cargos") List<Cargo> cargos);
+	@Query("select v from Veiculo as v inner join v.motorista as m inner join v.local as loc where m.cargo in (:cargos) and v.ativo = true and loc.organizacao.id = :idOrganizacao")
+	List<Veiculo> findByCargoIn(@Param("cargos") List<Cargo> cargos, @Param("idOrganizacao") Integer idOrganizacao);
 
 	/**
 	 * Buscar veículo pela placa ignorando a capitalização.
@@ -59,13 +61,4 @@ public interface VeiculoRepository extends BaseRepositorySpecification<Veiculo, 
 	 */
 	Long countByMotoristaIsNullAndViaturaMpFalseAndId(String id);
 
-	/**
-	 * Buscar veículos pelos parâmetros informados.
-	 * 
-	 * @param pageable
-	 * @param searchValue
-	 * @return
-	 */
-	@Query("select v from Veiculo as v left join v.motorista as m where lower(v.cor) like :searchValue or lower(v.id) like :searchValue or lower(v.marca) like :searchValue or lower(v.modelo) like :searchValue or lower(m.nome) like :searchValue")
-	Page<Veiculo> findByTerm(Pageable pageable, @Param("searchValue") String searchValue);
 }

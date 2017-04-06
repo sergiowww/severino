@@ -38,10 +38,11 @@ public interface MotoristaRepository extends BaseRepositorySpecification<Motoris
 	 * Buscar motoristas que não tem qualquer registro de ponto.
 	 * 
 	 * @param motorista
+	 * @param idLocal
 	 * @return
 	 */
 	@Query
-	List<Motorista> findMotoristasSemRegistroPonto(@Param("cargoMotorista") Cargo motorista);
+	List<Motorista> findMotoristasSemRegistroPonto(@Param("cargoMotorista") Cargo motorista, @Param("idLocal") Integer idLocal);
 
 	/**
 	 * Buscar motoristas por cargo.

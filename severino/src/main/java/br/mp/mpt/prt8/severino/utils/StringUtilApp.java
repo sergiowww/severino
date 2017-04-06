@@ -26,7 +26,18 @@ public class StringUtilApp {
 	 * @return
 	 */
 	public static String extrairNomeUsuario(String dn) {
-		Matcher matcher = PATTERN_CN_NOME_USUARIO.matcher(dn);
+		return extrairPadrao(dn, PATTERN_CN_NOME_USUARIO);
+	}
+
+	/**
+	 * Extrair padrão de uma string.
+	 * 
+	 * @param valor
+	 * @param pattern
+	 * @return
+	 */
+	public static String extrairPadrao(String valor, Pattern pattern) {
+		Matcher matcher = pattern.matcher(valor);
 		if (matcher.find()) {
 			return matcher.group();
 		}

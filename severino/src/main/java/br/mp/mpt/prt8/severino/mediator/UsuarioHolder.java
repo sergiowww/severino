@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 
 /**
@@ -25,5 +26,14 @@ public class UsuarioHolder implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	/**
+	 * Local do usuário.
+	 * 
+	 * @return
+	 */
+	public Local getLocal() {
+		return usuario.getLocal();
 	}
 }

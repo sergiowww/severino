@@ -1,5 +1,7 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -7,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
@@ -19,7 +23,6 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
-
 
 /**
  * The persistent class for the setor database table.
@@ -56,6 +59,11 @@ public class Setor extends AbstractEntity<Integer> {
 	@JsonView(DataTablesOutput.View.class)
 	@Size(max = 5)
 	private String sala;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false, updatable = false)
+	@JsonView(DataTablesOutput.View.class)
+	private Local local;
 
 	@Override
 	public Integer getId() {
@@ -98,5 +106,13 @@ public class Setor extends AbstractEntity<Integer> {
 	@Transient
 	public String getDescricaoCompleta() {
 		return String.format(DESCRICAO_TEMPLATE, getAndar(), getNome(), Objects.toString(getSala(), ""));
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 }

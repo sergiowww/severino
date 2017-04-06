@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="tags"%>
 
-<tags:base-template title="Setor" menuSelecionado="setor/registros">
+<c:if test="${empty setor.local}">
+	<c:set target="${setor}" property="local" value="${sessionScope['scopedTarget.usuarioHolder'].usuario.local}" />
+</c:if>
+<tags:base-template title="Setor - ${setor.local.titulo}" menuSelecionado="setor/registros">
 	<jsp:body>
 		<form:form servletRelativeAction="/setor" cssClass="form-horizontal" modelAttribute="setor">
 			<form:hidden path="id" />

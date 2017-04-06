@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
-import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.mediator.SetorMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitaMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
@@ -52,7 +52,7 @@ public class VisitaController extends AbstractFullCrudController<Visita, Integer
 	}
 
 	@Override
-	protected AbstractExampleMediator<Visita, Integer> getMediatorBean() {
+	protected AbstractMediator<Visita, Integer> getMediatorBean() {
 		return visitaMediator;
 	}
 

@@ -53,7 +53,7 @@ public abstract class AbstractViewDataController<T extends AbstractEntity<ID>, I
 	 * 
 	 * @return
 	 */
-	protected final String getModelName() {
+	protected String getModelName() {
 		return StringUtils.uncapitalize(entityClass.getSimpleName());
 	}
 

@@ -6,6 +6,7 @@ import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -99,6 +101,10 @@ public class Viagem extends AbstractEntity<Integer> {
 	@JsonView(DataTablesOutput.View.class)
 	private Usuario usuario;
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false, updatable = false)
+	private Local local;
+
 	@Transient
 	private boolean gravarVeiculo = false;
 
@@ -145,6 +151,7 @@ public class Viagem extends AbstractEntity<Integer> {
 		singletonControleRetorno();
 		getControleRetorno().setDataHora(retorno);
 		getControleRetorno().setFluxo(Fluxo.ENTRADA);
+		sincronizarLocal();
 	}
 
 	private void singletonControleRetorno() {
@@ -168,11 +175,25 @@ public class Viagem extends AbstractEntity<Integer> {
 		singletonControleSaida();
 		getControleSaida().setDataHora(saida);
 		getControleSaida().setFluxo(Fluxo.SAIDA);
+		sincronizarLocal();
 	}
 
 	private void singletonControleSaida() {
 		if (getControleSaida() == null) {
 			setControleSaida(new ControleMotorista(getMotorista()));
+		}
+	}
+
+	/**
+	 * Copiar o valor do local para as variáveis de controle.
+	 */
+	@PrePersist
+	public void sincronizarLocal() {
+		if (getControleRetorno() != null) {
+			getControleRetorno().setLocal(getLocal());
+		}
+		if (getControleSaida() != null) {
+			getControleSaida().setLocal(getLocal());
 		}
 	}
 
@@ -302,4 +323,13 @@ public class Viagem extends AbstractEntity<Integer> {
 			getControleRetorno().setId(idControleRetorno);
 		}
 	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
+	}
+
 }

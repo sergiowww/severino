@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.mp.mpt.prt8.severino.entity.AbstractEntityIntervaloData;
+import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.mediator.UsuarioHolder;
 
 /**
@@ -18,6 +19,7 @@ import br.mp.mpt.prt8.severino.mediator.UsuarioHolder;
  */
 @Service
 public class FluxoCamposIntervalo {
+
 	@Autowired
 	private UsuarioHolder usuarioHolder;
 
@@ -37,7 +39,8 @@ public class FluxoCamposIntervalo {
 				entidade.setEntrada(new Date());
 			}
 		}
-		entidade.setUsuario(Objects.requireNonNull(usuarioHolder.getUsuario()));
-
+		Usuario usuario = usuarioHolder.getUsuario();
+		entidade.setUsuario(Objects.requireNonNull(usuario));
+		entidade.setLocal(Objects.requireNonNull(usuario.getLocal()));
 	}
 }

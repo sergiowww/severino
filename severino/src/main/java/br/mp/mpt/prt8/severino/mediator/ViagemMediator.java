@@ -17,8 +17,11 @@ import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.ViagemRepository;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.ViagemSpec;
 import br.mp.mpt.prt8.severino.entity.ControleMotorista;
 import br.mp.mpt.prt8.severino.entity.FonteDisponibilidade;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Passageiro;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
@@ -34,7 +37,7 @@ import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
  *
  */
 @Service
-public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
+public class ViagemMediator extends AbstractSpecMediator<Viagem, Integer> {
 
 	@Autowired
 	private ViagemRepository viagemRepository;
@@ -56,18 +59,10 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 		return viagemRepository;
 	}
 
-	@Override
-	protected Viagem getExampleForSearching(String searchValue) {
-		Viagem viagem = new Viagem();
-		Motorista motorista = new Motorista();
-		motorista.setNome(searchValue);
-		viagem.setMotorista(motorista);
-		return viagem;
-	}
-
 	@Transactional
 	@Override
 	public Viagem save(Viagem viagem) {
+		viagem.setLocal(usuarioHolder.getLocal());
 		checkMotorista(viagem);
 		Boolean registrarRetorno = viagem.isRegistrarSaida();
 		Date dataHoraAtual = new Date();
@@ -146,7 +141,8 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 	 * @return
 	 */
 	public List<Viagem> findViagensSemBaixa() {
-		return viagemRepository.findByControleRetornoIsNull();
+		Local local = usuarioHolder.getLocal();
+		return viagemRepository.findByControleRetornoIsNullAndLocal(local);
 	}
 
 	/**
@@ -160,6 +156,7 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 	public ControleMotorista realizarBaixa(Motorista motorista, Date dataHoraRetorno) {
 		Viagem ultimaViagem = viagemRepository.findByControleRetornoIsNullAndMotorista(motorista);
 		if (ultimaViagem != null) {
+			ultimaViagem.setMotorista(motorista);
 			ultimaViagem.setRetorno(dataHoraRetorno);
 
 			Set<ConstraintViolation<Viagem>> validate = validator.getValidationConstraints(ultimaViagem, CadastrarViagem.class);
@@ -180,8 +177,14 @@ public class ViagemMediator extends AbstractExampleMediator<Viagem, Integer> {
 	 * @return
 	 */
 	public List<PessoaDisponibilidade> findUltimaDisponibilidade(Date inicio, Date fim) {
-		List<PessoaDisponibilidade> passageiros = viagemRepository.findPassageirosUltimaViagem(inicio, fim);
+		Integer idLocal = usuarioHolder.getLocal().getId();
+		List<PessoaDisponibilidade> passageiros = viagemRepository.findPassageirosUltimaViagem(inicio, fim, idLocal);
 		passageiros.forEach(p -> p.setFonte(FonteDisponibilidade.VIAGEM));
 		return passageiros;
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<Viagem>> specClass() {
+		return ViagemSpec.class;
 	}
 }

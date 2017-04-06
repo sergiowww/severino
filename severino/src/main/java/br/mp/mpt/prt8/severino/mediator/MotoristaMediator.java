@@ -40,15 +40,6 @@ public class MotoristaMediator extends AbstractExampleMediator<Motorista, Intege
 	}
 
 	/**
-	 * Listar motoristas.
-	 * 
-	 * @return
-	 */
-	public List<Motorista> findAll() {
-		return motoristaRepository.findAll();
-	}
-
-	/**
 	 * Verificar se motorista é um técnico de transporte.
 	 * 
 	 * @param motorista
@@ -67,6 +58,9 @@ public class MotoristaMediator extends AbstractExampleMediator<Motorista, Intege
 		String matricula = motorista.getMatricula();
 		if (motoristaRepository.countByMatriculaIgnoreCaseAndIdNot(matricula, id) > 0) {
 			throw new NegocioException("Já existe um motorista com a matrícula " + matricula + " cadastrado");
+		}
+		if (motorista.getLocal() == null) {
+			motorista.setLocal(usuarioHolder.getLocal());
 		}
 		return super.save(motorista);
 	}

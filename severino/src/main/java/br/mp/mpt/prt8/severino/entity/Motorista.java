@@ -1,6 +1,7 @@
 package br.mp.mpt.prt8.severino.entity;
 
 import static javax.persistence.EnumType.ORDINAL;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.Comparator;
 
@@ -10,7 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -39,7 +43,7 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 	@NotNull(groups = CadastrarViagem.class)
 	private Integer id;
 
-	@Column(nullable = false, length = 9)
+	@Column(nullable = false, length = 9, unique = true)
 	@JsonView(DataTablesOutput.View.class)
 	@NotNull(groups = CadastrarMotorista.class)
 	@Pattern(regexp = "\\d{3,}-[0-9xX]{1}", message = "O formato da está inválido, digite a matrícula com no formato 999-9", groups = CadastrarMotorista.class)
@@ -57,6 +61,13 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 	@JsonView(DataTablesOutput.View.class)
 	@NotNull(groups = CadastrarMotorista.class)
 	private Cargo cargo;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false)
+	@JsonView(DataTablesOutput.View.class)
+	@NotNull(groups = CadastrarMotorista.class)
+	@Valid
+	private Local local;
 
 	/**
 	 * Construtor.
@@ -111,6 +122,14 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 	@Override
 	public int compareTo(Motorista o) {
 		return COMPARE_ID.compare(o, this);
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 
 }

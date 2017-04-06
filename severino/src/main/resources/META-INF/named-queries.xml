@@ -8,6 +8,7 @@
 				ControleMotorista as cm 
 			where 
 				cm.fluxo = :fluxo and 
+				cm.local.id = :idLocal and
 				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
 		</query>
 	</named-query>
@@ -17,7 +18,8 @@
 				cm 
 			from 
 				ControleMotorista as cm 
-			where 
+			where
+				cm.local.id = :idLocal and 
 				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
 			order by
 				cm.id desc
@@ -41,6 +43,7 @@
 			from 
 				Motorista as m 
 			where 
+				m.local.id = :idLocal and
 				m.cargo = :cargoMotorista and 
 				m.id not in (
 					select distinct cm.motorista.id 
@@ -90,6 +93,7 @@
 				inner join v.controleSaida as cs
 				left join v.controleRetorno as cr
 			where
+				cs.local.id = :idLocal and
 				cs.dataHora = (
 					select 
 						max(cs2.dataHora)
@@ -116,6 +120,7 @@
 				AcessoGaragem as ag 
 				inner join ag.motorista as m
 			where
+				ag.local.id = :idLocal and
 				ag.entrada = (
 					select 
 						max(ag2.entrada) 

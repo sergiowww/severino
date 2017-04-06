@@ -1,6 +1,7 @@
 package br.mp.mpt.prt8.severino.entity;
 
 import static javax.persistence.EnumType.ORDINAL;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -66,6 +67,10 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	@NotNull
 	@Valid
 	private Motorista motorista;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false, updatable = false)
+	private Local local;
 
 	/**
 	 * Construtor.
@@ -141,6 +146,14 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	@Override
 	public int compareTo(ControleMotorista o) {
 		return COMPARE_ID.compare(o, this);
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 
 }

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.entity.Estado;
 import br.mp.mpt.prt8.severino.entity.Visitante;
-import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitanteMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
@@ -55,7 +55,7 @@ public class VisitanteController extends AbstractFullCrudController<Visitante, I
 	}
 
 	@Override
-	protected AbstractExampleMediator<Visitante, Integer> getMediatorBean() {
+	protected AbstractMediator<Visitante, Integer> getMediatorBean() {
 		return visitanteMediator;
 	}
 

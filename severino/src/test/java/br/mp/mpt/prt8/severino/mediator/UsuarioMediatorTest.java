@@ -11,6 +11,8 @@ import org.springframework.data.jpa.datatables.mapping.Search;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
 
+import br.mp.mpt.prt8.severino.entity.Local;
+import br.mp.mpt.prt8.severino.entity.Organizacao;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 
 /**
@@ -63,7 +65,7 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 		assertEquals(USUARIO_LOGIN, usuario.getId());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSaveSemDn() throws Exception {
 		usuarioMediator.save(configureMocksDn(USUARIO_LOGIN, ""));
 
@@ -122,6 +124,7 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 		Usuario usuario = new Usuario();
 		usuario.setId(USUARIO_LOGIN);
 		usuario.setNome(USUARIO_NOME);
+		usuario.setLocal(getLocal());
 		usuarioMediator.save(usuario);
 		entityManager.flush();
 
@@ -131,11 +134,21 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 
 	}
 
+	private Local getLocal() {
+		Local locTeste = new Local("teste");
+		Organizacao organizacao = new Organizacao("teste2");
+		entityManager.persist(organizacao);
+		locTeste.setOrganizacao(organizacao);
+		entityManager.persist(locTeste);
+		return locTeste;
+	}
+
 	@Test
 	public void testUpdateNome() throws Exception {
 		Usuario usuario = new Usuario();
 		usuario.setId(USUARIO_LOGIN);
 		usuario.setNome("Casei mudei de nome");
+		usuario.setLocal(getLocal());
 		usuarioMediator.save(usuario);
 		entityManager.flush();
 

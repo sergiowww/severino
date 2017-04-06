@@ -4,7 +4,7 @@
 	<Resource 
 		name="jdbc/ces" 
 		type="javax.sql.DataSource" 
-		url="jdbc:mysql://localhost/ces?useSSL=false" 
+		url="jdbc:mysql://localhost/severino?useSSL=false" 
 		driverClassName="org.gjt.mm.mysql.Driver" 
 		auth="Container" 
 		username="ces" 

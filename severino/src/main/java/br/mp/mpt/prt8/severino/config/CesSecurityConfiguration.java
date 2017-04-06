@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
 
 /**
  * Configurações de segurança e acesso.
@@ -63,14 +64,17 @@ public class CesSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		DefaultLdapAuthoritiesPopulator defaultAuthoritiesPopulator = new DefaultLdapAuthoritiesPopulator(this.ldapContextSource, ldapProperties.getProperty("groupSearchBase"));
+		defaultAuthoritiesPopulator.setGroupRoleAttribute(ldapProperties.getProperty("groupRoleAttribute"));
+		defaultAuthoritiesPopulator.setGroupSearchFilter(ldapProperties.getProperty("groupSearchFilter"));
+		defaultAuthoritiesPopulator.setRolePrefix(ROLE_PREFIX);
+		defaultAuthoritiesPopulator.setSearchSubtree(true);
 		//@formatter:off
 		auth.ldapAuthentication()
-			.groupSearchBase(ldapProperties.getProperty("groupSearchBase"))
-			.groupRoleAttribute(ldapProperties.getProperty("groupRoleAttribute"))
-			.groupSearchFilter(ldapProperties.getProperty("groupSearchFilter"))
 			.rolePrefix(ROLE_PREFIX)
 			.userSearchBase(ldapProperties.getProperty("userSearchBase"))
 			.userSearchFilter(ldapProperties.getProperty("userSearchFilter"))
+			.ldapAuthoritiesPopulator(defaultAuthoritiesPopulator)
 			.contextSource(this.ldapContextSource)
 		;
 		//@formatter:on

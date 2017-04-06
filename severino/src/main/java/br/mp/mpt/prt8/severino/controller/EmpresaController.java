@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.entity.Empresa;
-import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
 import br.mp.mpt.prt8.severino.mediator.EmpresaMediator;
 
 /**
@@ -31,7 +30,7 @@ public class EmpresaController extends AbstractFullCrudController<Empresa, Integ
 	private EmpresaMediator empresaMediator;
 
 	@Override
-	protected AbstractExampleMediator<Empresa, Integer> getMediatorBean() {
+	protected EmpresaMediator getMediatorBean() {
 		return empresaMediator;
 	}
 
@@ -43,6 +42,6 @@ public class EmpresaController extends AbstractFullCrudController<Empresa, Integ
 	@GetMapping(value = "/listarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
 	@JsonView(DataTablesOutput.View.class)
 	public @ResponseBody List<Empresa> listarPorNome(@RequestParam("term") String nomeEmpresa) {
-		return empresaMediator.findByParteNome(nomeEmpresa);
+		return getMediatorBean().findByParteNome(nomeEmpresa);
 	}
 }

@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.Search;
+import org.springframework.test.context.ContextConfiguration;
 
 import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
+import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -20,6 +22,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  * @author sergio.eoliveira
  *
  */
+@ContextConfiguration(classes = CargaUsuario.class)
 public class MotoristaMediatorTest extends AbstractSeverinoTests {
 
 	@Autowired

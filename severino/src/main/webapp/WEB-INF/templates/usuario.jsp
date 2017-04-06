@@ -9,6 +9,10 @@
 				<dd>${usuario.id}</dd>
 				<dt>Nome:</dt>
 				<dd>${usuario.nome}</dd>
+				<dt>Local:</dt>
+				<dd>${usuario.local.nome}</dd>
+				<dt>Regional:</dt>
+				<dd>${usuario.local.organizacao.nome}</dd>
 			</dl>
 		
 			<div class="col-sm-offset-2 col-sm-10">

@@ -35,10 +35,11 @@
 									<input type="hidden" name="idMotorista" value="${controle.motorista.id}" />
 									<input type="text" placeholder="hh:mm" class="form-control" id="horario-${controle.motorista.id}" name="horario" />
 									<c:if test="${empty controle.dataHora}">
-										<c:set var="dataHoraFormatada">00:00</c:set>
+										<c:set var="horaFormatada">00:00</c:set>
 									</c:if>
 									<c:if test="${not empty controle.dataHora}">
-										<fmt:formatDate value="${controle.dataHora}" type="time" timeStyle="SHORT" var="dataHoraFormatada" />
+										<fmt:formatDate value="${controle.dataHora}" type="time" timeStyle="SHORT" var="horaFormatada" />
+										<fmt:formatDate value="${controle.dataHora}" type="both" timeStyle="SHORT" dateStyle="MEDIUM" var="dataHoraFormatada" />
 									</c:if>
 									<c:if test="${controle.fluxoEntrada}">
 										<c:set var="dicaUltimoEvento">
@@ -50,7 +51,7 @@
 											Saiu as ${dataHoraFormatada}
 										</c:set>
 									</c:if>
-									<tags:toggleButton status="${controle.fluxoEntrada}" label="${dataHoraFormatada}" tip="${dicaUltimoEvento}" />
+									<tags:toggleButton status="${controle.fluxoEntrada}" label="${horaFormatada}" tip="${dicaUltimoEvento}" />
 									<script type="text/javascript">
 										$(document).ready(function() {
 											var field = $("#horario-${controle.motorista.id}");

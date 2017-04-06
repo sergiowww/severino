@@ -6,17 +6,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
-import org.springframework.data.jpa.datatables.repository.DataTablesUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.VeiculoRepository;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.VeiculoSpec;
 import br.mp.mpt.prt8.severino.entity.Cargo;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 
 /**
@@ -26,7 +25,7 @@ import br.mp.mpt.prt8.severino.entity.Veiculo;
  *
  */
 @Service
-public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
+public class VeiculoMediator extends AbstractSpecMediator<Veiculo, String> {
 	@Autowired
 	private VeiculoRepository veiculoRepository;
 
@@ -39,17 +38,8 @@ public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
 		if (veiculo.getViaturaMp()) {
 			veiculo.setMotorista(null);
 		}
+		veiculo.setLocal(usuarioHolder.getLocal());
 		return super.save(veiculo);
-	}
-
-	@Override
-	public Page<Veiculo> find(DataTablesInput dataTablesInput) {
-		String searchValue = dataTablesInput.getSearch().getValue();
-		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
-		if (StringUtils.isEmpty(searchValue)) {
-			return veiculoRepository.findAll(pageable);
-		}
-		return veiculoRepository.findByTerm(pageable, "%" + searchValue.toLowerCase() + "%");
 	}
 
 	@Override
@@ -63,7 +53,8 @@ public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
 	 * @return
 	 */
 	public List<Veiculo> findViaturas() {
-		return veiculoRepository.findByViaturaMpTrue();
+		Local local = usuarioHolder.getLocal();
+		return veiculoRepository.findByViaturaMpTrueAndAtivoTrueAndLocal(local);
 	}
 
 	/**
@@ -89,8 +80,8 @@ public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
 	public List<Veiculo> findAllServidoresMembros() {
 		Predicate<? super Cargo> predicate = m -> !m.equals(Cargo.MOTORISTA);
 		List<Cargo> cargos = Arrays.stream(Cargo.values()).filter(predicate).collect(Collectors.toList());
-
-		return veiculoRepository.findByCargoIn(cargos);
+		Integer idOrganizacao = usuarioHolder.getLocal().getOrganizacao().getId();
+		return veiculoRepository.findByCargoIn(cargos, idOrganizacao);
 	}
 
 	/**
@@ -119,6 +110,11 @@ public class VeiculoMediator extends AbstractMediator<Veiculo, String> {
 		}
 		Long total = veiculoRepository.countByMotoristaIsNullAndViaturaMpFalseAndId(veiculo.getId());
 		return total > 0;
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<Veiculo>> specClass() {
+		return VeiculoSpec.class;
 	}
 
 }

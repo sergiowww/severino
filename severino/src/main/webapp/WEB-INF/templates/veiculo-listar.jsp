@@ -3,6 +3,7 @@
 
 <tags:base-template title="Veículos Cadastrados" menuSelecionado="veiculo/registros">
 	<jsp:body>
-		<tags:displayTableData urlEdit="veiculo/" urlAdd="veiculo/" fieldList="id,cor,marca,modelo,viaturaMp:sim_nao,motorista.nome" urlRemove="veiculo/delete/" urlJsonList="veiculo/listar" labelList="Placa,Cor,Marca,Modelo,Viatura MP,Proprietário" />
+		<tags:displayTableData urlEdit="veiculo/" urlAdd="veiculo/" fieldList="id,cor,marca,modelo,ativo:sim_nao,viaturaMp:sim_nao,motorista.nome" urlRemove="veiculo/delete/" urlJsonList="veiculo/listar"
+			labelList="Placa,Cor,Marca,Modelo,Ativo,Viatura MP,Proprietário" />
 	</jsp:body>
 </tags:base-template>

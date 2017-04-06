@@ -14,8 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.mp.mpt.prt8.severino.entity.Cargo;
 import br.mp.mpt.prt8.severino.entity.Motorista;
-import br.mp.mpt.prt8.severino.mediator.AbstractExampleMediator;
+import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
+import br.mp.mpt.prt8.severino.mediator.LocalMediator;
 import br.mp.mpt.prt8.severino.mediator.MotoristaMediator;
+import br.mp.mpt.prt8.severino.mediator.UsuarioHolder;
 import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.validators.CadastrarMotorista;
 
@@ -32,14 +34,28 @@ public class MotoristaController extends AbstractFullCrudController<Motorista, I
 	@Autowired
 	private MotoristaMediator motoristaMediator;
 
+	@Autowired
+	private LocalMediator localMediator;
+
+	@Autowired
+	private UsuarioHolder usuarioHolder;
+
 	@Override
-	protected AbstractExampleMediator<Motorista, Integer> getMediatorBean() {
+	protected AbstractMediator<Motorista, Integer> getMediatorBean() {
 		return motoristaMediator;
+	}
+
+	@Override
+	protected Motorista getNewEntity() {
+		Motorista motorista = super.getNewEntity();
+		motorista.setLocal(usuarioHolder.getLocal());
+		return motorista;
 	}
 
 	@Override
 	protected void addCollections(ModelAndView mav, Motorista entity) {
 		mav.addObject("cargos", Arrays.asList(Cargo.values()));
+		mav.addObject("locais", localMediator.findAll());
 	}
 
 	@PostMapping("")

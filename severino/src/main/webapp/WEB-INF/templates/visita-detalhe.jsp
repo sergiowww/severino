@@ -53,7 +53,10 @@
 							</dl>
 							<dl>
 								<dt>Cadastrado por</dt>
-								<dd>${visita.usuario.nome}</dd>
+								<dd>
+									${visita.usuario.nome} <br />
+									${visita.local.titulo}
+								</dd>
 							</dl>
 						</div>
 

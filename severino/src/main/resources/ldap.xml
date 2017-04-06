@@ -8,10 +8,9 @@
 		<property name="userDn" value="user@spring.org" />
 		<property name="password" value="password" />
 	</bean>
-	
 	<util:properties id="ldapProperties">
-		<prop key="userSearchBase">ou=Usuarios</prop>
-		<prop key="groupSearchBase">OU=_Grupos da Regional,OU=EMPRESA</prop>
+		<prop key="userSearchBase">ou=MPT</prop>
+		<prop key="groupSearchBase">OU=MPT</prop>
 		<prop key="groupRoleAttribute">CN</prop>
 		<prop key="groupSearchFilter">(member={0})</prop>
 		<prop key="userSearchFilter">(sAMAccountName={0})</prop>

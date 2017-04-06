@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import br.mp.mpt.prt8.severino.entity.AcessoGaragem;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.IntervaloValidator;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
@@ -21,9 +22,11 @@ public interface AcessoGaragemRepository extends BaseRepositorySpecification<Ace
 	/**
 	 * Buscar registros que ainda não possuem a data de saída.
 	 * 
+	 * @param local
+	 * 
 	 * @return
 	 */
-	List<AcessoGaragem> findBySaidaIsNull();
+	List<AcessoGaragem> findBySaidaIsNullAndLocal(Local local);
 
 	/**
 	 * Contar quantos registros estão associados com a mesma visita, não pode
@@ -76,9 +79,9 @@ public interface AcessoGaragemRepository extends BaseRepositorySpecification<Ace
 	 * 
 	 * @param inicio
 	 * @param fim
-	 * 
+	 * @param idLocal
 	 * @return
 	 */
 	@Query
-	List<PessoaDisponibilidade> findUltimaDisponibilidade(@Param("inicio") Date inicio, @Param("fim") Date fim);
+	List<PessoaDisponibilidade> findUltimaDisponibilidade(@Param("inicio") Date inicio, @Param("fim") Date fim, @Param("idLocal") Integer idLocal);
 }

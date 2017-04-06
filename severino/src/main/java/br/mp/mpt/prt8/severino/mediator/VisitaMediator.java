@@ -15,7 +15,10 @@ import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.VisitaRepository;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.VisitaSpec;
 import br.mp.mpt.prt8.severino.entity.Empresa;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.CheckConflitoIntervalo;
@@ -32,7 +35,7 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
+public class VisitaMediator extends AbstractSpecMediator<Visita, Integer> {
 
 	private static final int MAXIMO_DIAS_ALTERACAO = 30;
 	private static final String MENSAGEM_FORA_INTERVALO_ALTERACAO = "Este registro foi cadastrado em %s a alteração somente é permitida nos "
@@ -61,16 +64,6 @@ public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
 	@Override
 	protected BaseRepositorySpecification<Visita, Integer> repositoryBean() {
 		return visitaRepository;
-	}
-
-	@Override
-	protected Visita getExampleForSearching(String searchValue) {
-		Visita probe = new Visita();
-		probe.setNomeProcurado(searchValue);
-		Visitante visitante = new Visitante();
-		visitante.setNome(searchValue);
-		probe.setVisitante(visitante);
-		return probe;
 	}
 
 	@Transactional
@@ -132,7 +125,8 @@ public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
 	 * @return
 	 */
 	public List<Visita> findVisitasSemBaixa() {
-		return visitaRepository.findBySaidaIsNull();
+		Local local = usuarioHolder.getLocal();
+		return visitaRepository.findBySaidaIsNullAndLocal(local);
 	}
 
 	/**
@@ -143,7 +137,13 @@ public class VisitaMediator extends AbstractExampleMediator<Visita, Integer> {
 	 */
 	public List<Visita> findAllRegistradasHoje(Visita visita) {
 		Integer idVisita = EntidadeUtil.getIdNaoNulo(visita);
-		return visitaRepository.findAllRegistradasHoje(idVisita);
+		Integer idLocal = usuarioHolder.getLocal().getId();
+		return visitaRepository.findAllRegistradasHoje(idVisita, idLocal);
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<Visita>> specClass() {
+		return VisitaSpec.class;
 	}
 
 }

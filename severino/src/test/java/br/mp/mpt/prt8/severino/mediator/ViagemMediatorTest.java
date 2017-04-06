@@ -470,6 +470,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		viatura.setMarca(marca);
 		viatura.setModelo(modelo);
 		viatura.setCor(cor);
+		viatura.setLocal(usuarioHolder.getLocal());
 		viagem.setGravarVeiculo(true);
 		viagem.setViatura(viatura);
 
@@ -512,6 +513,9 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setSearch(new Search(viagem.getMotorista().getNome(), false));
 		Page<Viagem> page = viagemMediator.find(dataTablesInput);
 		assertEquals(1, page.getTotalElements());
+		dataTablesInput.setSearch(new Search(null, false));
+		page = viagemMediator.find(dataTablesInput);
+		assertEquals(1, page.getTotalElements());
 	}
 
 	@Test
@@ -546,6 +550,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		motorista2.setNome("Outro Motora");
 		motorista2.setMatricula("1");
 		motorista2.setCargo(Cargo.MOTORISTA);
+		motorista2.setLocal(usuarioHolder.getLocal());
 		entityManager.persist(motorista2);
 
 		Date saidaViagem3 = DateUtils.toDate(LocalDateTime.now().minusHours(8));

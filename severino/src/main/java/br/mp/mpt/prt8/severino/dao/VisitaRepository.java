@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Usuario;
 import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.IntervaloValidator;
@@ -19,11 +20,14 @@ import br.mp.mpt.prt8.severino.mediator.intervalodatas.IntervaloValidator;
 public interface VisitaRepository extends BaseRepositorySpecification<Visita, Integer>, IntervaloValidator<String>, DeleteSomentePeloCriador<Visita, Integer> {
 
 	/**
-	 * Buscar registros que ainda não possuem a data de saída.
+	 * Buscar registros que ainda não possuem a data de saída filtrando por
+	 * local.
+	 * 
+	 * @param local
 	 * 
 	 * @return
 	 */
-	List<Visita> findBySaidaIsNull();
+	List<Visita> findBySaidaIsNullAndLocal(Local local);
 
 	/**
 	 * Buscar uma visita para ser eliminada que tenha o mesmo id e usuário que
@@ -63,10 +67,11 @@ public interface VisitaRepository extends BaseRepositorySpecification<Visita, In
 	 * Recupera todas as visitas com data de entrada na data corrente.
 	 * 
 	 * @param idVisita
+	 * @param idLocal
 	 * @return
 	 */
-	@Query("select v from Visita as v inner join v.visitante as vi where cast(v.entrada as date) = current_date or v.id = :idVisita order by vi.nome")
-	List<Visita> findAllRegistradasHoje(@Param("idVisita") Integer idVisita);
+	@Query("select v from Visita as v inner join v.visitante as vi where (cast(v.entrada as date) = current_date or v.id = :idVisita) and v.local.id = :idLocal order by vi.nome")
+	List<Visita> findAllRegistradasHoje(@Param("idVisita") Integer idVisita, @Param("idLocal") Integer idLocal);
 
 	/**
 	 * Buscar a data de cadastro do registro.

@@ -13,6 +13,7 @@
 				<tags:selectField name="motorista.id" label="Proprietário" collection="${motoristas}" itemLabel="nome" itemValue="id" searchItems="false" extraCssClass="col-xs-6" />
 			</div>
 			<tags:checkbox label="Viatura do MP" name="viaturaMp" tip="Indica se este veículo é uma viatura do MP" />
+			<tags:checkbox label="Ativo" name="ativo" tip="Indica se este veículo deve ser apresentado nas outras telas do sistema" />
 			<tags:defaultButtons backUrl="veiculo/registros" />
 		</form:form>
 	</jsp:body>

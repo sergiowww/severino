@@ -2,17 +2,15 @@ package br.mp.mpt.prt8.severino.mediator;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.SetorRepository;
+import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.SetorSpec;
 import br.mp.mpt.prt8.severino.entity.Setor;
 import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
@@ -24,25 +22,14 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  *
  */
 @Service
-public class SetorMediator extends AbstractExampleMediator<Setor, Integer> {
+public class SetorMediator extends AbstractSpecMediator<Setor, Integer> {
 
 	@Autowired
 	private SetorRepository setorRepository;
 
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	@Override
 	protected BaseRepositorySpecification<Setor, Integer> repositoryBean() {
 		return setorRepository;
-	}
-
-	@Override
-	protected Setor getExampleForSearching(String searchValue) {
-		Setor probe = new Setor();
-		probe.setNome(searchValue);
-		probe.setSala(searchValue);
-		return probe;
 	}
 
 	@Transactional
@@ -57,6 +44,7 @@ public class SetorMediator extends AbstractExampleMediator<Setor, Integer> {
 		if (total > 0) {
 			throw new NegocioException("O setor com o nome \"" + nome + "\" já existe!");
 		}
+		setor.setLocal(usuarioHolder.getLocal());
 		return super.save(setor);
 	}
 
@@ -73,7 +61,12 @@ public class SetorMediator extends AbstractExampleMediator<Setor, Integer> {
 	 * @return
 	 */
 	public List<Setor> findAll() {
-		return setorRepository.findAll(new Sort("andar"));
+		return setorRepository.findByLocalOrderByAndar(usuarioHolder.getLocal());
+	}
+
+	@Override
+	public Class<? extends AbstractSpec<Setor>> specClass() {
+		return SetorSpec.class;
 	}
 
 }

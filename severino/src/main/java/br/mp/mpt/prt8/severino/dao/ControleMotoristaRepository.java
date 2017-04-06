@@ -21,19 +21,23 @@ public interface ControleMotoristaRepository extends BaseRepositorySpecification
 	/**
 	 * Buscar o último controle de ponto de cada motoristas.
 	 * 
+	 * @param idLocal
+	 * 
 	 * @return
 	 */
 	@Query
-	List<ControleMotorista> findUltimoAgrupadoPorMotorista();
+	List<ControleMotorista> findUltimoAgrupadoPorMotorista(@Param("idLocal") Integer idLocal);
 
 	/**
 	 * Buscar motoristas pelo cargo.
+	 * 
+	 * @param idLocal
 	 * 
 	 * @param motorista
 	 * @return
 	 */
 	@Query
-	List<Motorista> findMotoristasDisponiveis(@Param("fluxo") Fluxo fluxo);
+	List<Motorista> findMotoristasDisponiveis(@Param("fluxo") Fluxo fluxo, @Param("idLocal") Integer idLocal);
 
 	/**
 	 * Buscar o ultimo ponto de controle de um motorista.

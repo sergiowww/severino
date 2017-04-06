@@ -1,8 +1,12 @@
 package br.mp.mpt.prt8.severino.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -28,6 +32,11 @@ public class Usuario extends AbstractEntity<String> {
 	@Column(length = 200, nullable = false)
 	@JsonView(DataTablesOutput.View.class)
 	private String nome;
+
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "id_local", nullable = false)
+	@JsonView(DataTablesOutput.View.class)
+	private Local local;
 
 	@Override
 	public String getId() {
@@ -84,6 +93,14 @@ public class Usuario extends AbstractEntity<String> {
 			return false;
 		}
 		return true;
+	}
+
+	public Local getLocal() {
+		return local;
+	}
+
+	public void setLocal(Local local) {
+		this.local = local;
 	}
 
 }

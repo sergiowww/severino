@@ -65,7 +65,8 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li style="padding-right: 10px;">
 						<b>${pageContext.request.userPrincipal.name}</b> <br />
-						<span class="text-success">${sessionScope['scopedTarget.usuarioHolder'].usuario.nome}</span>
+						<span class="text-success bg-success">${sessionScope['scopedTarget.usuarioHolder'].usuario.nome}</span>
+						<span class="text-info bg-info">${sessionScope['scopedTarget.usuarioHolder'].usuario.local.titulo} </span>
 					</li>
 					<li>
 						<a href="logout" class="btn" role="button">
