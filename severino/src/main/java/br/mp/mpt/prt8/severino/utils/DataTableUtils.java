@@ -10,7 +10,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
  * @author sergio.eoliveira
  *
  */
-public class DataTableUtils {
+public abstract class DataTableUtils {
 
 	/**
 	 * Converter a pagina para o data tables output.

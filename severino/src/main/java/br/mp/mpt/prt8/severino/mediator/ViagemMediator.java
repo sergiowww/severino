@@ -26,6 +26,7 @@ import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Passageiro;
 import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Viagem;
+import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
@@ -65,7 +66,7 @@ public class ViagemMediator extends AbstractSpecMediator<Viagem, Integer> {
 		viagem.setLocal(usuarioHolder.getLocal());
 		checkMotorista(viagem);
 		Boolean registrarRetorno = viagem.isRegistrarSaida();
-		Date dataHoraAtual = new Date();
+		Date dataHoraAtual = DateUtils.getDataHoraAtual();
 		if (registrarRetorno) {
 			viagem.setRetorno(dataHoraAtual);
 		}

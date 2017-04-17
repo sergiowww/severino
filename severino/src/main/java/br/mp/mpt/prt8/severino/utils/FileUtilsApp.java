@@ -12,7 +12,7 @@ import java.nio.file.Paths;
  * @author sergio.eoliveira
  *
  */
-public class FileUtilsApp {
+public abstract class FileUtilsApp {
 	public static final String EXTENSAO_PADRAO = ".jpg";
 	private static final String DIRETORIO_FOTOS = "fotos_severino";
 	private static String homeDir = System.getProperty("user.home");

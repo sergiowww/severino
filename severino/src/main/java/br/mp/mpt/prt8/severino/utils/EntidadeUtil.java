@@ -8,15 +8,8 @@ import br.mp.mpt.prt8.severino.entity.AbstractEntity;
  * @author sergio.eoliveira
  *
  */
-public final class EntidadeUtil {
+public abstract class EntidadeUtil {
 	private static final int ID_INVALIDO = -1;
-
-	/**
-	 * Privado.
-	 */
-	private EntidadeUtil() {
-		super();
-	}
 
 	/**
 	 * Retorna um identificador não nulo mas inválido.

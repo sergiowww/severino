@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
-import br.mp.mpt.prt8.severino.validators.PastOrPresent;
 
 /**
  * The persistent class for the controle_motorista database table.
@@ -49,7 +49,7 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_hora", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@PastOrPresent(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA)
+	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA)
 	@NotNull
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	private Date dataHora;

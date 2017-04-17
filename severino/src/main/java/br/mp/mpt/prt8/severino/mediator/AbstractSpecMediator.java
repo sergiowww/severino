@@ -27,6 +27,7 @@ public abstract class AbstractSpecMediator<T, ID extends Serializable> extends A
 	@Override
 	public Page<T> find(DataTablesInput dataTablesInput) {
 		String searchValue = dataTablesInput.getSearch().getValue();
+		translateSortProperties(dataTablesInput);
 		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
 		Local local = usuarioHolder.getLocal();
 		Organizacao organizacao = local.getOrganizacao();

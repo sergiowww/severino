@@ -26,7 +26,7 @@ public interface AcessoGaragemRepository extends BaseRepositorySpecification<Ace
 	 * 
 	 * @return
 	 */
-	List<AcessoGaragem> findBySaidaIsNullAndLocal(Local local);
+	List<AcessoGaragem> findBySaidaIsNullAndLocalOrderByEntrada(Local local);
 
 	/**
 	 * Contar quantos registros estão associados com a mesma visita, não pode

@@ -11,13 +11,9 @@ import org.springframework.util.StringUtils;
  * @author sergio.eoliveira
  *
  */
-public class StringUtilApp {
+public abstract class StringUtilApp {
 
 	private static final Pattern PATTERN_CN_NOME_USUARIO = Pattern.compile("(?<=(cn\\=))([^,]*)", Pattern.CASE_INSENSITIVE);
-
-	private StringUtilApp() {
-		super();
-	}
 
 	/**
 	 * Extrair nome do usuário do cn.

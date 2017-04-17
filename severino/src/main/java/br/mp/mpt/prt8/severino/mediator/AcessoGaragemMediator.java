@@ -131,7 +131,7 @@ public class AcessoGaragemMediator extends AbstractSpecMediator<AcessoGaragem, I
 	 */
 	public List<AcessoGaragem> findAllSemBaixa() {
 		Local local = usuarioHolder.getLocal();
-		return acessoGaragemRepository.findBySaidaIsNullAndLocal(local);
+		return acessoGaragemRepository.findBySaidaIsNullAndLocalOrderByEntrada(local);
 	}
 
 	/**

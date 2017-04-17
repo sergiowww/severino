@@ -42,7 +42,7 @@ public interface VeiculoRepository extends BaseRepositorySpecification<Veiculo, 
 	 * @param idLocal
 	 * @return
 	 */
-	@Query("select v from Veiculo as v inner join v.motorista as m inner join v.local as loc where m.cargo in (:cargos) and v.ativo = true and loc.organizacao.id = :idOrganizacao")
+	@Query("select v from Veiculo as v inner join v.motorista as m inner join v.local as loc where m.cargo in (:cargos) and v.ativo = true and loc.organizacao.id = :idOrganizacao order by m.nome")
 	List<Veiculo> findByCargoIn(@Param("cargos") List<Cargo> cargos, @Param("idOrganizacao") Integer idOrganizacao);
 
 	/**

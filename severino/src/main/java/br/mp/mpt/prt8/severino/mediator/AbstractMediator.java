@@ -1,11 +1,17 @@
 package br.mp.mpt.prt8.severino.mediator;
 
 import java.io.Serializable;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.datatables.mapping.Column;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +27,13 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  */
 public abstract class AbstractMediator<T, ID extends Serializable> {
 
+	/**
+	 * Propriedades que são utilizadas apenas para exibir, quando for para
+	 * ordenar deve se consultar este mapa para obter a propriedade utilizada
+	 * para ordenar o resultado.
+	 */
+	private static final Map<String, String> SORT_PROPERTIES = Collections
+			.unmodifiableMap(Stream.of(new SimpleEntry<>("local.titulo", "local.nome")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
 	@Autowired
 	protected UsuarioHolder usuarioHolder;
 
@@ -96,6 +109,20 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 */
 	public List<T> findAll() {
 		return repositoryBean().findAll();
+	}
+
+	/**
+	 * Traduzir propriedades de exibição para propriedades de ordenação.
+	 * 
+	 * @param dataTablesInput
+	 */
+	protected void translateSortProperties(DataTablesInput dataTablesInput) {
+		for (String key : SORT_PROPERTIES.keySet()) {
+			Column column = dataTablesInput.getColumn(key);
+			if (column != null) {
+				column.setData(SORT_PROPERTIES.get(key));
+			}
+		}
 	}
 
 }

@@ -42,6 +42,6 @@ public class EmpresaController extends AbstractFullCrudController<Empresa, Integ
 	@GetMapping(value = "/listarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
 	@JsonView(DataTablesOutput.View.class)
 	public @ResponseBody List<Empresa> listarPorNome(@RequestParam("term") String nomeEmpresa) {
-		return getMediatorBean().findByParteNome(nomeEmpresa);
+		return empresaMediator.findByParteNome(nomeEmpresa);
 	}
 }

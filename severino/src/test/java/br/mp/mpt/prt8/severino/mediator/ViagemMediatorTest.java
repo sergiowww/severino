@@ -338,6 +338,10 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		assertControle(viagemGravada, Fluxo.SAIDA, 1);
 
 		viagemGravada.setRegistrarSaida(true);
+		
+		// Dorme um pouquinho pra dar um intervalo entre as datas cadastradas,
+		// se não elas são cadastradas no mesmo instantes e se tornam iguais.
+		Thread.sleep(4);
 		viagemGravada = salvarRegistro(viagemGravada);
 		assertControle(viagemGravada, Fluxo.ENTRADA, 2);
 		assertNotNull(viagemGravada.getRetorno());
@@ -378,6 +382,11 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		assertNotNull(viagemGravada.getSaida());
 
 		viagemGravada.setRegistrarSaida(true);
+
+		// Dorme um pouquinho pra dar um intervalo entre as datas cadastradas,
+		// se não elas são cadastradas no mesmo instantes e se tornam iguais.
+		Thread.sleep(4);
+
 		viagemGravada = salvarRegistro(viagemGravada);
 		assertControle(viagemGravada, Fluxo.ENTRADA, 2);
 		assertNotNull(viagemGravada.getRetorno());

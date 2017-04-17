@@ -152,7 +152,7 @@ public class ControleMotoristaMediator extends AbstractSpecMediator<ControleMoto
 
 	private Date getDataHora(Date horario) {
 		if (horario == null) {
-			return new Date();
+			return DateUtils.getDataHoraAtual();
 		}
 		Calendar calendarTime = Calendar.getInstance();
 		calendarTime.setTime(horario);

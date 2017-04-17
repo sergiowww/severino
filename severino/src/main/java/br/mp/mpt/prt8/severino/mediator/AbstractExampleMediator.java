@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
  *
  */
 public abstract class AbstractExampleMediator<T, ID extends Serializable> extends AbstractMediator<T, ID> {
-
 	/**
 	 * Realizar uma busca com os parâmetros informados.
 	 * 
@@ -56,6 +55,7 @@ public abstract class AbstractExampleMediator<T, ID extends Serializable> extend
 	 */
 	@Override
 	public Page<T> find(DataTablesInput dataTablesInput) {
+		translateSortProperties(dataTablesInput);
 		String searchValue = dataTablesInput.getSearch().getValue();
 		Pageable pageable = DataTablesUtils.getPageable(dataTablesInput);
 		if (StringUtils.isEmpty(searchValue)) {

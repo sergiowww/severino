@@ -2,7 +2,7 @@ package br.mp.mpt.prt8.severino.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -32,126 +33,96 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class EmpresaControllerTest {
-	@Mock
-	private EmpresaController empresaControllerMock;
+	@InjectMocks
+	private EmpresaController empresaController;
 
 	@Mock
 	private EmpresaMediator empresaMediatorMock;
 
 	@Mock
-	RedirectAttributes redirectAttributesMock;
+	private RedirectAttributes redirectAttributesMock;
 
 	@Mock
-	BindingResult bindingResultMock;
+	private BindingResult bindingResultMock;
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testSalvarNegocioException() throws Exception {
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		Empresa entity = new Empresa();
-		Mockito.when(empresaMediatorMock.save(entity)).thenThrow(NegocioException.class);
-
-		Mockito.when(empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock)).thenCallRealMethod();
-
-		empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock);
-
+		Empresa empresa = new Empresa();
+		String mensagem = "negócio exceptioin";
+		Mockito.when(empresaMediatorMock.save(empresa)).thenThrow(new NegocioException(mensagem));
+		ModelAndView mav = empresaController.salvar(empresa, bindingResultMock, redirectAttributesMock);
+		assertEquals(1, mav.getModelMap().values().stream().filter(p -> mensagem.equals(p)).count());
 	}
 
 	@Test
 	public void testSalvar() throws Exception {
 
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
 		Empresa entity = new Empresa();
 
-		Mockito.when(empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock)).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.redirectAposGravar(entity)).thenCallRealMethod();
-
-		empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock);
+		empresaController.salvar(entity, bindingResultMock, redirectAttributesMock);
 		Mockito.verify(empresaMediatorMock, Mockito.only()).save(entity);
 	}
 
 	@Test
 	public void testGetMediatorBean() throws Exception {
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenCallRealMethod();
-		assertNull(empresaControllerMock.getMediatorBean());
+		assertSame(empresaMediatorMock, empresaController.getMediatorBean());
 	}
 
 	@Test
 	public void testListarPorNome() throws Exception {
 		String string = "qualquer";
-		Mockito.when(empresaControllerMock.listarPorNome(string)).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
 		Mockito.when(empresaMediatorMock.findByParteNome(string)).thenReturn(Collections.emptyList());
-		empresaControllerMock.listarPorNome(string);
+		empresaController.listarPorNome(string);
 		Mockito.verify(empresaMediatorMock, Mockito.only()).findByParteNome(string);
 	}
 
 	@Test
 	public void testSalvarValidation() throws Exception {
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
 
 		Empresa entity = new Empresa();
-		Mockito.when(empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock)).thenCallRealMethod();
 		Mockito.when(bindingResultMock.hasErrors()).thenReturn(true);
 
-		empresaControllerMock.salvar(entity, bindingResultMock, redirectAttributesMock);
+		empresaController.salvar(entity, bindingResultMock, redirectAttributesMock);
 
 	}
 
 	@Test
 	public void testDelete() {
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		Mockito.when(empresaControllerMock.delete(Mockito.anyInt(), Mockito.any(RedirectAttributes.class))).thenCallRealMethod();
 
 		String keyMensagem = "Registro " + 1 + " removido com sucesso.";
 		Mockito.when(redirectAttributesMock.addFlashAttribute(AbstractFullCrudController.KEY_MSG, keyMensagem)).thenReturn(redirectAttributesMock);
-		empresaControllerMock.delete(1, redirectAttributesMock);
+		empresaController.delete(1, redirectAttributesMock);
 		Mockito.verify(redirectAttributesMock, Mockito.only()).addFlashAttribute(Mockito.eq(AbstractFullCrudController.KEY_MSG), Mockito.eq(keyMensagem));
 		Mockito.verify(empresaMediatorMock, Mockito.only()).apagar(Mockito.eq(1));
 	}
 
 	@Test
 	public void testDeleteNegocioException() {
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		Mockito.when(empresaControllerMock.delete(Mockito.anyInt(), Mockito.any(RedirectAttributes.class))).thenCallRealMethod();
 		Mockito.doThrow(NegocioException.class).when(empresaMediatorMock).apagar(Mockito.anyInt());
 
 		Mockito.when(redirectAttributesMock.addFlashAttribute(AbstractFullCrudController.KEY_MSG, null)).thenReturn(redirectAttributesMock);
-		empresaControllerMock.delete(1, redirectAttributesMock);
+		empresaController.delete(1, redirectAttributesMock);
 		Mockito.verify(redirectAttributesMock, Mockito.only()).addFlashAttribute(Mockito.eq(AbstractFullCrudController.KEY_ERROR), Mockito.anyString());
 	}
 
 	@Test
 	public void testInicioEdit() throws Exception {
 		Optional<Integer> param = Optional.of(1);
-		Mockito.when(empresaControllerMock.inicio(param)).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
 		Empresa value = new Empresa();
 		Mockito.when(empresaMediatorMock.findOne(param)).thenReturn(value);
-		empresaControllerMock.inicio(param);
+		empresaController.inicio(param);
 	}
 
 	@Test
 	public void testInicioNew() throws Exception {
 		Optional<Integer> param = Optional.of(1);
-		Mockito.when(empresaControllerMock.inicio(param)).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
 		Mockito.when(empresaMediatorMock.findOne(param)).thenReturn(null);
-		empresaControllerMock.inicio(param);
+		empresaController.inicio(param);
 	}
 
 	@Test
 	public void testListarPage() throws Exception {
-		Mockito.when(empresaControllerMock.listarPage()).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.getModelName()).thenReturn("empresa");
-		assertEquals("empresa-listar", empresaControllerMock.listarPage());
+		assertEquals("empresa-listar", empresaController.listarPage());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -160,30 +131,25 @@ public class EmpresaControllerTest {
 		DataTablesInput dataTablesInput = new DataTablesInput();
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
-		Mockito.when(empresaControllerMock.listar(dataTablesInput)).thenCallRealMethod();
-		Mockito.when(empresaControllerMock.getMediatorBean()).thenReturn(empresaMediatorMock);
 		Page<Empresa> pageMock = Mockito.mock(Page.class);
 		Mockito.when(empresaMediatorMock.find(dataTablesInput)).thenReturn(pageMock);
-		DataTablesOutput<Empresa> result = empresaControllerMock.listar(dataTablesInput);
+		DataTablesOutput<Empresa> result = empresaController.listar(dataTablesInput);
 		assertNotNull(result);
 	}
 
 	@Test
 	public void testGetNewEntity() throws Exception {
-		EmpresaController empresaController = new EmpresaController();
 		assertTrue(empresaController.getNewEntity() instanceof Empresa);
 	}
 
 	@Test
 	public void testGetModelName() throws Exception {
-		EmpresaController empresaController = new EmpresaController();
 		assertEquals("empresa", empresaController.getModelName());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testAddCollections() throws Exception {
-		EmpresaController empresaController = new EmpresaController();
 		ModelAndView mav = Mockito.mock(ModelAndView.class);
 		empresaController.addCollections(mav, new Empresa());
 		Mockito.verify(mav, Mockito.never()).addObject(Mockito.anyString());

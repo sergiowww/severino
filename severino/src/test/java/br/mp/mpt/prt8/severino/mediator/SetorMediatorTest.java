@@ -59,6 +59,7 @@ public class SetorMediatorTest extends AbstractSeverinoTests {
 		dataTablesInput.setStart(0);
 		dataTablesInput.setLength(4);
 		dataTablesInput.setSearch(new Search(NOME_SETOR2, false));
+		dataTablesInput.addColumn("local.titulo", true, true, null);
 		Page<Setor> resultado = setorMediator.find(dataTablesInput);
 		assertEquals(1, resultado.getTotalElements());
 		dataTablesInput.setSearch(new Search(null, false));

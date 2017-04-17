@@ -1,6 +1,7 @@
 package br.mp.mpt.prt8.severino.utils;
 
 import java.text.DateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,10 +13,7 @@ import java.util.Date;
  * @author sergio.eoliveira
  *
  */
-public final class DateUtils {
-	private DateUtils() {
-		super();
-	}
+public abstract class DateUtils {
 
 	/**
 	 * Converter data para localdate.
@@ -45,6 +43,15 @@ public final class DateUtils {
 	 */
 	public static String toString(Date date) {
 		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Constantes.DEFAULT_LOCALE).format(date);
+	}
+
+	/**
+	 * Data e hora atual do sistema.
+	 * 
+	 * @return
+	 */
+	public static Date getDataHoraAtual() {
+		return toDate(LocalDateTime.now().minus(Duration.ofMillis(1)));
 	}
 
 }
