@@ -35,4 +35,8 @@ $(document).ready(function() {
 			$("#wait").css("visibility", "hidden");
 		}
 	});
+
+	$(".table-row").click(function() {
+		window.document.location = $(this).data("href");
+	});
 });

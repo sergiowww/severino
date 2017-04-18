@@ -46,3 +46,7 @@
 	padding-right: 0px !important;
 	padding-left: 0px !important;
 }
+
+.table-row {
+	cursor: pointer;
+}

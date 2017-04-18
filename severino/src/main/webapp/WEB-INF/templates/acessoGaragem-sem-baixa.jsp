@@ -13,7 +13,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="table-responsive bodycontainer scrollable" style="height: 392px;">
-			<table class="table table-scrollable">
+			<table class="table table-scrollable table-hover">
 				<tbody>
 					<c:if test="${empty acessosSemBaixa}">
 						<tr>
@@ -21,7 +21,7 @@
 						</tr>
 					</c:if>
 					<c:forEach items="${acessosSemBaixa}" var="acessoGaragemSemBaixa">
-						<tr class="${acessoGaragemSemBaixa.id eq acessoGaragem.id ? 'active' : ''}">
+						<tr class="${acessoGaragemSemBaixa.id eq acessoGaragem.id ? 'active ' : ''}table-row" data-href="acessoGaragem/${acessoGaragemSemBaixa.id}">
 							<fmt:formatDate value="${acessoGaragemSemBaixa.entrada}" type="both" dateStyle="MEDIUM" timeStyle="SHORT" var="dataEntrada" />
 							<td title="${dataEntrada}">
 								<fmt:formatDate value="${acessoGaragemSemBaixa.entrada}" type="time" timeStyle="SHORT" />
