@@ -10,7 +10,7 @@
 		<form:form servletRelativeAction="/motorista" cssClass="form-horizontal" modelAttribute="motorista">
 			<form:hidden path="id" />
 			<div class="form-group">
-				<tags:inputField label="Nome" name="nome" type="text" requiredField="true" extraCssClass="col-md-4" />
+				<tags:inputField label="Nome (digite parte do nome e selecione na busca)" name="nome" type="text" requiredField="true" extraCssClass="col-md-4" tip="Digite parte do nome e pressione a tecla Tab para selecionar" />
 				<tags:inputField label="Matricula" name="matricula" type="text" requiredField="true" extraCssClass="col-md-2" />
 				<tags:selectField label="Cargo" name="cargo" collection="${cargos}" itemLabel="descricao" itemValue="name" searchItems="false" requiredField="true" extraCssClass="col-md-3" />
 				<tags:selectField label="Local" name="local.id" collection="${locais}" itemLabel="titulo" itemValue="id" searchItems="false" requiredField="true" extraCssClass="col-md-3" />

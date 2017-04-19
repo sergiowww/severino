@@ -122,7 +122,7 @@ public class ViagemControllerTest {
 		disponibilidadeMotorista.setIdMotorista(49);
 		disponibilidadeMotorista.setIdViagem(488);
 		disponibilidadeMotorista.setHorario(new Date());
-		assertEquals("redirect:/viagem/488", viagemController.atualizarDisponibilidade(disponibilidadeMotorista, redirectAttributesMock, bindingResultMock));
+		assertEquals("redirect:/viagem/488", viagemController.atualizarDisponibilidade(disponibilidadeMotorista, bindingResultMock, redirectAttributesMock));
 		Mockito.verify(controleMotoristaMediatorMock, Mockito.never()).atualizarDisponibilidade(49, null);
 	}
 
@@ -132,7 +132,7 @@ public class ViagemControllerTest {
 		ViagemController.DisponibilidadeMotorista disponibilidadeMotorista = new ViagemController.DisponibilidadeMotorista();
 		disponibilidadeMotorista.setIdMotorista(49);
 		disponibilidadeMotorista.setIdViagem(488);
-		assertEquals("redirect:/viagem/488", viagemController.atualizarDisponibilidade(disponibilidadeMotorista, redirectAttributesMock, bindingResultMock));
+		assertEquals("redirect:/viagem/488", viagemController.atualizarDisponibilidade(disponibilidadeMotorista, bindingResultMock, redirectAttributesMock));
 		Mockito.verify(controleMotoristaMediatorMock, Mockito.only()).atualizarDisponibilidade(49, null);
 	}
 
@@ -148,7 +148,7 @@ public class ViagemControllerTest {
 		Mockito.doThrow(new ConstraintViolationException(violation)).when(controleMotoristaMediatorMock).atualizarDisponibilidade(49, null);
 		ViagemController.DisponibilidadeMotorista disponibilidadeMotorista = new ViagemController.DisponibilidadeMotorista();
 		disponibilidadeMotorista.setIdMotorista(49);
-		viagemController.atualizarDisponibilidade(disponibilidadeMotorista, redirectAttributesMock, bindingResultMock);
+		viagemController.atualizarDisponibilidade(disponibilidadeMotorista, bindingResultMock, redirectAttributesMock);
 		Mockito.verify(controleMotoristaMediatorMock, Mockito.only()).atualizarDisponibilidade(49, null);
 		Mockito.verify(redirectAttributesMock, Mockito.only()).addFlashAttribute(AbstractFullCrudController.KEY_ERROR, mensagemErro);
 	}
@@ -160,7 +160,7 @@ public class ViagemControllerTest {
 		Mockito.doThrow(new NegocioException(mensagemErro)).when(controleMotoristaMediatorMock).atualizarDisponibilidade(49, null);
 		ViagemController.DisponibilidadeMotorista disponibilidadeMotorista = new ViagemController.DisponibilidadeMotorista();
 		disponibilidadeMotorista.setIdMotorista(49);
-		viagemController.atualizarDisponibilidade(disponibilidadeMotorista, redirectAttributesMock, bindingResultMock);
+		viagemController.atualizarDisponibilidade(disponibilidadeMotorista, bindingResultMock, redirectAttributesMock);
 		Mockito.verify(controleMotoristaMediatorMock, Mockito.only()).atualizarDisponibilidade(49, null);
 		Mockito.verify(redirectAttributesMock, Mockito.only()).addFlashAttribute(AbstractFullCrudController.KEY_ERROR, mensagemErro);
 	}

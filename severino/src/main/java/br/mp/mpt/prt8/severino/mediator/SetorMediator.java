@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import br.mp.mpt.prt8.severino.dao.BaseRepositorySpecification;
 import br.mp.mpt.prt8.severino.dao.SetorRepository;
 import br.mp.mpt.prt8.severino.dao.specs.AbstractSpec;
+import br.mp.mpt.prt8.severino.dao.specs.SetorEqualsSpec;
 import br.mp.mpt.prt8.severino.dao.specs.SetorSpec;
+import br.mp.mpt.prt8.severino.entity.Local;
 import br.mp.mpt.prt8.severino.entity.Setor;
-import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -36,11 +36,7 @@ public class SetorMediator extends AbstractSpecMediator<Setor, Integer> {
 	@Override
 	public Setor save(Setor setor) {
 		String nome = setor.getNome();
-		Integer id = EntidadeUtil.getIdNaoNulo(setor);
-
-		Short andar = setor.getAndar();
-		String sala = setor.getSala();
-		Long total = countSetoresComMesmosValores(nome, id, andar, sala);
+		Long total = countSetoresComMesmosValores(setor);
 		if (total > 0) {
 			throw new NegocioException("O setor com o nome \"" + nome + "\" já existe!");
 		}
@@ -48,11 +44,10 @@ public class SetorMediator extends AbstractSpecMediator<Setor, Integer> {
 		return super.save(setor);
 	}
 
-	private Long countSetoresComMesmosValores(String nome, Integer id, Short andar, String sala) {
-		if (StringUtils.isEmpty(sala)) {
-			setorRepository.countByNomeIgnoreCaseAndAndarAndSalaIsNullAndIdNot(nome, andar, id);
-		}
-		return setorRepository.countByNomeIgnoreCaseAndAndarAndSalaIgnoreCaseAndIdNot(nome, andar, sala, id);
+	private Long countSetoresComMesmosValores(Setor setor) {
+		Local local = usuarioHolder.getLocal();
+		SetorEqualsSpec spec = new SetorEqualsSpec(local, setor);
+		return setorRepository.count(spec);
 	}
 
 	/**

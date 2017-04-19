@@ -98,11 +98,12 @@ public class ViagemController extends AbstractFullCrudController<Viagem, Integer
 	 * 
 	 * @param idMotorista
 	 * @param horario
+	 * 
 	 * @return
 	 */
 	@PostMapping("/atualizarDisponibilidade")
 	@PreAuthorize(Roles.PADRAO)
-	public String atualizarDisponibilidade(@Valid @ModelAttribute DisponibilidadeMotorista disponibilidade, RedirectAttributes redirectAttributes, BindingResult result) {
+	public String atualizarDisponibilidade(@Valid @ModelAttribute DisponibilidadeMotorista disponibilidade, BindingResult result, RedirectAttributes redirectAttributes) {
 		if (!result.hasErrors()) {
 			Date horario = disponibilidade.getHorario();
 			Integer idMotorista = disponibilidade.getIdMotorista();
@@ -114,6 +115,8 @@ public class ViagemController extends AbstractFullCrudController<Viagem, Integer
 			} catch (NegocioException e) {
 				redirectAttributes.addFlashAttribute(KEY_ERROR, e.getMessage());
 			}
+		} else {
+			redirectAttributes.addFlashAttribute(KEY_ERROR, "Formato de hora inválido! Digite apenas números precedidos de zero (Ex.: 07:20)");
 		}
 		return "redirect:/viagem/" + Objects.toString(disponibilidade.getIdViagem(), "");
 	}
