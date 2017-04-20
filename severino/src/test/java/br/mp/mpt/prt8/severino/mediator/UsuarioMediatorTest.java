@@ -67,7 +67,12 @@ public class UsuarioMediatorTest extends AbstractSeverinoTests {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveSemDn() throws Exception {
-		usuarioMediator.save(configureMocksDn(USUARIO_LOGIN, ""));
+		try {
+			usuarioMediator.save(configureMocksDn(USUARIO_LOGIN, ""));
+		} catch (IllegalArgumentException e) {
+			assertEquals("O valor do DN é obrigatório, porque cargas dágua não veio preenchido?!", e.getMessage());
+			throw e;
+		}
 
 		entityManager.flush();
 		verificarComportamentoPadrao();

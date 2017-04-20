@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -58,7 +59,6 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 
 	@Column(nullable = false, name = "tipo")
 	@Enumerated(ORDINAL)
-	@JsonView(DataTablesOutput.View.class)
 	@NotNull(groups = CadastrarMotorista.class)
 	private Cargo cargo;
 
@@ -130,6 +130,20 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 
 	public void setLocal(Local local) {
 		this.local = local;
+	}
+
+	/**
+	 * Descrição do cargo.
+	 * 
+	 * @return
+	 */
+	@Transient
+	@JsonView(DataTablesOutput.View.class)
+	public String getCargoDescricao() {
+		if (cargo != null) {
+			return cargo.getDescricao();
+		}
+		return null;
 	}
 
 }

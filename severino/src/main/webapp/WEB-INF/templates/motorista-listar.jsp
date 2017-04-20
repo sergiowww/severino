@@ -3,7 +3,7 @@
 
 <tags:base-template title="Condutores e usuários da garagem" menuSelecionado="motorista/registros">
 	<jsp:body>
-		<tags:displayTableData urlEdit="motorista/" urlAdd="motorista/" fieldList="matricula,nome,cargo,local.titulo" urlRemove="motorista/delete/" urlJsonList="motorista/listar"
+		<tags:displayTableData urlEdit="motorista/" urlAdd="motorista/" fieldList="matricula,nome,cargoDescricao,local.titulo" urlRemove="motorista/delete/" urlJsonList="motorista/listar"
 			labelList="Matrícula,Nome,Cargo,Local" />
 	</jsp:body>
 </tags:base-template>

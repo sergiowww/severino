@@ -11,17 +11,15 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.test.context.ContextConfiguration;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import br.mp.mpt.prt8.severino.dao.ViagemRepository;
 import br.mp.mpt.prt8.severino.entity.Motorista;
 import br.mp.mpt.prt8.severino.entity.Viagem;
-import br.mp.mpt.prt8.severino.mediator.ViagemMediatorMockTest.MockContextClasses;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 
 /**
@@ -30,18 +28,17 @@ import br.mp.mpt.prt8.severino.utils.NegocioException;
  * @author sergio.eoliveira
  *
  */
-@ContextConfiguration(classes = MockContextClasses.class)
-public class ViagemMediatorMockTest extends AbstractSeverinoTests {
+@RunWith(MockitoJUnitRunner.class)
+public class ViagemMediatorMockTest {
 	private static final String EXCEPTION_MESSAGE = "essa validação foi \"mockada\" com sucesso!";
 
-	@Autowired
+	@InjectMocks
 	private ViagemMediator viagemMediator;
 
-	@Autowired
-	@Qualifier("viagemRepositoryMock")
+	@Mock
 	private ViagemRepository viagemRepositoryMock;
 
-	@Autowired
+	@Mock
 	private ValidatorServiceBean<Viagem> validatorServiceBeanMock;
 
 	@Test(expected = NegocioException.class)
@@ -63,21 +60,6 @@ public class ViagemMediatorMockTest extends AbstractSeverinoTests {
 			throw e;
 		}
 
-	}
-
-	public static class MockContextClasses {
-		@Bean
-		@Primary
-		@SuppressWarnings("unchecked")
-		public ValidatorServiceBean<Viagem> validatorBean() {
-			return (ValidatorServiceBean<Viagem>) Mockito.mock(ValidatorServiceBean.class);
-		}
-
-		@Bean("viagemRepositoryMock")
-		@Primary
-		public ViagemRepository viagemRepository() {
-			return Mockito.mock(ViagemRepository.class);
-		}
 	}
 
 }

@@ -7,7 +7,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Motoristas na Casa
+			Téc. de Transporte na Casa
 			<c:if test="${not empty controleMotoristas}">
 				<span class="badge" style="float: right;" title="técnicos disponíveis/total">${totalMotoristasNaCasa}/${fn:length(controleMotoristas)}</span>
 			</c:if>

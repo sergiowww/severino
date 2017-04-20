@@ -32,8 +32,11 @@ public abstract class AbstractMediator<T, ID extends Serializable> {
 	 * ordenar deve se consultar este mapa para obter a propriedade utilizada
 	 * para ordenar o resultado.
 	 */
-	private static final Map<String, String> SORT_PROPERTIES = Collections
-			.unmodifiableMap(Stream.of(new SimpleEntry<>("local.titulo", "local.nome")).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+	private static final Map<String, String> SORT_PROPERTIES = Collections.unmodifiableMap(Stream.of(//
+			new SimpleEntry<>("local.titulo", "local.nome"), //
+			new SimpleEntry<>("cargoDescricao", "cargo")//
+	).collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+
 	@Autowired
 	protected UsuarioHolder usuarioHolder;
 
