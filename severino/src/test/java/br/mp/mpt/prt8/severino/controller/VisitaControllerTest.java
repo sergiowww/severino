@@ -22,7 +22,6 @@ import br.mp.mpt.prt8.severino.entity.Visita;
 import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.SetorMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitaMediator;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 
 /**
  * Teste para o controlador da visita.
@@ -102,7 +101,7 @@ public class VisitaControllerTest {
 		Visita visita = new Visita();
 		visita.setVisitante(new Visitante());
 		visitaController.salvar(visita, bindingResultMock, redirectAttributesMock);
-		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock, CadastrarVisita.class);
+		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock);
 		Mockito.verify(visitaMediatorMock, Mockito.only()).save(visita);
 	}
 
@@ -115,7 +114,7 @@ public class VisitaControllerTest {
 		visita.getVisitante().setEndereco(endereco);
 
 		visitaController.salvar(visita, bindingResultMock, redirectAttributesMock);
-		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock, CadastrarVisita.class);
+		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock);
 		Mockito.verify(visitaMediatorMock, Mockito.only()).save(visita);
 	}
 
@@ -125,7 +124,7 @@ public class VisitaControllerTest {
 		visita.setVisitante(new Visitante());
 		visita.getVisitante().setEndereco(new Endereco());
 		visitaController.salvar(visita, bindingResultMock, redirectAttributesMock);
-		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock, CadastrarVisita.class);
+		Mockito.verify(smartValidatorMock, Mockito.only()).validate(visita, bindingResultMock);
 		Mockito.verify(visitaMediatorMock, Mockito.only()).save(visita);
 	}
 

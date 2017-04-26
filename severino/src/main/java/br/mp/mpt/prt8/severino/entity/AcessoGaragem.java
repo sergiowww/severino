@@ -27,6 +27,8 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
+import br.mp.mpt.prt8.severino.validators.SelecionarVeiculo;
 import br.mp.mpt.prt8.severino.validators.SelecionarVisita;
 
 /**
@@ -86,6 +89,7 @@ public class AcessoGaragem extends AbstractEntityIntervaloData<Integer> {
 	@JoinColumn(name = "placa", nullable = false)
 	@Valid
 	@NotNull
+	@ConvertGroup(from = Default.class, to = SelecionarVeiculo.class)
 	private Veiculo veiculo;
 
 	// uni-directional many-to-one association to Usuario

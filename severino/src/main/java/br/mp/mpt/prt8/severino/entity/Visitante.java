@@ -34,7 +34,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.utils.ConversorLimparMascara;
 import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 
 /**
@@ -60,50 +59,50 @@ public class Visitante extends AbstractEntity<Integer> {
 	private Integer id;
 
 	@Column(nullable = false, length = 20)
-	@NotEmpty(groups = CadastrarVisita.class)
-	@Size(max = 20, min = 3, groups = CadastrarVisita.class)
+	@NotEmpty
+	@Size(max = 20, min = 3)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
-	@Pattern(regexp = "[\\dxX]+", message = "Digite apenas números neste campo", groups = CadastrarVisita.class)
+	@Pattern(regexp = "[\\dxX]+", message = "Digite apenas números neste campo")
 	private String documento;
 
 	@Column(name = "orgao_emissor", nullable = false, length = 45)
-	@NotEmpty(groups = CadastrarVisita.class)
-	@Size(max = 45, groups = CadastrarVisita.class)
+	@NotEmpty
+	@Size(max = 45)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String orgaoEmissor;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 2, nullable = false)
-	@NotNull(groups = CadastrarVisita.class)
+	@NotNull
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private Estado uf;
 
 	@Column(nullable = false, length = 200)
-	@NotNull(groups = CadastrarVisita.class)
-	@Size(max = 200, min = 5, groups = CadastrarVisita.class)
+	@NotNull
+	@Size(max = 200, min = 5)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String nome;
 
 	@Column(length = 120)
-	@Size(max = 120, min = 2, groups = CadastrarVisita.class)
+	@Size(max = 120, min = 2)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	private String profissao;
 
 	@Column(length = 11)
-	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
+	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE)
 	@JsonView({ DataTablesOutput.View.class, PesquisaDoc.class })
 	@Convert(converter = ConversorLimparMascara.class)
 	private String telefone;
 
 	@Column(name = "telefone_alternativo", length = 11)
-	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE, groups = CadastrarVisita.class)
+	@Pattern(regexp = PADRAO_TELEFONE, message = MENSAGEM_TELEFONE)
 	@JsonView(PesquisaDoc.class)
 	@Convert(converter = ConversorLimparMascara.class)
 	private String telefoneAlternativo;
 
 	@Column(length = 45)
-	@Size(max = 45, groups = CadastrarVisita.class)
-	@Email(message = "O e-mail informado é inválido", groups = CadastrarVisita.class)
+	@Size(max = 45)
+	@Email(message = "O e-mail informado é inválido")
 	@JsonView(PesquisaDoc.class)
 	private String email;
 

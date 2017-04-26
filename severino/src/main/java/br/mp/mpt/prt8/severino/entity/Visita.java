@@ -28,6 +28,8 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.SelecionarSetor;
 import br.mp.mpt.prt8.severino.validators.SelecionarVisita;
 
 /**
@@ -62,16 +64,16 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = MENSAGEM_DATA_FUTURA, groups = CadastrarVisita.class)
+	@Past(message = MENSAGEM_DATA_FUTURA)
 	private Date entrada;
 
 	@Column(name = "nome_procurado", length = 45)
-	@Size(max = 45, groups = CadastrarVisita.class)
+	@Size(max = 45)
 	@JsonView(DataTablesOutput.View.class)
 	private String nomeProcurado;
 
 	@Column(name = "setor_procurado", length = 200)
-	@Size(max = 200, groups = CadastrarVisita.class)
+	@Size(max = 200)
 	@JsonView(DataTablesOutput.View.class)
 	private String setorProcurado;
 
@@ -83,7 +85,7 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = MENSAGEM_DATA_FUTURA, groups = CadastrarVisita.class)
+	@Past(message = MENSAGEM_DATA_FUTURA)
 	private Date saida;
 
 	// uni-directional many-to-one association to Empresa
@@ -95,7 +97,8 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	// uni-directional many-to-one association to Setor
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_setor", nullable = false)
-	@NotNull(groups = CadastrarVisita.class)
+	@NotNull
+	@ConvertGroup(from = Default.class, to = SelecionarSetor.class)
 	@JsonView(DataTablesOutput.View.class)
 	@Valid
 	private Setor setor;
@@ -111,19 +114,19 @@ public class Visita extends AbstractEntityIntervaloData<Integer> {
 	@JoinColumn(name = "id_visitante", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
 	@Valid
-	@NotNull(groups = CadastrarVisita.class)
+	@NotNull
 	private Visitante visitante;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_local", nullable = false, updatable = false)
 	private Local local;
 
-	@AssertFalse(message = VALIDACAO_DATA_ENTRADA, groups = CadastrarVisita.class)
+	@AssertFalse(message = VALIDACAO_DATA_ENTRADA)
 	public boolean isValidacaoDataEntrada() {
 		return isDataEntradaValida(this);
 	}
 
-	@AssertFalse(message = VALIDACAO_INTERVALO_ENTRADA_SAIDA, groups = CadastrarVisita.class)
+	@AssertFalse(message = VALIDACAO_INTERVALO_ENTRADA_SAIDA)
 	public boolean isValidacaoIntervaloEntradaSaida() {
 		return isIntervaloEntradaSaidaValido(this);
 	}

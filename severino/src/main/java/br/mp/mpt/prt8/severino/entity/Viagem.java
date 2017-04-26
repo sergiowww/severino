@@ -31,6 +31,8 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.validators.SelecionarMotorista;
 
 /**
  * The persistent class for the viagem database table.
@@ -58,7 +60,7 @@ public class Viagem extends AbstractEntity<Integer> {
 	private Integer id;
 
 	@Column(length = 400)
-	@Size(max = 400, groups = CadastrarViagem.class)
+	@Size(max = 400)
 	private String anotacao;
 
 	@Column(name = "data_hora_cadastro", nullable = false, updatable = false)
@@ -74,7 +76,8 @@ public class Viagem extends AbstractEntity<Integer> {
 	@ManyToOne(cascade = { REFRESH, DETACH })
 	@JoinColumn(name = "id_motorista", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarViagem.class)
+	@NotNull
+	@ConvertGroup(from = Default.class, to = SelecionarMotorista.class)
 	@Valid
 	private Motorista motorista;
 
@@ -139,7 +142,7 @@ public class Viagem extends AbstractEntity<Integer> {
 	@Transient
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA, groups = CadastrarViagem.class)
+	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA)
 	public Date getRetorno() {
 		if (getControleRetorno() != null) {
 			return getControleRetorno().getDataHora();
@@ -163,7 +166,7 @@ public class Viagem extends AbstractEntity<Integer> {
 	@Transient
 	@DateTimeFormat(pattern = Constantes.DATE_TIME_FORMAT)
 	@JsonView(DataTablesOutput.View.class)
-	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA, groups = CadastrarViagem.class)
+	@Past(message = ValidarIntervalo.MENSAGEM_DATA_FUTURA)
 	public Date getSaida() {
 		if (getControleSaida() != null) {
 			return getControleSaida().getDataHora();
@@ -239,13 +242,13 @@ public class Viagem extends AbstractEntity<Integer> {
 		this.usuario = usuario;
 	}
 
-	@AssertFalse(message = "A data de saída não pode ser vazia!", groups = CadastrarViagem.class)
+	@AssertFalse(message = "A data de saída não pode ser vazia!")
 	public boolean isValidacaoDataEntrada() {
 
 		return getId() != null && getSaida() == null;
 	}
 
-	@AssertFalse(message = "A data/hora de entrada não pode estar antes do retorno!", groups = CadastrarViagem.class)
+	@AssertFalse(message = "A data/hora de entrada não pode estar antes do retorno!")
 	public boolean isValidacaoIntervaloEntradaSaida() {
 		return getSaida() != null && getRetorno() != null && getRetorno().before(getSaida());
 	}

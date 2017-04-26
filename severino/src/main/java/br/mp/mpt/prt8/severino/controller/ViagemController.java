@@ -31,7 +31,6 @@ import br.mp.mpt.prt8.severino.mediator.ViagemMediator;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.utils.Roles;
 import br.mp.mpt.prt8.severino.validators.CadastrarVeiculo;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 
 /**
  * Controlador de operações da entidade.
@@ -86,9 +85,9 @@ public class ViagemController extends AbstractFullCrudController<Viagem, Integer
 			viagem.getPassageiros().removeIf(p -> StringUtils.isEmpty(p.getNome()));
 		}
 		if (viagem.isGravarVeiculo()) {
-			smartValidator.validate(viagem, result, CadastrarViagem.class, CadastrarVeiculo.class);
+			smartValidator.validate(viagem, result, CadastrarVeiculo.class);
 		} else {
-			smartValidator.validate(viagem, result, CadastrarViagem.class);
+			smartValidator.validate(viagem, result);
 		}
 		return super.salvar(viagem, result, redirectAttributes);
 	}

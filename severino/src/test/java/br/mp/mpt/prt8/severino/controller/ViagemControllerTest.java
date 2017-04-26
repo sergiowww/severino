@@ -29,7 +29,6 @@ import br.mp.mpt.prt8.severino.mediator.VeiculoMediator;
 import br.mp.mpt.prt8.severino.mediator.ViagemMediator;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
 import br.mp.mpt.prt8.severino.validators.CadastrarVeiculo;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 
 /**
  * Teste do controlador de viagem.
@@ -102,7 +101,7 @@ public class ViagemControllerTest {
 		Viagem viagem = new Viagem();
 		viagemController.salvar(viagem, bindingResultMock, redirectAttributesMock);
 		Mockito.verify(viagemMediatorMock, Mockito.only()).save(viagem);
-		Mockito.verify(smartValidatorMock, Mockito.only()).validate(viagem, bindingResultMock, CadastrarViagem.class);
+		Mockito.verify(smartValidatorMock, Mockito.only()).validate(viagem, bindingResultMock);
 	}
 
 	@Test
@@ -112,7 +111,7 @@ public class ViagemControllerTest {
 		viagem.addPassageiro(new Passageiro());
 		viagemController.salvar(viagem, bindingResultMock, redirectAttributesMock);
 		Mockito.verify(viagemMediatorMock, Mockito.only()).save(viagem);
-		Mockito.verify(smartValidatorMock, Mockito.only()).validate(viagem, bindingResultMock, CadastrarViagem.class, CadastrarVeiculo.class);
+		Mockito.verify(smartValidatorMock, Mockito.only()).validate(viagem, bindingResultMock, CadastrarVeiculo.class);
 	}
 
 	@Test

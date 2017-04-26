@@ -1,11 +1,11 @@
 package br.mp.mpt.prt8.severino.validators;
 
 /**
- * Grupo de validação para validar os dados do motorista.
+ * Indica que a seleção do veículo é obrigatória.
  * 
  * @author sergio.eoliveira
  *
  */
-public interface CadastrarMotorista {
+public interface SelecionarVeiculo {
 
 }

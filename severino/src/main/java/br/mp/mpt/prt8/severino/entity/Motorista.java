@@ -19,13 +19,15 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validators.CadastrarMotorista;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.validators.SelecionarLocal;
+import br.mp.mpt.prt8.severino.validators.SelecionarMotorista;
 
 /**
  * The persistent class for the motorista database table.
@@ -41,31 +43,32 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_motorista", unique = true, nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarViagem.class)
+	@NotNull(groups = SelecionarMotorista.class)
 	private Integer id;
 
 	@Column(nullable = false, length = 9, unique = true)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
-	@Pattern(regexp = "\\d{3,}-[0-9xX]{1}", message = "O formato da está inválido, digite a matrícula com no formato 999-9", groups = CadastrarMotorista.class)
-	@Size(max = 9, groups = CadastrarMotorista.class)
+	@NotNull
+	@Pattern(regexp = "\\d{3,}-[0-9xX]{1}", message = "O formato da matrícula está inválido, digite a matrícula com no formato 999-9")
+	@Size(max = 9)
 	private String matricula;
 
 	@Column(nullable = false, length = 200)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
-	@Size(min = 5, max = 200, groups = CadastrarMotorista.class)
+	@NotNull
+	@Size(min = 5, max = 200)
 	private String nome;
 
 	@Column(nullable = false, name = "tipo")
 	@Enumerated(ORDINAL)
-	@NotNull(groups = CadastrarMotorista.class)
+	@NotNull
 	private Cargo cargo;
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "id_local", nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarMotorista.class)
+	@NotNull
+	@ConvertGroup(from = Default.class, to = SelecionarLocal.class)
 	@Valid
 	private Local local;
 

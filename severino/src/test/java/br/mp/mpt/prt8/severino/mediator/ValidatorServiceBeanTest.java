@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
 
 /**
  * Teste do validador.
@@ -23,7 +22,7 @@ public class ValidatorServiceBeanTest extends AbstractSeverinoTests {
 	@Test(expected = NegocioException.class)
 	public void test() {
 		Viagem viagem = new Viagem();
-		validatorServiceBean.validate(viagem, CadastrarViagem.class);
+		validatorServiceBean.validate(viagem);
 	}
 
 }

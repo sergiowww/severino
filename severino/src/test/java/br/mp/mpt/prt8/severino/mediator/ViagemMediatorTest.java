@@ -45,7 +45,7 @@ import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.validators.SelecionarMotorista;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 @ContextConfiguration(classes = { CargaUsuario.class, CargaMotorista.class })
@@ -202,7 +202,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 
 	private void validarVisita(Viagem viagem) {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(viagem, "viagem", true, 256);
-		smartValidator.validate(viagem, errors, CadastrarViagem.class);
+		smartValidator.validate(viagem, errors, SelecionarMotorista.class);
 		assertFalse("Validação falhou..." + errors.toString(), errors.hasErrors());
 	}
 
@@ -557,7 +557,7 @@ public class ViagemMediatorTest extends AbstractSeverinoTests {
 		// gravar viagem 3 com 1 passageiro
 		Motorista motorista2 = new Motorista();
 		motorista2.setNome("Outro Motora");
-		motorista2.setMatricula("1");
+		motorista2.setMatricula("111-1");
 		motorista2.setCargo(Cargo.MOTORISTA);
 		motorista2.setLocal(usuarioHolder.getLocal());
 		entityManager.persist(motorista2);

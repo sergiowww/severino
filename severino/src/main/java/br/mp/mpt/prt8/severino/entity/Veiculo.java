@@ -12,13 +12,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.validators.CadastrarVeiculo;
+import br.mp.mpt.prt8.severino.validators.SelecionarVeiculo;
 
 /**
  * The persistent class for the veiculo database table.
@@ -34,7 +34,7 @@ public class Veiculo extends AbstractEntity<String> {
 
 	@Id
 	@Column(name = "placa", unique = true, nullable = false, length = 7)
-	@NotNull(groups = { CadastrarVeiculo.class, Default.class })
+	@NotNull(groups = { CadastrarVeiculo.class, SelecionarVeiculo.class })
 	@Pattern(regexp = "[A-Z]{3}\\d{4}", message = "O formato da placa deve ser xxx0000", groups = CadastrarVeiculo.class)
 	@JsonView(DataTablesOutput.View.class)
 	private String id;

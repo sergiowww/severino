@@ -28,7 +28,7 @@ import br.mp.mpt.prt8.severino.entity.Veiculo;
 import br.mp.mpt.prt8.severino.entity.Viagem;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validators.CadastrarViagem;
+import br.mp.mpt.prt8.severino.validators.SelecionarMotorista;
 import br.mp.mpt.prt8.severino.valueobject.PessoaDisponibilidade;
 
 /**
@@ -160,7 +160,7 @@ public class ViagemMediator extends AbstractSpecMediator<Viagem, Integer> {
 			ultimaViagem.setMotorista(motorista);
 			ultimaViagem.setRetorno(dataHoraRetorno);
 
-			Set<ConstraintViolation<Viagem>> validate = validator.getValidationConstraints(ultimaViagem, CadastrarViagem.class);
+			Set<ConstraintViolation<Viagem>> validate = validator.getValidationConstraints(ultimaViagem, SelecionarMotorista.class);
 			if (validate.isEmpty()) {
 				return ultimaViagem.getControleRetorno();
 			}

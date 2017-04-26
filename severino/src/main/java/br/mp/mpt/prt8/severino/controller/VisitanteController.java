@@ -30,7 +30,6 @@ import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.mediator.AbstractMediator;
 import br.mp.mpt.prt8.severino.mediator.VisitanteMediator;
 import br.mp.mpt.prt8.severino.utils.Roles;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 
 /**
@@ -87,7 +86,7 @@ public class VisitanteController extends AbstractFullCrudController<Visitante, I
 		if (visitante.getEndereco() != null && !visitante.getEndereco().algumDadoPreenchido()) {
 			visitante.setEndereco(null);
 		}
-		smartValidator.validate(visitante, result, CadastrarVisita.class);
+		smartValidator.validate(visitante, result);
 		return super.salvar(visitante, result, redirectAttributes);
 	}
 

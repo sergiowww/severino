@@ -21,6 +21,8 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.mediator.intervalodatas.ValidarIntervalo;
 import br.mp.mpt.prt8.severino.utils.Constantes;
+import br.mp.mpt.prt8.severino.validators.SelecionarMotorista;
 
 /**
  * The persistent class for the controle_motorista database table.
@@ -66,6 +69,7 @@ public class ControleMotorista extends AbstractEntity<Integer> implements Compar
 	@JsonView(DataTablesOutput.View.class)
 	@NotNull
 	@Valid
+	@ConvertGroup(from = Default.class, to = SelecionarMotorista.class)
 	private Motorista motorista;
 
 	@ManyToOne(fetch = LAZY)

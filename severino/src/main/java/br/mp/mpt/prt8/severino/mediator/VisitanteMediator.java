@@ -20,7 +20,7 @@ import br.mp.mpt.prt8.severino.entity.Visitante;
 import br.mp.mpt.prt8.severino.utils.EntidadeUtil;
 import br.mp.mpt.prt8.severino.utils.FileUtilsApp;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.SelecionarSetor;
 
 /**
  * Mediador de operações.
@@ -51,7 +51,7 @@ public class VisitanteMediator extends AbstractExampleMediator<Visitante, Intege
 		if (visitante.getEndereco() != null && !visitante.getEndereco().algumDadoPreenchido()) {
 			visitante.setEndereco(null);
 		}
-		validator.validate(visitante, CadastrarVisita.class);
+		validator.validate(visitante, SelecionarSetor.class);
 
 		Integer id = EntidadeUtil.getIdNaoNulo(visitante);
 

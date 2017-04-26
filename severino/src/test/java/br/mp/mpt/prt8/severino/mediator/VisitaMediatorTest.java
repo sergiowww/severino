@@ -35,7 +35,7 @@ import br.mp.mpt.prt8.severino.mediator.carga.CargaUsuario;
 import br.mp.mpt.prt8.severino.utils.Constantes;
 import br.mp.mpt.prt8.severino.utils.DateUtils;
 import br.mp.mpt.prt8.severino.utils.NegocioException;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.SelecionarSetor;
 
 /**
  * Casos de teste para a visita.
@@ -438,7 +438,7 @@ public class VisitaMediatorTest extends AbstractSeverinoTests {
 
 	private void validarVisita(Visita visita) {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(visita, "visita", true, 256);
-		smartValidator.validate(visita, errors, CadastrarVisita.class);
+		smartValidator.validate(visita, errors, SelecionarSetor.class);
 		assertFalse("Validação falhou..." + errors.toString(), errors.hasErrors());
 	}
 

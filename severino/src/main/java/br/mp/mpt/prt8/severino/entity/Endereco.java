@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import br.mp.mpt.prt8.severino.utils.ConversorLimparMascara;
 import br.mp.mpt.prt8.severino.utils.StringUtilApp;
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
 import br.mp.mpt.prt8.severino.viewhelpers.PesquisaDoc;
 
 /**
@@ -41,47 +40,47 @@ public class Endereco implements Serializable {
 	private Integer id;
 
 	@Column(nullable = false, length = 80)
-	@NotNull(groups = CadastrarVisita.class)
-	@Size(min = 2, max = 80, groups = CadastrarVisita.class)
+	@NotNull
+	@Size(min = 2, max = 80)
 	@JsonView(PesquisaDoc.class)
 	private String bairro;
 
 	@Column(length = 8)
-	@Pattern(regexp = "\\d{5}-\\d{3}", message = "o formato do CEP deve ser 00000-000", groups = CadastrarVisita.class)
+	@Pattern(regexp = "\\d{5}-\\d{3}", message = "o formato do CEP deve ser 00000-000")
 	@JsonView(PesquisaDoc.class)
 	@Convert(converter = ConversorLimparMascara.class)
 	private String cep;
 
 	@Column(length = 50)
-	@Size(max = 50, groups = CadastrarVisita.class)
+	@Size(max = 50)
 	@JsonView(PesquisaDoc.class)
 	private String complemento;
 
 	@Column(nullable = false, length = 300)
-	@Size(min = 2, max = 300, groups = CadastrarVisita.class)
-	@NotNull(groups = CadastrarVisita.class)
+	@Size(min = 2, max = 300)
+	@NotNull
 	@JsonView(PesquisaDoc.class)
 	private String logradouro;
 
 	@Column(nullable = false, length = 80)
-	@Size(min = 2, max = 80, groups = CadastrarVisita.class)
-	@NotNull(groups = CadastrarVisita.class)
+	@Size(min = 2, max = 80)
+	@NotNull
 	@JsonView(PesquisaDoc.class)
 	private String municipio;
 
 	@Column(length = 10)
-	@Size(max = 10, groups = CadastrarVisita.class)
+	@Size(max = 10)
 	@JsonView(PesquisaDoc.class)
 	private String numero;
 
 	@Column(length = 30)
-	@Size(max = 30, groups = CadastrarVisita.class)
+	@Size(max = 30)
 	@JsonView(PesquisaDoc.class)
 	private String referencia;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 2, nullable = false)
-	@NotNull(groups = CadastrarVisita.class)
+	@NotNull
 	@JsonView(PesquisaDoc.class)
 	private Estado uf;
 

@@ -22,7 +22,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validators.CadastrarVisita;
+import br.mp.mpt.prt8.severino.validators.SelecionarSetor;
 
 /**
  * The persistent class for the setor database table.
@@ -41,7 +41,7 @@ public class Setor extends AbstractEntity<Integer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_setor", unique = true, nullable = false)
 	@JsonView(DataTablesOutput.View.class)
-	@NotNull(groups = CadastrarVisita.class)
+	@NotNull(groups = SelecionarSetor.class)
 	private Integer id;
 
 	@JsonView(DataTablesOutput.View.class)

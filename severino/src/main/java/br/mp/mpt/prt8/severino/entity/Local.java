@@ -18,7 +18,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.mp.mpt.prt8.severino.validators.CadastrarMotorista;
+import br.mp.mpt.prt8.severino.validators.SelecionarLocal;
 
 /**
  * The persistent class for the local database table.
@@ -32,7 +32,7 @@ public class Local extends AbstractEntity<Integer> implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_local", unique = true, nullable = false)
-	@NotNull(groups = CadastrarMotorista.class)
+	@NotNull(groups = SelecionarLocal.class)
 	private Integer id;
 
 	@Column(nullable = false, length = 45)

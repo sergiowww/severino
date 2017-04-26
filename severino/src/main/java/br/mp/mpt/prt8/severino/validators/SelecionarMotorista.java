@@ -6,6 +6,6 @@ package br.mp.mpt.prt8.severino.validators;
  * @author sergio.eoliveira
  *
  */
-public interface CadastrarViagem {
+public interface SelecionarMotorista {
 
 }
