@@ -1,9 +1,9 @@
 insert into organizacao (id_organizacao, nome) values (1, 'teste2');
 insert into local (id_local, nome, id_organizacao) values (1, 'teste', 1);
 INSERT INTO usuario (id_usuario,nome,id_local) VALUES ('c.marcos.porfirio','Marcos Jose Santos Porfirio',1);
-INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local) VALUES (14, 'Cintia Nazare Pantoja Leao', 0, '705-6', 1);
-INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local) VALUES (15, 'Faustino Bartolomeu Alves Pimenta', 0, '565-7', 1);
-INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local) VALUES (17, 'Carla Afonso de Novoa Melo', 0, '863-X', 1);
+INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local,ativo) VALUES (14, 'Cintia Nazare Pantoja Leao', 0, '705-6', 1,1);
+INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local,ativo) VALUES (15, 'Faustino Bartolomeu Alves Pimenta', 0, '565-7', 1,1);
+INSERT INTO motorista (id_motorista, nome, tipo, matricula, id_local,ativo) VALUES (17, 'Carla Afonso de Novoa Melo', 0, '863-X', 1,1);
 INSERT INTO veiculo (placa,marca,modelo,cor,viatura_mp,id_motorista, ativo, id_local) VALUES ('JVW9192','citroen','c3','vermelho',0,15, 1, 1);
 INSERT INTO veiculo (placa,marca,modelo,cor,viatura_mp,id_motorista, ativo, id_local) VALUES ('OSY2505','hyundai','ix35','prata',0,17, 1, 1);
 INSERT INTO veiculo (placa,marca,modelo,cor,viatura_mp,id_motorista, ativo, id_local) VALUES ('QDI3612','honda','hrv','grafite',0,14, 1, 1);

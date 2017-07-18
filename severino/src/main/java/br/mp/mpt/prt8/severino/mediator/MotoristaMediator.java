@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,11 @@ public class MotoristaMediator extends AbstractExampleMediator<Motorista, Intege
 		motorista.setMatricula(searchValue);
 		motorista.setNome(searchValue);
 		return motorista;
+	}
+
+	@Override
+	protected ExampleMatcher getExampleMatcher() {
+		return super.getExampleMatcher().withIgnorePaths("ativo");
 	}
 
 	/**

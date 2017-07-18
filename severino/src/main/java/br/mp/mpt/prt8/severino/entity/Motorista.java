@@ -72,6 +72,10 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 	@Valid
 	private Local local;
 
+	@Column(nullable = false, name = "ativo")
+	@JsonView(DataTablesOutput.View.class)
+	private boolean ativo = true;
+
 	/**
 	 * Construtor.
 	 */
@@ -147,6 +151,14 @@ public class Motorista extends AbstractEntity<Integer> implements Comparable<Mot
 			return cargo.getDescricao();
 		}
 		return null;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
 	}
 
 }

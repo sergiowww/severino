@@ -1,7 +1,7 @@
-INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local) VALUES (9,'Gerson Felix Mendonca Dias',2,'6007641-0',1);
-INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local) VALUES (38,'Cesar Augusto Cabral da Rocha',2,'6000927-6',1);
-INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local) VALUES (5,'Jose Ricardo Barros da Silva',2,'6005289-9',1);
-INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local) VALUES (13,'Loris Rocha Pereira Junior',0,'262-3',1);
+INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local,ativo) VALUES (9,'Gerson Felix Mendonca Dias',2,'6007641-0',1,1);
+INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local,ativo) VALUES (38,'Cesar Augusto Cabral da Rocha',2,'6000927-6',1,1);
+INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local,ativo) VALUES (5,'Jose Ricardo Barros da Silva',2,'6005289-9',1,1);
+INSERT INTO motorista (id_motorista,nome,tipo,matricula,id_local,ativo) VALUES (13,'Loris Rocha Pereira Junior',0,'262-3',1,1);
 INSERT INTO veiculo (placa,marca,modelo,cor,viatura_mp,id_motorista,ativo,id_local) VALUES ('QDG3584','fiat','uno','vermelho',0,13,1,1);
 INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo,id_local) VALUES (131,5,'2016-11-17 12:11:00',1,1);
 INSERT INTO controle_motorista (id_controle_motorista,id_motorista,data_hora,fluxo,id_local) VALUES (104,9,'2016-11-16 08:35:06',1,1);

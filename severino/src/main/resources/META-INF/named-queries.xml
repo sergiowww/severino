@@ -3,13 +3,14 @@
 	<named-query name="ControleMotorista.findMotoristasDisponiveis">
 		<query>
 			select 
-				cm.motorista 
+				m
 			from 
-				ControleMotorista as cm 
+				ControleMotorista as cm inner join cm.motorista as m 
 			where 
 				cm.fluxo = :fluxo and 
 				cm.local.id = :idLocal and
-				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id) and
+				m.ativo = true
 		</query>
 	</named-query>
 	<named-query name="ControleMotorista.findUltimoAgrupadoPorMotorista">
@@ -17,10 +18,11 @@
 			select 
 				cm 
 			from 
-				ControleMotorista as cm 
+				ControleMotorista as cm inner join cm.motorista as m 
 			where
 				cm.local.id = :idLocal and 
-				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id) and
+				m.ativo = true
 			order by
 				cm.id desc
 		</query>
@@ -30,10 +32,11 @@
 			select 
 				cm 
 			from 
-				ControleMotorista as cm 
+				ControleMotorista as cm inner join cm.motorista as m
 			where 
 				cm.motorista.id = :idMotorista and 
-				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id)
+				cm.dataHora = (select max(cm2.dataHora) from ControleMotorista as cm2 where cm.motorista.id = cm2.motorista.id) and
+				m.ativo = true
 		</query>
 	</named-query>
 	<named-query name="Motorista.findMotoristasSemRegistroPonto">
@@ -45,6 +48,7 @@
 			where 
 				m.local.id = :idLocal and
 				m.cargo = :cargoMotorista and 
+				m.ativo = true and
 				m.id not in (
 					select distinct cm.motorista.id 
 					from ControleMotorista as cm
@@ -121,6 +125,7 @@
 				inner join ag.motorista as m
 			where
 				ag.local.id = :idLocal and
+				m.ativo = true and
 				ag.entrada = (
 					select 
 						max(ag2.entrada) 
