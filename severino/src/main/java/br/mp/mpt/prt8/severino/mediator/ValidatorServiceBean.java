@@ -44,7 +44,7 @@ public class ValidatorServiceBean<T> {
 	 * @return
 	 */
 	public String constraintsToMessage(Set<ConstraintViolation<T>> constraints) {
-		return constraints.stream().map(c -> c.getMessage()).collect(Collectors.joining(","));
+		return constraints.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
 	}
 
 	/**
