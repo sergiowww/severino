@@ -2,6 +2,7 @@ package br.mp.mpt.prt8.severino.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.springframework.util.StringUtils;
 
@@ -58,14 +59,6 @@ public abstract class StringUtilApp {
 	 * @return <code>true</code> se algum dados estiver preenchido.
 	 */
 	public static boolean algumValorPreenchido(Object... valores) {
-		for (Object valor : valores) {
-			if (valor instanceof String && !StringUtils.isEmpty((String) valor)) {
-				return true;
-			}
-			if (valor != null) {
-				return true;
-			}
-		}
-		return false;
+		return Stream.of(valores).anyMatch(v -> (v instanceof String && !StringUtils.isEmpty(v)) || v != null);
 	}
 }
