@@ -51,11 +51,11 @@ public class HomeController {
 		Date inicio = DateUtils.toDate(LocalDateTime.now().minusDays(10));
 		Date fim = new Date();
 		List<PessoaDisponibilidade> pessoas = pessoaDisponibilidadeMediator.findUltimaDisponibilidade(inicio, fim);
-		mav.addObject("totalPessoasNaCasa", pessoas.stream().filter(p -> p.isEntrou()).count());
+		mav.addObject("totalPessoasNaCasa", pessoas.stream().filter(PessoaDisponibilidade::isEntrou).count());
 		mav.addObject("pessoasDisponiveis", pessoas);
 
 		List<ControleMotorista> motoristas = controleMotoristaMediator.findDisponiveis();
-		mav.addObject("totalMotoristasNaCasa", motoristas.stream().filter(m -> m.isFluxoEntrada()).count());
+		mav.addObject("totalMotoristasNaCasa", motoristas.stream().filter(ControleMotorista::isFluxoEntrada).count());
 		mav.addObject("controleMotoristas", motoristas);
 		return mav;
 	}

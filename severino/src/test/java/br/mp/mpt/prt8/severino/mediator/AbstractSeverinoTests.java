@@ -39,7 +39,7 @@ public abstract class AbstractSeverinoTests extends AbstractTransactionalJUnit4S
 	@Before
 	public void setUpCarga() {
 		Map<String, ICarga> beansMap = applicationContext.getBeansOfType(ICarga.class);
-		beansMap.values().forEach(c -> c.carga());
+		beansMap.values().forEach(ICarga::carga);
 	}
 
 	/**
